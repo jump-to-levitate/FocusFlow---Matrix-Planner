@@ -29,7 +29,8 @@
 
 ## Aktualny Plan
 
-### UI Rollback & Logic Merge
-- [ ] Refaktoryzacja AppShell.tsx
-- [ ] Mobile-first container (max-w-[480px])
-- [ ] Zachowanie reaktywności store
+### UI Rollback & Logic Merge (W TOKU)
+- [x] Refaktoryzacja AppShell.tsx - max-w-[480px] mx-auto
+- [ ] Refaktoryzacja Macierz.tsx (paddingy)
+- [ ] Mobile-first container verification
+- [ ] Timer start verification
