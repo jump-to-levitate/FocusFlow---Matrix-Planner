@@ -6,7 +6,20 @@ Aplikacja PWA dla osób z ADHD i ambitnych planistów, którzy chcą sprowadzić
 
 ---
 
-## 🎯 Dlaczego FocusFlow?
+## 📋 Spis treści
+
+1. [O Projekcie](#-o-projekcie)
+2. [Kluczowe Funkcjonalności](#-kluczowe-funkcjonalności)
+3. [Stack Techniczny](#-stack-techniczny)
+4. [Instalacja i Uruchomienie](#-instalacja-i-uruchomienie)
+5. [Struktura Katalogów](#-struktura-katalogów)
+6. [Status Projektu (Roadmapa)](#-status-projektu-roadmapa)
+7. [Dokumentacja Techniczna](#-dokumentacja-techniczna)
+8. [Licencja](#-licencja)
+
+---
+
+## 🎯 O Projekcie
 
 **FocusFlow to coś więcej niż kolejna lista to-do.** To osobisty asystent produktywności, którego głównym celem jest maksymalne ułatwienie priorytetyzowania codziennych wyzwań.
 
@@ -26,7 +39,7 @@ Dzięki **IndexedDB i technologii PWA** Twoje centrum dowodzenia jest zawsze pod
 
 ---
 
-## ✨ Główne funkcje
+## ✨ Kluczowe Funkcjonalności
 
 ### 🎯 Macierz Eisenhowera z hard-limitem Q1
 Klasyfikuj zadania w czterech ćwiartkach (pilne/ważne). Q1 ma **twardy limit 5 zadań** — przy przepełnieniu uruchamia się modal *Overload* z trzema strategiami wyjścia.
@@ -51,7 +64,7 @@ Dark mode z neonowymi akcentami (Q1 red, Q2 green, Q3 orange, Q4 slate), glassmo
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Stack Techniczny
 
 | Warstwa | Technologia |
 |---|---|
@@ -65,7 +78,7 @@ Dark mode z neonowymi akcentami (Q1 red, Q2 green, Q3 orange, Q4 slate), glassmo
 
 ---
 
-## 🚀 Instalacja
+## 🚀 Instalacja i Uruchomienie
 
 ```bash
 # 1. Klon repozytorium
@@ -88,8 +101,14 @@ npm run preview
 
 ---
 
-## 📂 Struktura projektu
+## 📂 Struktura Katalogów
 
+```
+app/              # Kod źródłowy aplikacji React + TypeScript
+docs/             # Pełna dokumentacja sprintów, roadmap i specyfikacje
+```
+
+**app/src/**
 ```
 app/src/
 ├── pages/              # Ekrany: Pulpit, Macierz, FocusSession, BrainDump,
@@ -156,9 +175,24 @@ runEscalation(tasks, today);        // → Task[] (zmienione na Q1)
 
 ---
 
-## 🎯 Roadmap
+## 📈 Status Projektu (Roadmapa)
 
 Pełna mapa drogowa MVP znajduje się w `docs/ai_team/FocusFlow-Roadmapa-MVP.md` — od Sprint 1 (fundament + persystencja) przez Sprint 4 (timer + engines) po Sprint 5 (UI overhaul + PWA).
+
+---
+
+## 📚 Dokumentacja Techniczna
+
+Dokumentacja techniczna dostępna w folderze `docs/`:
+- `docs/FocusFlow-Specyfikacja-Techniczna.md` - Pełna specyfikacja
+- `docs/FocusFlow-Roadmapa-MVP.md` - Roadmap MVP
+- `docs/MVP/sprint*/` - Dokumentacja sprintów 1-5
+
+---
+
+## 📄 Licencja
+
+MIT License - zobacz plik LICENSE dla szczegółów.
 
 ---
 
