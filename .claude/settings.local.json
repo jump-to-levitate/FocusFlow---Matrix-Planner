@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "PowerShell(Start-Process \"http://localhost:5173/\")",
+      "Bash(npx tsc *)",
+      "Bash(echo \"exit=$?\")",
+      "Bash(npx vite *)",
+      "Bash(echo \"tsc_exit=$?\")",
+      "Bash(curl -sI http://127.0.0.1:5180/)",
+      "Bash(curl *)",
+      "PowerShell(Get-Content *)",
+      "Bash(taskkill /F /IM node.exe)",
+      "PowerShell(Get-Process *)",
+      "mcp__ide__getDiagnostics",
+      "Bash(echo \"---EXIT: $?---\")",
+      "PowerShell(Set-Location app; npx tsc --noEmit 2>&1 | Select-Object -First 30; \"---EXIT: $LASTEXITCODE---\")",
+      "PowerShell(npx tsc --noEmit 2>&1 | Select-Object -First 30; \"---EXIT: $LASTEXITCODE---\")"
+    ]
+  }
+}

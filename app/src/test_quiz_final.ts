@@ -1,5 +1,5 @@
 // === Synthetic Logic Test for Sprint 1 ===
-import { processQuiz } from './src/logic/processQuiz';
+import { processQuiz } from './logic/processQuiz';
 
 console.log('SPRINT 1 Logic Test: processQuiz\n');
 
@@ -18,4 +18,6 @@ const pass2 = result2.quadrant === 'II' && result2.isComplete === true;
 console.log('  ' + (pass2 ? 'PASS' : 'FAIL'));
 
 console.log('\n' + (pass1 && pass2 ? 'ALL TESTS PASSED' : 'SOME TESTS FAILED'));
-if (!(pass1 && pass2)) process.exit(1);
+if (!(pass1 && pass2)) {
+  throw new Error('Tests failed');
+}
