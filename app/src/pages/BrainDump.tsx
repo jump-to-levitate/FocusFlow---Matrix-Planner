@@ -127,7 +127,7 @@ export const BrainDump: FC = () => {
   const quadColor = quiz.quadrant ? qColors[quiz.quadrant] : null;
 
   return (
-    <div className="h-full flex flex-col p-5 space-y-3 animate-in fade-in duration-700 overflow-hidden">
+    <div className="flex flex-col p-3 space-y-3 animate-in fade-in duration-700 overflow-hidden">
       <header className="pt-2 flex justify-between items-center">
         <h2 className="text-white text-2xl font-black uppercase tracking-qlabel">Brain Dump</h2>
         <button
@@ -142,7 +142,7 @@ export const BrainDump: FC = () => {
           value={title}
           onChange={e => setTitle(e.target.value)}
           placeholder="Wpisz cokolwiek..."
-          className="w-full rounded-card p-4 text-white bg-panel border-2 border-neonPurple focus:outline-none transition-all text-base"
+          className="w-full rounded-card p-3 text-white bg-panel border-2 border-neonPurple focus:outline-none transition-all text-base"
           style={{ boxShadow: GLOW.ring(colors.neonPurple) }}
         />
       </section>
@@ -168,12 +168,12 @@ export const BrainDump: FC = () => {
               <button
                 onClick={addTask}
                 disabled={!canSubmit}
-                className={`flex-[2] py-4 rounded-pill font-black uppercase tracking-qlabel text-sm disabled:opacity-40 transition-all active:scale-95 ${canSubmit ? 'bg-neonGreen text-midnight' : 'bg-slate800 text-textSecondary'}`}
+                className={`flex-[2] py-3 rounded-pill font-black uppercase tracking-qlabel text-sm disabled:opacity-40 transition-all active:scale-95 ${canSubmit ? 'bg-neonGreen text-midnight' : 'bg-slate800 text-textSecondary'}`}
                 style={canSubmit ? { boxShadow: GLOW.hero(colors.neonGreen) } : undefined}
               >Dodaj zadanie</button>
               <button
                 onClick={addNote}
-                className="flex-1 py-4 rounded-pill font-black uppercase tracking-qlabel text-[11px] bg-transparent text-neonPurple border-2 border-neonPurple active:scale-95 transition-all"
+                className="flex-1 py-3 rounded-pill font-black uppercase tracking-qlabel text-[11px] bg-transparent text-neonPurple border-2 border-neonPurple active:scale-95 transition-all"
               >Dodaj notatke</button>
             </div>
           </div>

@@ -31,6 +31,8 @@
 
 ### UI Rollback & Logic Merge (W TOKU)
 - [x] Refaktoryzacja AppShell.tsx - max-w-[480px] mx-auto
+- [x] Cleanup BrainDump.tsx padding (p-5 → p-3)
+- [x] Cleanup FocusSession.tsx max-width
 - [ ] Refaktoryzacja Macierz.tsx (paddingy)
-- [ ] Mobile-first container verification
+- [x] Mobile-first container verification
 - [ ] Timer start verification

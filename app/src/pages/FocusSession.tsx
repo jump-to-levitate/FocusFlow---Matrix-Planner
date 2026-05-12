@@ -44,9 +44,9 @@ const getWakeLock = (): WakeLockAPI | null => {
 };
 
 const Loading: FC = () => (
-  <div className="px-4 pt-10 pb-20 flex flex-col items-center gap-6">
-    <h2 className="text-white text-xl font-bold">Inicjalizacja sesji...</h2>
-    <div className="w-32 h-32 border-4 border-slate-700 border-t-emerald-400 rounded-full animate-spin" />
+  <div className="px-3 py-4 flex flex-col items-center gap-6">
+    <h2 className="text-white text-lg font-bold">Inicjalizacja sesji...</h2>
+    <div className="w-32 h-32 border-4 border-panelBorder border-t-neonGreen rounded-full animate-spin" />
   </div>
 );
 
@@ -204,9 +204,9 @@ export const FocusSession: FC = () => {
   };
 
   return (
-    <div className="px-4 pt-10 pb-20 flex flex-col items-center gap-6 animate-in fade-in duration-300">
+    <div className="px-3 py-4 flex flex-col items-center gap-6 animate-in fade-in duration-300">
       <header className="text-center">
-        <p className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+        <p className="text-[10px] font-extrabold uppercase tracking-widest text-textSecondary">
           Tryb {timerState.mode} &middot; Cykl {timerState.completedCycles + 1}/{MAX_CYCLES}
         </p>
         <h2 className="text-white text-xl font-bold mt-1">{task?.title ?? 'Sesja Focus'}</h2>
@@ -236,7 +236,7 @@ export const FocusSession: FC = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-3 w-full max-w-[340px] justify-center">
+      <div className="flex flex-wrap gap-3 w-full justify-center">
         {isPaused ? (
           <button
             onClick={onResume}

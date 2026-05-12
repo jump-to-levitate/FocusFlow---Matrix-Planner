@@ -78,8 +78,8 @@ export const Onboarding: FC<OnboardingProps> = ({ onDone }) => {
   const { Icon } = slide;
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate900" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-      <div className={`${CONTAINER} max-w-md mx-auto min-h-screen flex flex-col justify-between`}>
+    <div className="fixed inset-0 z-50 bg-black" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      <div className={`${CONTAINER} max-w-[480px] mx-auto min-h-screen bg-panel border-x border-panelBorder flex flex-col justify-between`}>
         <header className="flex items-center justify-between">
           <span className="text-[10px] font-black uppercase tracking-qlabel text-textSecondary">
             Krok {idx + 1} / {SLIDES.length}
