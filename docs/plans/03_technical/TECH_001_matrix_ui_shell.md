@@ -592,6 +592,8 @@ export const DashboardScreen = () => {
 
 ### 6.1 Extended Tailwind Config
 
+> **ZASADA:** Brak hardcoded HEX w config. Wszystkie kolory pochodzą z CSS variables (`index.css`), które są SSOT z `colors.ts`.
+
 ```js
 // app/tailwind.config.js
 
@@ -601,20 +603,41 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Neon Palette
-        'neon-lime': '#39FF14',
-        'neon-purple': '#A855F7',
-        'neon-cyan': '#00F0FF',
-        'neon-pink': '#FF00FF',
+        // Neon Palette - z CSS variables (SSOT: index.css ← colors.ts)
+        'neon-lime': 'var(--color-neon-lime)',
+        'neon-purple': 'var(--color-neon-magenta)',
+        'neon-cyan': 'var(--color-neon-cyan)',
+        'neon-pink': 'var(--color-neon-magenta)',
+        'neon-yellow': 'var(--color-neon-yellow)',
         
-        // Background
-        'app-bg': '#0F172A',
+        // Quadrant Colors - z CSS variables
+        'q1': 'var(--color-q1)',
+        'q2': 'var(--color-q2)',
+        'q3': 'var(--color-q3)',
+        'q4': 'var(--color-q4)',
         
-        // Surfaces
+        // Background - z CSS variables
+        'app-bg': 'var(--color-bg)',
+        'app-bg-elevated': 'var(--color-bg-elevated)',
+        
+        // Surfaces - z CSS variables
         'surface': {
-          DEFAULT: 'rgba(255, 255, 255, 0.08)',
-          hover: 'rgba(255, 255, 255, 0.12)',
+          DEFAULT: 'var(--glass-light)',
+          hover: 'var(--glass-medium)',
+          heavy: 'var(--glass-heavy)',
+          border: 'var(--glass-border)',
         },
+        
+        // Text Colors - z CSS variables
+        'text-primary': 'var(--text-primary)',
+        'text-secondary': 'var(--text-secondary)',
+        'text-tertiary': 'var(--text-tertiary)',
+        
+        // Status - z CSS variables
+        'status-success': 'var(--status-success)',
+        'status-danger': 'var(--status-danger)',
+        'status-warning': 'var(--status-warning)',
+        'status-info': 'var(--status-info)',
       },
       
       fontFamily: {
