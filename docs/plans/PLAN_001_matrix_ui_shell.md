@@ -329,27 +329,33 @@ export const QuadrantCard = ({
   return (
     <div 
       className={`
-        relative rounded-xl border backdrop-blur-sm p-4
+        relative rounded-xl border backdrop-blur-sm 
+        p-2 min-[360px]:p-4   {/* Responsive padding: tight on small screens */}
         ${colorClasses[color]}
         ${bgClasses[color]}
-        min-h-[200px]
+        min-h-[160px] min-[360px]:min-h-[200px]
         transition-all duration-200 hover:scale-[1.02]
       `}
     >
       {/* Header */}
-      <div className="mb-3">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-xs font-bold text-white/60">Q{quadrant}</span>
-          <h3 className="text-sm font-semibold text-white">{title}</h3>
+      <div className="mb-2 min-[360px]:mb-3">
+        <div className="flex items-center gap-1.5 min-[360px]:gap-2 mb-1">
+          <span className="text-[10px] min-[360px]:text-xs font-bold text-white/60">Q{quadrant}</span>
+          <h3 className="text-[11px] min-[360px]:text-sm font-semibold text-white leading-tight">
+            {title}
+          </h3>
         </div>
-        <p className="text-xs text-white/50">{subtitle}</p>
+        {/* hyphens-auto prevents long words from breaking the Matrix layout */}
+        <p className="text-[10px] min-[360px]:text-xs text-white/50 hyphens-auto leading-snug">
+          {subtitle}
+        </p>
       </div>
       
       {/* Content (empty state or tasks) */}
       <div className="flex-1">
         {children || (
-          <div className="flex flex-col items-center justify-center h-24 text-white/30">
-            <p className="text-xs text-center">Brak zadań</p>
+          <div className="flex flex-col items-center justify-center h-20 min-[360px]:h-24 text-white/30">
+            <p className="text-[10px] min-[360px]:text-xs text-center">Brak zadań</p>
           </div>
         )}
       </div>
