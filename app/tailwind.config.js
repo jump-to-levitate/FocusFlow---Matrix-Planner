@@ -239,16 +239,53 @@ export default {
         },
       });
       
-      // Neon text utilities
+      // ============================================================================
+      // VIBRANT NEON TEXT - High contrast against glassmorphism
+      // Drop shadows ensure text 'cuts' through glass layers and appears to glow
+      // ============================================================================
       addUtilities({
+        // Vibrant neon text colors with built-in glow
+        '.text-neon-cyan': {
+          color: '#00F0FF',
+          textShadow: '0 0 5px rgba(0, 240, 255, 0.5), 0 0 10px rgba(0, 240, 255, 0.3)',
+        },
+        '.text-neon-lime': {
+          color: '#39FF14',
+          textShadow: '0 0 5px rgba(57, 255, 20, 0.5), 0 0 10px rgba(57, 255, 20, 0.3)',
+        },
+        '.text-neon-magenta': {
+          color: '#FF00F0',
+          textShadow: '0 0 5px rgba(255, 0, 240, 0.5), 0 0 10px rgba(255, 0, 240, 0.3)',
+        },
+        '.text-neon-yellow': {
+          color: '#FFF100',
+          textShadow: '0 0 5px rgba(255, 241, 0, 0.5), 0 0 10px rgba(255, 241, 0, 0.3)',
+        },
+        '.text-neon-purple': {
+          color: '#A855F7',
+          textShadow: '0 0 5px rgba(168, 85, 247, 0.5), 0 0 10px rgba(168, 85, 247, 0.3)',
+        },
+        
+        // Additional glow intensities (for emphasis)
         '.text-glow-cyan': {
-          textShadow: '0 0 10px rgba(0, 240, 255, 0.5)',
+          textShadow: '0 0 10px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.3)',
         },
         '.text-glow-lime': {
-          textShadow: '0 0 10px rgba(57, 255, 20, 0.5)',
+          textShadow: '0 0 10px rgba(57, 255, 20, 0.5), 0 0 20px rgba(57, 255, 20, 0.3)',
         },
         '.text-glow-purple': {
-          textShadow: '0 0 10px rgba(168, 85, 247, 0.5)',
+          textShadow: '0 0 10px rgba(168, 85, 247, 0.5), 0 0 20px rgba(168, 85, 247, 0.3)',
+        },
+        '.text-glow-magenta': {
+          textShadow: '0 0 10px rgba(255, 0, 240, 0.5), 0 0 20px rgba(255, 0, 240, 0.3)',
+        },
+        '.text-glow-yellow': {
+          textShadow: '0 0 10px rgba(255, 241, 0, 0.5), 0 0 20px rgba(255, 241, 0, 0.3)',
+        },
+        
+        // Strong glow for maximum emphasis (CTAs, alerts)
+        '.text-glow-strong': {
+          textShadow: '0 0 10px currentColor, 0 0 20px currentColor, 0 0 40px currentColor',
         },
       });
       

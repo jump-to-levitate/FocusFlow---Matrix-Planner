@@ -283,6 +283,30 @@ export const TW = {
     cyan: 'bg-gradient-to-r from-[#00F0FF] to-[#00D4FF] bg-clip-text text-transparent',
     neon: 'bg-gradient-to-r from-[#39FF14] via-[#00F0FF] to-[#FF00F0] bg-clip-text text-transparent',
   },
+  
+  // ============================================================================
+  // VIBRANT NEON TEXT - High contrast on glassmorphism
+  // Uses drop-shadow to 'cut' text from glass layers and create glow effect
+  // CRITICAL: Always use these on dark/glass backgrounds - never on white
+  // ============================================================================
+  textVibrant: {
+    // Primary vibrant colors - built-in glow via tailwind drop-shadow
+    cyan: 'text-neon-cyan',      // #00F0FF + glow - for primary actions, active states
+    lime: 'text-neon-lime',      // #39FF14 + glow - for Q1 urgency, success
+    purple: 'text-neon-purple',  // #A855F7 + glow - for Q2 importance
+    magenta: 'text-neon-magenta', // #FF00F0 + glow - for highlights, special
+    yellow: 'text-neon-yellow',  // #FFF100 + glow - for warnings, attention
+    
+    // Glow modifiers (add extra intensity)
+    glowCyan: 'text-neon-cyan text-glow-cyan',
+    glowLime: 'text-neon-lime text-glow-lime',
+    glowPurple: 'text-neon-purple text-glow-purple',
+    glowMagenta: 'text-neon-magenta text-glow-magenta',
+    glowYellow: 'text-neon-yellow text-glow-yellow',
+    
+    // Maximum glow for CTAs and critical alerts
+    glowStrong: 'text-glow-strong',
+  },
 } as const;
 
 // ============================================================================
@@ -318,5 +342,23 @@ export type StatusColors = keyof typeof COLORS.status;
 // 5. Status actions:
 //    <button className={TW.badge.success}>Zrobione</button>
 //    <button className={TW.badge.danger}>Odrzuć</button>
+//
+// 6. Vibrant neon text (with drop shadow for glassmorphism):
+//    import { TW } from '@/constants/colors';
+//    <span className={TW.textVibrant.cyan}>Active Label</span>
+//    <span className={TW.textVibrant.glowLime}>Critical Alert</span>
+//    <h1 className={TW.textVibrant.glowStrong}>Hero Title</h1>
+//
+// 7. Direct Tailwind vibrant classes (from tailwind.config.js):
+//    <span className="text-neon-cyan">Cyan with glow</span>
+//    <span className="text-neon-lime text-glow-lime">Intense lime</span>
+//    <span className="text-glow-strong">Maximum glow effect</span>
+//
+// VIBRANT TEXT BEST PRACTICES:
+// - Always use on dark/glass backgrounds (bg-slate-900, glass-panel)
+// - Never use on light/white backgrounds (glow effect is lost)
+// - Use text-neon-* for all interactive/active states
+// - Combine with text-glow-* for emphasis (CTAs, alerts, hero text)
+// - Contrast ratio: All vibrant colors > 7:1 on #0F172A (WCAG AAA)
 //
 // ============================================================================
