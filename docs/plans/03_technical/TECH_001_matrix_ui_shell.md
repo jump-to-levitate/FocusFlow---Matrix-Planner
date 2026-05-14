@@ -12,21 +12,23 @@
 | **ID** | TECH_001 |
 | **Tytuł** | Matrix UI Shell Implementation |
 | **Faza Roadmap** | Faza 1: The Shell |
-| **Status** | Draft - Ready for Implementation |
+| **Status** | **Final v1.0** - Ready for Implementation |
 | **Data** | 2026-05-14 |
 | **Priority** | P0 (MUST HAVE - Foundation) |
 | **Estimated Effort** | 3 dni (1 developer) |
 
 **Dependencies:**
-- ✅ PLAN_000 (Repository Setup) - DONE
-- ✅ docs/design-system.md (Visual spec)
+- ✅ TECH_000 (Bootstrap & Repository Setup) - DONE
+- ✅ docs/roles/ux_ui/design-system.md (Visual spec)
 - ✅ docs/business/glossary.md (Terminology)
+- ✅ docs/tech/conventions.md (480px constraint SSOT)
 
 **Powiązane dokumenty:**
 - PDF str. 15 (Pulpit/Dashboard)
 - PDF str. 16 (Macierz 2×2)
 - PDF str. 5, 6, 7 (Bottom navigation pattern)
-- docs/design-system.md (480px constraint, glassmorphism)
+- docs/roles/ux_ui/design-system.md (480px constraint, glassmorphism)
+- docs/architecture/adr/ADR_002_mobile_first_constraint.md (480px ADR)
 
 ---
 
@@ -843,7 +845,7 @@ module.exports = {
 
 Po zakończeniu TECH_001 (The Shell), następny plan do implementacji:
 
-**→ PLAN_002: Brain-Dump Quiz Logic (Faza 2: The Brain)**
+**→ FEAT_001: Brain-Dump Quiz Logic (Faza 2: The Brain)**
 
 Będziemy mogli:
 1. Podłączyć "Dodaj zadanie" buttony do Quiz flow
@@ -859,12 +861,31 @@ Będziemy mogli:
 | PDF str. 15 | Dashboard layout, Q1 empty state |
 | PDF str. 16 | Matrix 2×2 grid, quadrant colors |
 | PDF str. 5, 6, 7 | Bottom navigation pattern |
-| docs/design-system.md | 480px constraint, colors, typography |
+| docs/roles/ux_ui/design-system.md | 480px constraint, colors, typography |
+| docs/tech/conventions.md | 480px SSOT, color usage rules |
 | docs/business/glossary.md | Terminology (Q1-Q4, AppShell) |
 | docs/business/roadmap.md | Faza 1 context |
+| docs/architecture/adr/ADR_002_mobile_first_constraint.md | 480px architectural decision |
 
 ---
 
-**Status:** ✅ Ready for Implementation  
+**Status:** ✅ Final v1.0 - Ready for Implementation  
 **Next Action:** Rozpocząć Day 1 (AppShell + Tailwind Config)
+
+---
+
+## 12. Changelog (Finalization)
+
+| Wersja | Data | Zmiany |
+|--------|------|--------|
+| v1.0 | 2026-05-14 | **Final release** - wszystkie sekcje zweryfikowane i ujednolicone |
+| v0.9 | 2026-05-14 | Ujednolicono `content-area` do `pb-28` (112px) |
+| v0.8 | 2026-05-14 | Dodano `webkit-backdrop-filter` i `safe-area-inset-bottom` |
+| v0.7 | 2026-05-14 | Zmieniono kolory w Tailwind na CSS variables (`var(--*)`) |
+| v0.6 | 2026-05-14 | Dodano dynamiczny padding i fonty w QuadrantCard (<360px) |
+| v0.5 | 2026-05-14 | Dodano vibrant neon text z drop shadows |
+| v0.4 | 2026-05-14 | Ulepszono BottomNav (fill-neon-cyan/20, stroke-[2.5px]) |
+| v0.3 | 2026-05-14 | Poprawiono 480px constraint w BottomNav (left-1/2 -translate-x-1/2) |
+| v0.2 | 2026-05-14 | Aktualizacja nazewnictwa (TECH_001, reorganizacja folderów) |
+| v0.1 | 2026-05-14 | Initial draft |
 
