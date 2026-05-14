@@ -174,8 +174,8 @@ export const BottomNav = () => {
   return (
     {/* Fixed nav constrained to 480px AppShell width, centered */}
     <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 z-40 w-full max-w-[480px]">
-      {/* Padding container */}
-      <div className="px-4 pb-4">
+      {/* Padding container - dynamic safe area for gesture bars */}
+      <div className="px-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
         {/* Glassmorphism background */}
         <div className="rounded-2xl bg-white/[0.08] backdrop-blur-xl border border-white/[0.15] px-2 py-3">
           <div className="flex items-center justify-around">
@@ -705,6 +705,7 @@ module.exports = {
   /* Glassmorphism card */
   .glass-card {
     @apply bg-white/[0.08] backdrop-blur-xl rounded-xl border border-white/[0.15];
+    -webkit-backdrop-filter: blur(12px); /* Safari support */
   }
   
   /* Neon text gradient */
