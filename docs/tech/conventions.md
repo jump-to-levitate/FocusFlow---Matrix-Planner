@@ -1,34 +1,51 @@
 # Konwencje Techniczne FocusFlow 2.0
 
-> Zasady kodowania obowiązujące w całym projekcie
+> **SINGLE SOURCE OF TRUTH (SSOT) dla ograniczeń technicznych i konwencji kodowania**
 
-## ZASADA KRYTYCZNA: Mobile-First Only
+---
+
+## ZASADA KRYTYCZNA: Mobile-First Only (480px Safety Net)
 
 **Aplikacja jest WYŁĄCZNIE Mobile-First.**
 
-### AppShell
+> **UWAGA:** Niniejszy dokument jest JEDYNYM źródłem prawdy (SSOT) dla ograniczenia 480px. Każda zmiana UI MUSI być zgodna z ADR_002.
 
-- Stała maksymalna szerokość: `max-w-[480px]`
-- Wycentrowanie: `mx-auto`
-- Pełna wysokość: `min-h-screen`
-- Padding boczny: `px-4`
+### AppShell - 480px Safety Net
+
+| Property | Value | Rationale |
+|----------|-------|-----------|
+| **Max Width** | `max-w-[480px]` | Hard limit dla mobile-first |
+| **Centering** | `mx-auto` | Wycentrowanie na desktopie |
+| **Min Height** | `min-h-screen` | Full viewport coverage |
+| **Padding X** | `px-4` (16px) | Safe zone dla contentu |
 
 ```tsx
-// app/src/components/AppShell.tsx
+// app/src/components/AppShell.tsx - MANDATORY pattern
 <div className="max-w-[480px] mx-auto min-h-screen px-4">
   {children}
 </div>
 ```
 
-## Zakaz Twardego Kodowania Kolorów
+### Why 480px for ADHD?
+
+- **Focus Constraint** - Mniejszy viewport = mniej dystrakcji wizualnych
+- **Thumb Reachability** - Wszystko w zasięgu kciuka (thumb-first design)
+- **Object Permanence** - Content zawsze widoczny, nie "ginie" poza viewport
+- **Cognitive Load** - Redukcja overwhelm przez limitowanie pola widzenia
+
+---
+
+## Zakaz Twardego Kodowania Kolorów (SSOT)
 
 **NIE WOLNO** używać wartości kolorów bezpośrednio w komponentach.
 
-### Dozwolone źródła kolorów:
+### Dozwolone źródła kolorów (SSOT):
 
-1. `src/constants/colors.ts` - aplikacyjna paleta
-2. `tailwind.config.js` - custom theme colors
-3. Klasy Tailwind np. `bg-blue-500`, `text-gray-900`
+| Źródło | Ścieżka | Użycie |
+|--------|---------|--------|
+| **Primary** | `src/constants/colors.ts` | Neon Glassmorphism palette, Q1-Q4 colors |
+| **Secondary** | `tailwind.config.js` | Custom theme extensions |
+| **Fallback** | Tailwind classes | `bg-slate-900`, `text-white`, etc. |
 
 ### Przykład ZAKAZANEGO kodu:
 
@@ -40,13 +57,18 @@
 ### Przykład POPRAWNEGO kodu:
 
 ```tsx
-// ✅ POPRAWNE
+// ✅ POPRAWNE - użycie colors.ts (PRIMARY SSOT)
 import { COLORS } from '@/constants/colors';
 <button className={COLORS.primary.button}>
 
-// lub
-<button className="bg-accent-500 text-white">
+// ✅ POPRAWNE - użycie tailwind.config (SECONDARY)
+<button className="bg-neon-lime text-white">
+
+// ✅ POPRAWNE - standardowe Tailwind (FALLBACK)
+<button className="bg-slate-700 text-white">
 ```
+
+> **ZASADA:** Zawsze preferuj `src/constants/colors.ts` dla kolorów brand/Neon Glassmorphism.
 
 ## Struktura Plików
 
