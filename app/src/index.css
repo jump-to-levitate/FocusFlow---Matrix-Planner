@@ -1,0 +1,437 @@
+/* ============================================================================
+ * FocusFlow 2.0 - Global Styles
+ * Mobile-First, Neon Glassmorphism Aesthetic
+ * ============================================================================ */
+
+/* Tailwind Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+ * BASE STYLES
+ * ============================================================================ */
+
+@layer base {
+  /* Root variables for dynamic access */
+  :root {
+    /* Background */
+    --color-bg: #0F172A;
+    --color-bg-elevated: #1E293B;
+    
+    /* Neon Brand */
+    --color-neon-cyan: #00F0FF;
+    --color-neon-magenta: #FF00F0;
+    --color-neon-lime: #39FF14;
+    --color-neon-yellow: #FFF100;
+    
+    /* Quadrants */
+    --color-q1: #39FF14;
+    --color-q2: #A855F7;
+    --color-q3: #00F0FF;
+    --color-q4: #64748B;
+    
+    /* Glassmorphism */
+    --glass-light: rgba(255, 255, 255, 0.08);
+    --glass-medium: rgba(255, 255, 255, 0.12);
+    --glass-heavy: rgba(255, 255, 255, 0.18);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    
+    /* Text */
+    --text-primary: #FFFFFF;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-tertiary: rgba(255, 255, 255, 0.4);
+    
+    /* Status */
+    --status-success: #39FF14;
+    --status-danger: #FF4757;
+    --status-warning: #FFA502;
+    --status-info: #00F0FF;
+    
+    /* Animation */
+    --transition-fast: 150ms;
+    --transition-normal: 200ms;
+    --transition-slow: 300ms;
+  }
+
+  /* Reset and base */
+  * {
+    @apply border-white/[0.1];
+  }
+  
+  html {
+    @apply antialiased;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-background text-white;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Mobile-First: Prevent zoom on input focus (iOS) */
+  input, textarea, select {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+  
+  /* Selection color */
+  ::selection {
+    background-color: rgba(0, 240, 255, 0.3);
+    color: #FFFFFF;
+  }
+  
+  /* Scrollbar styling (Webkit) */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* ============================================================================
+ * COMPONENTS - Reusable patterns
+ * ============================================================================ */
+
+@layer components {
+  /* Glassmorphism Panel */
+  .glass-panel {
+    @apply bg-white/[0.08] backdrop-blur-md border border-white/[0.15] rounded-xl;
+  }
+  
+  .glass-panel-hover {
+    @apply glass-panel hover:bg-white/[0.12] transition-colors duration-200;
+  }
+  
+  /* Glass Card */
+  .glass-card {
+    @apply bg-white/[0.05] backdrop-blur-sm border border-white/[0.1] rounded-lg;
+  }
+  
+  /* Input Base */
+  .glass-input {
+    @apply bg-[#0F172A]/60 border border-white/[0.1] rounded-lg px-4 py-3 
+           text-white placeholder-white/40
+           focus:outline-none focus:border-neon-cyan/50 focus:ring-2 focus:ring-neon-cyan/20
+           transition-all duration-200;
+  }
+  
+  /* Button Base */
+  .btn-base {
+    @apply px-4 py-2.5 rounded-lg font-medium transition-all duration-200
+           active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  /* Primary Button (Neon Cyan) */
+  .btn-primary {
+    @apply btn-base bg-neon-cyan text-slate-900 
+           hover:bg-neon-cyan/80 hover:shadow-neon-cyan;
+  }
+  
+  /* Secondary Button (Glass) */
+  .btn-secondary {
+    @apply btn-base bg-white/[0.1] text-white border border-white/[0.2]
+           hover:bg-white/[0.15] hover:border-white/[0.3];
+  }
+  
+  /* Ghost Button */
+  .btn-ghost {
+    @apply btn-base text-white/70 hover:text-white hover:bg-white/[0.08];
+  }
+  
+  /* Status Buttons (from PDF str. 24) */
+  .btn-success {
+    @apply btn-base bg-status-success/15 text-status-success 
+           border border-status-success/40 hover:bg-status-success/25;
+  }
+  
+  .btn-danger {
+    @apply btn-base bg-status-danger/15 text-status-danger
+           border border-status-danger/40 hover:bg-status-danger/25;
+  }
+  
+  .btn-warning {
+    @apply btn-base bg-status-warning/15 text-status-warning
+           border border-status-warning/40 hover:bg-status-warning/25;
+  }
+  
+  /* Quadrant Cards (with left border accent) */
+  .card-q1 {
+    @apply border-l-4 border-l-q1 bg-gradient-to-r from-q1/10 to-transparent;
+  }
+  
+  .card-q2 {
+    @apply border-l-4 border-l-q2 bg-gradient-to-r from-q2/10 to-transparent;
+  }
+  
+  .card-q3 {
+    @apply border-l-4 border-l-q3 bg-gradient-to-r from-q3/10 to-transparent;
+  }
+  
+  .card-q4 {
+    @apply border-l-4 border-l-q4 bg-gradient-to-r from-q4/10 to-transparent;
+  }
+  
+  /* Badge */
+  .badge {
+    @apply px-2 py-0.5 text-xs font-medium rounded-full;
+  }
+  
+  .badge-success {
+    @apply badge bg-status-success/15 text-status-success border border-status-success/30;
+  }
+  
+  .badge-danger {
+    @apply badge bg-status-danger/15 text-status-danger border border-status-danger/30;
+  }
+  
+  .badge-warning {
+    @apply badge bg-status-warning/15 text-status-warning border border-status-warning/30;
+  }
+  
+  .badge-info {
+    @apply badge bg-status-info/15 text-status-info border border-status-info/30;
+  }
+  
+  /* Divider */
+  .divider {
+    @apply border-t border-white/10;
+  }
+  
+  .divider-strong {
+    @apply border-t border-white/20;
+  }
+  
+  /* App Shell (Mobile-First 480px constraint) */
+  .app-shell {
+    @apply w-full max-w-[480px] mx-auto min-h-screen px-4 py-6;
+  }
+  
+  /* Thumb-friendly touch targets */
+  .touch-target {
+    @apply min-w-[44px] min-h-[44px];
+  }
+  
+  /* Bottom navigation (thumb zone) */
+  .bottom-nav {
+    @apply fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto 
+           bg-background/95 backdrop-blur-lg border-t border-white/10
+           px-6 py-4 z-50;
+  }
+}
+
+/* ============================================================================
+ * UTILITIES - Helper classes
+ * ============================================================================ */
+
+@layer utilities {
+  /* Text glow effects */
+  .text-glow-cyan {
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  }
+  
+  .text-glow-lime {
+    text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+  }
+  
+  .text-glow-purple {
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+  }
+  
+  /* Gradient text */
+  .text-gradient-neon {
+    @apply bg-gradient-to-r from-neon-lime via-neon-cyan to-neon-magenta 
+           bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-cyan {
+    @apply bg-gradient-to-r from-neon-cyan to-[#00D4FF] 
+           bg-clip-text text-transparent;
+  }
+  
+  /* Neon box shadows */
+  .shadow-neon-cyan {
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  }
+  
+  .shadow-neon-lime {
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+  }
+  
+  .shadow-neon-magenta {
+    box-shadow: 0 0 20px rgba(255, 0, 240, 0.3);
+  }
+  
+  /* Safe area for notched phones */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Line clamp utilities */
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* ============================================================================
+ * ANIMATIONS (ADHD-friendly micro-interactions)
+ * ============================================================================ */
+
+@layer utilities {
+  /* Smooth appear */
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  /* Slide up enter */
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  @keyframes slideUp {
+    from { 
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Scale enter */
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+  
+  @keyframes scaleIn {
+    from { 
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to { 
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* Subtle bounce (attention without annoyance) */
+  .animate-bounce-subtle {
+    animation: bounceSubtle 0.5s ease-in-out;
+  }
+  
+  @keyframes bounceSubtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  
+  /* Pulse glow (for active/focused elements) */
+  .animate-pulse-glow {
+    animation: pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes pulseGlow {
+    0%, 100% { 
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+    }
+  }
+  
+  /* Shake (for errors/validation) */
+  .animate-shake {
+    animation: shake 0.5s ease-in-out;
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+    20%, 40%, 60%, 80% { transform: translateX(2px); }
+  }
+}
+
+/* ============================================================================
+ * ACCESSIBILITY - Focus and reduced motion
+ * ============================================================================ */
+
+/* Focus visible styles */
+*:focus-visible {
+  @apply outline-none ring-2 ring-neon-cyan/50 ring-offset-2 ring-offset-background;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .glass-panel,
+  .glass-card {
+    @apply border-white/40;
+  }
+}
