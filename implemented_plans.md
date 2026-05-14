@@ -5,7 +5,8 @@
 
 ## Zakończone Plany
 
-- [ ] TECH_000 - Bootstrap & Repository Setup
+- [x] TECH_000 - Bootstrap & Repository Setup ✅  
+  - Weryfikacja: `docs/roles/tester/TECH_000_verification_report.md`
 - [ ] TECH_001 - Matrix UI Shell (480px, AppShell, BottomNav)
 - [ ] FEAT_001 - Brain-Dump Quiz Logic (Smart Classification)
 - [ ] FEAT_002 - Core Data Layer (Dexie.js schema)
