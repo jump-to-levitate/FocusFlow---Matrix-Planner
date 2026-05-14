@@ -101,9 +101,9 @@ export const AppShell = ({ children }: AppShellProps) => {
     @apply bg-slate-900 min-h-screen;
   }
   
-  /* Safe area for bottom nav */
+  /* Safe area for bottom nav - leaves breathing room above 80px nav */
   .content-area {
-    @apply pb-20; /* Space for BottomNav height (80px) */
+    @apply pb-28; /* 112px = 80px nav + 32px breathing room */
   }
 }
 ```
@@ -697,9 +697,9 @@ module.exports = {
     @apply mx-auto w-full max-w-[480px] min-h-screen px-4 py-6;
   }
   
-  /* Content area with space for bottom nav */
+  /* Content area with space for bottom nav - unified pb-28 */
   .content-area {
-    @apply pb-24; /* 96px for BottomNav + safe area */
+    @apply pb-28; /* 112px = 80px nav + 32px breathing room */
   }
   
   /* Glassmorphism card */
@@ -832,7 +832,7 @@ module.exports = {
 | Risk | Prawdopodobieństwo | Wpływ | Mitigacja |
 |------|-------------------|-------|-----------|
 | **480px constraint nie działa** | Low | High | Testować od razu na DevTools Mobile |
-| **BottomNav zasłania content** | Low | Medium | `pb-24` padding na content-area |
+| **BottomNav zasłania content** | Low | Medium | `pb-28` padding na content-area |
 | **Neon colors za jasne** | Low | Low | Sprawdzić kontrast w `/WF UX` |
 | **Routing nie działa na mobile** | Low | High | Testować na realnym telefonie |
 | **Glassmorphism nie wspierany** | Low | Low | Fallback do solid colors |
