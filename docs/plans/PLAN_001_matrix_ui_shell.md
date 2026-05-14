@@ -193,12 +193,20 @@ export const BottomNav = () => {
               >
                 {({ isActive }) => (
                   <>
+                    {/* Icon: thicker stroke + light fill when active */}
                     <Icon 
                       size={24} 
-                      strokeWidth={1.5}
-                      className={isActive ? 'fill-current' : ''}
+                      strokeWidth={isActive ? 2.5 : 1.5}
+                      className={isActive 
+                        ? 'fill-neon-cyan/20 transition-all duration-150' 
+                        : 'transition-all duration-150'
+                      }
                     />
-                    <span className="text-[10px] font-medium">{label}</span>
+                    <span className={`text-[10px] font-medium transition-all duration-150 ${
+                      isActive ? 'font-semibold' : ''
+                    }`}>
+                      {label}
+                    </span>
                   </>
                 )}
               </NavLink>
