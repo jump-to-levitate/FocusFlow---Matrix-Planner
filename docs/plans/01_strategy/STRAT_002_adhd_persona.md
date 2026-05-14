@@ -1,9 +1,9 @@
-# PLAN_RISK_002: ICP & Persona Definition - FocusFlow 2.0
+# STRAT_002: ICP & Persona Definition - FocusFlow 2.0
 
-> Wygenerowano przez workflow: WF_ICP_Persona.md
-> Data: 2026-05-10
-> Status: [ ] Draft | [ ] Validated | [ ] Action Required
-> Dependencies: PLAN_RISK_001_pre_mortem_audit.md
+> Wygenerowano przez workflow: WF_ICP_Persona.md  
+> Data: 2026-05-10  
+> Status: [ ] Draft | [ ] Validated | [ ] Action Required  
+> Dependencies: STRAT_003 (Pre-Mortem Audit & Risk Analysis)
 
 ---
 
@@ -11,7 +11,7 @@
 
 **Produkt:** FocusFlow 2.0 - Mobile-first Matrix Planner z Inteligentnym Quizem i Systemem Anti-Burnout
 
-**Etap:** Idea → MVP (przed implementacją PLAN_001)
+**Etap:** Idea → MVP (przed implementacją TECH_001)
 
 **Cel:** Zdefiniować Ideal Customer Profile (ICP) oraz persona dla produktu, aby skierować development i GTM na właściwą niszę.
 
@@ -361,13 +361,13 @@
 | 3 | Set up Carrd landing page (3 variants: A, B, C) z ADHD-focused copy | Product Owner | 4-5h |
 | 4 | Schedule 5 interviews z r/ADHD responders (DM) | Product Owner | 2h |
 | 5 | Przygotować Concierge Smart Quiz script dla ADHD users | Product Owner | 1h |
-| 6 | Review this ICP with PLAN_RISK_001 findings + ADHD angle | Architect + PO | 1h |
+| 6 | Review this ICP with STRAT_003 findings + ADHD angle | Architect + PO | 1h |
 
 ### Go/No-Go Decision Gate
 
 **✅ DECISION MADE: Primary ICP = ADHD Brain**
 
-**Przed PLAN_001 (Core Data Layer) - wymagane:**
+**Przed TECH_001 (Core Data Layer) - wymagane:**
 - [ ] ≥5 validated interviews z r/ADHD community (potwierdzają executive dysfunction pain)
 - [ ] Landing page z ≥20 emails OR ≥10% conversion (ADHD-focused messaging)
 - [ ] Concierge test: Manual Smart Quiz dla 3-5 ADHD users (validation of auto-classification value)
@@ -385,7 +385,7 @@
 
 ## 9. Critical UX Requirements (dla /WF UX)
 
-> Soczewka przez którą agent AI ocenia aplikację podczas audytu UX
+> Soczewka przez którą agent AI ocenia aplikację podczas audytu UX  
 > Każdy komponent MUSI spełniać poniższe kryteria dla ADHD Brain
 
 ### 9.1 Minimal Friction (Tarcie Minimalne)
@@ -466,7 +466,7 @@ Pytanie 2: "Czy masz twardy termin?" (Pilność)
 
 ## 10. Anty-wzorce (Czego UNIKAĆ)
 
-> Lista zakazanych wzorów UI/UX dla ADHD Brain
+> Lista zakazanych wzorów UI/UX dla ADHD Brain  
 > Podczas /WF UX - sprawdź czy któryś występuje!
 
 | Anty-wzorzec | Dlaczego szkodliwy? | Co zamiast? |

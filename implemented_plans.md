@@ -5,13 +5,13 @@
 
 ## Zakończone Plany
 
-- [ ] PLAN_000 - Repository Setup & AppShell Base
-- [ ] PLAN_001 - Core Data Layer (Dexie.js schema)
-- [ ] PLAN_002 - Matrix UI (Q1-Q4 Grid)
-- [ ] PLAN_003 - Intelligent Quiz System
-- [ ] PLAN_004 - Notes System (Free + Linked)
-- [ ] PLAN_005 - Focus Timer
-- [ ] PLAN_006 - Polish & Optimization
+- [ ] TECH_000 - Bootstrap & Repository Setup
+- [ ] TECH_001 - Matrix UI Shell (480px, AppShell, BottomNav)
+- [ ] FEAT_001 - Brain-Dump Quiz Logic (Smart Classification)
+- [ ] FEAT_002 - Core Data Layer (Dexie.js schema)
+- [ ] FEAT_003 - Notes System (Free + Linked)
+- [ ] FEAT_004 - Focus Timer
+- [ ] TECH_002 - Polish & Optimization
 
 ## Legenda
 

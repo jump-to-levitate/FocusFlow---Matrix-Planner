@@ -171,7 +171,7 @@ All UI changes MUST verify:
 | `docs/tech/conventions.md` | SSOT for 480px implementation details |
 | `docs/plans/PLAN_RISK_002_icp_persona.md` | ADHD persona validation |
 | `docs/design-system.md` | Visual design system |
-| `docs/plans/PLAN_001_matrix_ui_shell.md` | Implementation plan |
+| `docs/plans/TECH_001_matrix_ui_shell.md` | Implementation plan |
 
 ### Technical Implementation
 

@@ -1,4 +1,4 @@
-# PLAN_000: Repository Setup & AppShell Base
+# TECH_000: Bootstrap & Repository Setup & AppShell Base
 
 > Plan implementacji szkieletu aplikacji
 

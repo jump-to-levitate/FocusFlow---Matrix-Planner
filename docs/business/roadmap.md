@@ -59,8 +59,8 @@ Zbudowanie szkieletu aplikacji który "trzyma" wszystko razem - bez tego nie ma 
 
 | Plan | Tytuł | Status | Priority |
 |------|-------|--------|----------|
-| PLAN_000 | Repository Setup | ✅ Done | P0 |
-| **PLAN_001** | **Matrix UI Shell** | 📝 Draft | **P0** |
+| TECH_000 | Bootstrap & Repo Setup | ✅ Done | P0 |
+| **TECH_001** | **Matrix UI Shell** | 📝 Draft | **P0** |
 
 ### 1.4 PDF Reference Mapping
 
@@ -115,8 +115,8 @@ Implementacja "mózgu" aplikacji - tam gdzie dzieje się magia klasyfikacji zada
 
 | Plan | Tytuł | Status | Priority |
 |------|-------|--------|----------|
-| **PLAN_002** | **Brain-Dump Quiz Logic** | 📝 Draft | **P0** |
-| **PLAN_003** | **Task CRUD & Data Layer** | 📝 Draft | **P0** |
+| **FEAT_001** | **Brain-Dump Quiz Logic** | 📝 Draft | **P0** |
+| **TECH_002** | **Task CRUD & Data Layer** | 📝 Draft | **P0** |
 
 ### 2.4 PDF Reference Mapping
 
@@ -297,11 +297,11 @@ Week 1          Week 2          Week 3          Week 4
 
 ---
 
-## Next Step: PLAN_001_matrix_ui_shell
+## Next Step: TECH_001_matrix_ui_shell
 
-### Rekomendacja: Rozpocznij od PLAN_001
+### Rekomendacja: Rozpocznij od TECH_001
 
-**Dlaczego PLAN_001 jako pierwszy:**
+**Dlaczego TECH_001 jako pierwszy:**
 
 1. **Zero Dependencies** - nie potrzebuje innych planów
 2. **Foundation** - wszystko inne stoi na AppShell
@@ -309,10 +309,10 @@ Week 1          Week 2          Week 3          Week 4
 4. **Risk Mitigation** - jeśli 480px constraint się nie uda, wiemy od razu
 5. **Quick Win** - 2-3 dni i mamy działający szkielet
 
-### Struktura Proponowanego PLAN_001:
+### Struktura Proponowanego TECH_001:
 
 ```
-PLAN_001_matrix_ui_shell.md
+docs/plans/03_technical/TECH_001_matrix_ui_shell.md
 ├── 1. Executive Summary
 ├── 2. AppShell Specification (480px constraint)
 ├── 3. Bottom Navigation Component
@@ -336,7 +336,7 @@ PLAN_001_matrix_ui_shell.md
 └── 7. Implementation Checklist
 ```
 
-### Szacowany Timeline dla PLAN_001:
+### Szacowany Timeline dla TECH_001:
 
 | Dzień | Zadanie | Output |
 |-------|---------|--------|
@@ -346,7 +346,7 @@ PLAN_001_matrix_ui_shell.md
 
 **Gotowy do rozpoczęcia?** 
 
-Mogę teraz wygenerować szczegółowy `PLAN_001_matrix_ui_shell.md` z pełnymi specyfikacjami, kodem TypeScript, i acceptance criteria.
+Mogę teraz wygenerować szczegółowy `TECH_001_matrix_ui_shell.md` z pełnymi specyfikacjami, kodem TypeScript, i acceptance criteria.
 
 ---
 
@@ -354,9 +354,10 @@ Mogę teraz wygenerować szczegółowy `PLAN_001_matrix_ui_shell.md` z pełnymi 
 
 | Dokument | Rola w Roadmap |
 |----------|----------------|
-| `PLAN_000_repository_setup.md` | ✅ Done - fundamenty repo |
-| `PLAN_002_brain_dump_quiz_logic.md` | Faza 2 - Brain Dump Quiz |
-| `PLAN_003_user_journey_map.md` | Wsparcie dla wszystkich faz |
+| `docs/plans/03_technical/TECH_000_bootstrap.md` | ✅ Done - fundamenty repo |
+| `docs/plans/02_features/FEAT_001_quiz_logic.md` | Faza 2 - Brain Dump Quiz |
+| `docs/plans/01_strategy/STRAT_001_user_journey.md` | Wsparcie dla wszystkich faz |
+| `docs/plans/01_strategy/STRAT_002_adhd_persona.md` | ICP & ADHD Requirements |
 | `design-system.md` | Wizualne fundamenty (wszystkie fazy) |
 | `docs/tech/conventions.md` | SSOT dla 480px constraint i colors (wszystkie fazy) |
 | `src/constants/colors.ts` | Paleta Neon Glassmorphism (wszystkie fazy) |
@@ -369,5 +370,5 @@ Mogę teraz wygenerować szczegółowy `PLAN_001_matrix_ui_shell.md` z pełnymi 
 ---
 
 **Status:** Roadmap v1.0 gotowy do zatwierdzenia  
-**Next Action:** Utworzenie PLAN_001_matrix_ui_shell.md
+**Next Action:** Utworzenie docs/plans/03_technical/TECH_001_matrix_ui_shell.md
 

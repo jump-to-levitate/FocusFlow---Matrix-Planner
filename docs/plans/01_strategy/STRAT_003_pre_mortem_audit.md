@@ -1,4 +1,4 @@
-# PLAN_RISK_001: Pre-Mortem Audit - FocusFlow 2.0
+# STRAT_003: Pre-Mortem Audit - FocusFlow 2.0
 
 > Wygenerowano przez workflow: WF_Kill_The_Idea.md
 > Data: 2026-05-10

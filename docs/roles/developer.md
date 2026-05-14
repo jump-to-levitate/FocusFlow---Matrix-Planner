@@ -281,7 +281,7 @@ const MAX_WIDTH = 480;
 ### Plan References
 
 ```tsx
-// @see PLAN_002 Brain-Dump Quiz Logic
+// @see FEAT_001 Brain-Dump Quiz Logic
 // @see ADR_002 480px Mobile-First Constraint
 export const useQuiz = () => {
   // implementation
@@ -321,7 +321,7 @@ export const useQuiz = () => {
 | `docs/tech/conventions.md` | SSOT for 480px and colors |
 | `src/constants/colors.ts` | Actual color values to use |
 | `ADR_002_mobile_first_constraint.md` | 480px rationale and verification |
-| `PLAN_001_matrix_ui_shell.md` | Current implementation plan |
+| `TECH_001_matrix_ui_shell.md` | Current implementation plan |
 | `glossary.md` | Terminology consistency |
 
 ### Quick Reference Links
@@ -396,7 +396,7 @@ export const useQuiz = () => {
 - [ ] Read `docs/tech/conventions.md`
 - [ ] Study `src/constants/colors.ts`
 - [ ] Review `ADR_002_mobile_first_constraint.md`
-- [ ] Complete `PLAN_001_matrix_ui_shell.md` walkthrough
+- [ ] Complete `TECH_001_matrix_ui_shell.md` walkthrough
 - [ ] Run first `/WF UX` review
 - [ ] First commit with mentor review
 

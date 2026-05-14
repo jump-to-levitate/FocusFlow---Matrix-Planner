@@ -1,4 +1,4 @@
-# PLAN_001: Matrix UI Shell Implementation
+# TECH_001: Matrix UI Shell Implementation
 
 > Faza 1: Fundamenty i Szkielet (The Shell)  
 > AppShell 480px, Bottom Navigation, Empty Matrix View
@@ -9,7 +9,7 @@
 
 | Pole | Wartość |
 |------|---------|
-| **ID** | PLAN_001 |
+| **ID** | TECH_001 |
 | **Tytuł** | Matrix UI Shell Implementation |
 | **Faza Roadmap** | Faza 1: The Shell |
 | **Status** | Draft - Ready for Implementation |
@@ -815,9 +815,9 @@ module.exports = {
 
 ---
 
-## 10. Next Steps After PLAN_001
+## 10. Next Steps After TECH_001
 
-Po zakończeniu PLAN_001 (The Shell), następny plan do implementacji:
+Po zakończeniu TECH_001 (The Shell), następny plan do implementacji:
 
 **→ PLAN_002: Brain-Dump Quiz Logic (Faza 2: The Brain)**
 

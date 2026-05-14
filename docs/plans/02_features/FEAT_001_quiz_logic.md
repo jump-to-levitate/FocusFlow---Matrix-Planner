@@ -1,4 +1,4 @@
-# PLAN_002: Brain-Dump Quiz Logic Implementation
+# FEAT_001: Brain-Dump Quiz Logic Implementation
 
 > Detailed Implementation Plan for Smart Task Classification  
 > Source: system_overview.md + PDF str. 18-19
@@ -9,19 +9,19 @@
 
 | Pole | Wartość |
 |------|---------|
-| **ID** | PLAN_002 |
+| **ID** | FEAT_001 |
 | **Tytuł** | Brain-Dump Quiz Logic Implementation |
 | **Status** | Draft |
 | **Data** | 2026-05-10 |
 | **Autor** | Senior Logic Developer & SDD Specialist |
-| **Dependencies** | PLAN_000 (Repo Setup), PLAN_001 (Core Data Layer), ADR_001 (IndexedDB) |
+| **Dependencies** | TECH_000 (Repo Setup), TECH_001 (Core Data Layer), ADR_001 (IndexedDB) |
 | **Priority** | P0 (MUST HAVE - core differentiator) |
 
 **Powiązane dokumenty:**
 - `docs/architecture/system_overview.md` - Model danych Task, relacje
 - `docs/architecture/adr/ADR_001_choice_of_storage.md` - IndexedDB + Dexie.js
 - `docs/design-system.md` - Neon Glassmorphism, transitions
-- `docs/plans/PLAN_RISK_002_icp_persona.md` - ADHD UX requirements
+- `docs/plans/01_strategy/STRAT_002_adhd_persona.md` - ADHD UX requirements
 - PDF str. 18 - Brain Dump Quiz flow
 - PDF str. 19 - Q1 Overload Protection
 

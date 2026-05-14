@@ -1,4 +1,4 @@
-# PLAN_003: User Journey Map - FocusFlow 2.0
+# STRAT_001: User Journey Map - FocusFlow 2.0
 
 > Complete User Journey Map for ADHD Brain Persona  
 > Source: WF_User_Journey_Map.md + PDF str. 5-31
@@ -9,18 +9,18 @@
 
 | Pole | Wartość |
 |------|---------|
-| **ID** | PLAN_003 |
+| **ID** | STRAT_001 |
 | **Tytuł** | User Journey Map - FocusFlow 2.0 |
 | **Status** | Draft |
 | **Data** | 2026-05-14 |
 | **Autor** | UX Research & Journey Architect |
-| **Dependencies** | PLAN_RISK_002 (ICP ADHD Persona), PLAN_002 (Quiz Logic), design-system.md |
+| **Dependencies** | STRAT_002 (ICP ADHD Persona), FEAT_001 (Quiz Logic), design-system.md |
 | **Primary ICP** | The ADHD Brain (22-40, executive dysfunction, object permanence issues) |
 
 **Powiązane dokumenty:**
 - PDF str. 5-31 - Wizualne referencje ekranów
-- `docs/plans/PLAN_RISK_002_icp_persona.md` - ADHD UX Requirements
-- `docs/plans/PLAN_002_brain_dump_quiz_logic.md` - Quiz flow logic
+- `docs/plans/01_strategy/STRAT_002_adhd_persona.md` - ADHD UX Requirements
+- `docs/plans/02_features/FEAT_001_quiz_logic.md` - Quiz flow logic
 - `docs/design-system.md` - Visual design constraints
 - `docs/architecture/system_overview.md` - Task model
 

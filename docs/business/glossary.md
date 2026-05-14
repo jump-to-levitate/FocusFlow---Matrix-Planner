@@ -135,7 +135,7 @@
 | **Odpowiedzi** | Binarna: TAK / NIE (żadnych skali 1-5) |
 | **Algorytm** | ```TAK+TAK=Q1, TAK+NIE=Q2, NIE+TAK=Q3, NIE+NIE=Q4``` |
 | **UX Principle** | **Decision Support** - system myśli za użytkownika, eliminuje paraliż decyzyjny |
-| **Ref** | PDF str. 18 (Quiz flow), PLAN_002 (Quiz Logic) |
+| **Ref** | PDF str. 18 (Quiz flow), TECH_00$1 (Quiz Logic) |
 
 **Flow:**
 1. User wpisuje tytuł zadania
@@ -184,7 +184,7 @@
 | **Copy** | "Masz już 5 zadań krytycznych. Dodanie kolejnego = burnout." |
 | **Opcje reasignacji** | Zaplanuj w Q2 / Zrób w przerwie (Q3) / Brain Dump / Odrzuć |
 | **Psychology** | External brake - system "mówi NIE" zamiast użytkownika, zapobiega overwhelm |
-| **Ref** | PDF str. 19 (Overload popup), PLAN_002 |
+| **Ref** | PDF str. 19 (Overload popup), TECH_00$1 |
 
 ---
 
@@ -212,7 +212,7 @@
 | **Zasada** | "No code without spec" - kod jest implementacją dokumentacji, nie odwrotnie |
 | **Workflow** | 1. PLAN → 2. Review → 3. Approve → 4. Implement → 5. Test vs PLAN |
 | **Benefit** | Single Source of Truth, redukcja tech debt, jasne acceptance criteria |
-| **Files** | `PLAN_000.md`, `PLAN_001.md`, etc. |
+| **Files** | `TECH_00$1.md`, `TECH_00$1.md`, etc. |
 | **Ref** | `.kilocode/workflows/*.md` |
 
 ---
@@ -281,7 +281,7 @@
 | **ADHD Problem** | Brak naturalnej pamięci o zadaniach "poza polem widzenia" |
 | **UX Solution** | Visual persistence - Q1 tasks zawsze widoczne, neonowe przypomnienia, mobile-first (zawsze w kieszeni) |
 | **Implementacja** | Sticky Q1 widget, neon borders, always-visible counters |
-| **Ref** | `docs/plans/PLAN_RISK_002_icp_persona.md` (ADHD persona) |
+| **Ref** | `docs/plans/STRAT_002_icp_persona.md` (ADHD persona) |
 
 ---
 
@@ -292,7 +292,7 @@
 | **Definicja** | Kluczowa value proposition dla ADHD: system który "myśli" i "pilnuje" za użytkownika, kompensując słabe executive function |
 | **Components** | Smart Quiz (decides for you), Q1 Limit (says NO for you), Visual Persistence (remembers for you) |
 | **Metaphor** | "Mózg na zewnątrz" - gdy Twój mózg nie współpracuje, FocusFlow podejmuje decyzje za Ciebie |
-| **Ref** | `docs/plans/PLAN_RISK_002_icp_persona.md` (ICP definition) |
+| **Ref** | `docs/plans/STRAT_002_icp_persona.md` (ICP definition) |
 
 ---
 
