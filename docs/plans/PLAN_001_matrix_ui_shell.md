@@ -172,30 +172,35 @@ const navItems: NavItem[] = [
 
 export const BottomNav = () => {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50">
-      {/* 480px constraint wrapper */}
-      <div className="mx-auto max-w-[480px]">
+    {/* Fixed nav constrained to 480px AppShell width, centered */}
+    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 z-40 w-full max-w-[480px]">
+      {/* Padding container */}
+      <div className="px-4 pb-4">
         {/* Glassmorphism background */}
-        <div className="mx-4 mb-4 rounded-2xl bg-white/[0.08] backdrop-blur-xl border border-white/[0.15] px-2 py-3">
+        <div className="rounded-2xl bg-white/[0.08] backdrop-blur-xl border border-white/[0.15] px-2 py-3">
           <div className="flex items-center justify-around">
             {navItems.map(({ to, label, icon: Icon }) => (
               <NavLink
                 key={to}
                 to={to}
                 className={({ isActive }) =>
-                  `flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-150 ${
+                  `flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-150 active:scale-95 ${
                     isActive
-                      ? 'text-neon-cyan scale-95'
+                      ? 'text-neon-cyan'
                       : 'text-white/50 hover:text-white/70'
                   }`
                 }
               >
-                <Icon 
-                  size={24} 
-                  strokeWidth={1.5}
-                  className={({ isActive }) => isActive ? 'fill-current' : ''}
-                />
-                <span className="text-[10px] font-medium">{label}</span>
+                {({ isActive }) => (
+                  <>
+                    <Icon 
+                      size={24} 
+                      strokeWidth={1.5}
+                      className={isActive ? 'fill-current' : ''}
+                    />
+                    <span className="text-[10px] font-medium">{label}</span>
+                  </>
+                )}
               </NavLink>
             ))}
           </div>
