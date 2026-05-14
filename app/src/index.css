@@ -127,6 +127,12 @@
   /* Glass Card */
   .glass-card {
     @apply bg-white/[0.05] backdrop-blur-sm border border-white/[0.1] rounded-lg;
+    -webkit-backdrop-filter: blur(12px); /* Safari support */
+  }
+  
+  /* Content area with space for bottom nav (112px = 80px nav + 32px breathing room) */
+  .content-area {
+    @apply pb-28;
   }
   
   /* Input Base */
