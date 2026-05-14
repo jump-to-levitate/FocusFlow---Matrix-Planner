@@ -12,7 +12,7 @@
 | **ID** | PLAN_002 |
 | **Tytuł** | Brain-Dump Quiz Logic Implementation |
 | **Status** | Draft |
-| **Data** | 2026-05-14 |
+| **Data** | 2026-05-10 |
 | **Autor** | Senior Logic Developer & SDD Specialist |
 | **Dependencies** | PLAN_000 (Repo Setup), PLAN_001 (Core Data Layer), ADR_001 (IndexedDB) |
 | **Priority** | P0 (MUST HAVE - core differentiator) |
