@@ -11,7 +11,7 @@ export const MatrixScreen = () => {
     <div className="flex flex-col h-full pt-4 pb-4">
       {/* Header */}
       <header className="mb-4 shrink-0">
-        <h1 className="text-xl font-black text-white uppercase tracking-wide mb-1">Macierz</h1>
+        <h1 className="text-2xl font-black text-white uppercase tracking-wide mb-1">Macierz</h1>
         <p className="text-sm text-white/50 font-medium">Eisenhower Matrix 2×2</p>
       </header>
 

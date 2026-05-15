@@ -15,10 +15,10 @@ interface QuadrantCardProps {
 }
 
 const colorClasses = {
-  lime: 'border-[#39FF14] shadow-[0_0_15px_rgba(57,255,20,0.6),0_0_40px_rgba(57,255,20,0.15)]',
-  purple: 'border-[#D000FF] shadow-[0_0_25px_rgba(208,0,255,0.7),0_0_50px_rgba(208,0,255,0.2)]',
-  orange: 'border-[#FF8C00] shadow-[0_0_15px_rgba(255,140,0,0.6),0_0_40px_rgba(255,140,0,0.15)]',
-  slate: 'border-slate-500/70 shadow-[0_0_10px_rgba(100,116,139,0.3)]',
+  lime: 'border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.6),0_0_50px_rgba(57,255,20,0.15)]',
+  purple: 'border-[#D000FF] shadow-[0_0_30px_rgba(208,0,255,0.7),0_0_60px_rgba(208,0,255,0.2)]',
+  orange: 'border-[#FF8C00] shadow-[0_0_20px_rgba(255,140,0,0.6),0_0_50px_rgba(255,140,0,0.15)]',
+  slate: 'border-slate-500/70 shadow-[0_0_12px_rgba(100,116,139,0.3)]',
 };
 
 const bgClasses = {
@@ -46,7 +46,7 @@ export const QuadrantCard = ({
     <div 
       className={`
         relative rounded-xl border backdrop-blur-sm 
-        p-2 min-[360px]:p-4
+        p-3 min-[360px]:p-5
         ${colorClasses[color]}
         ${bgClasses[color]}
         h-full flex flex-col
