@@ -38,14 +38,18 @@ export const DashboardScreen = () => {
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-3">
         <div className="glass-card p-4 text-center border border-[#39FF14]/20">
           <p className="text-3xl font-black text-[#39FF14]">0</p>
-          <p className="text-xs text-white/50 font-medium uppercase tracking-wider mt-1">Zadań Q1</p>
+          <p className="text-[10px] text-white/50 font-medium uppercase tracking-wider mt-1">Q1</p>
         </div>
-        <div className="glass-card p-4 text-center border border-[#A855F7]/20">
-          <p className="text-3xl font-black text-[#A855F7]">0</p>
-          <p className="text-xs text-white/50 font-medium uppercase tracking-wider mt-1">Zadań Q2</p>
+        <div className="glass-card p-4 text-center border border-[#C084FC]/20">
+          <p className="text-3xl font-black text-[#C084FC]">0</p>
+          <p className="text-[10px] text-white/50 font-medium uppercase tracking-wider mt-1">Q2</p>
+        </div>
+        <div className="glass-card p-4 text-center border border-[#FF8C00]/20">
+          <p className="text-3xl font-black text-[#FF8C00]">0</p>
+          <p className="text-[10px] text-white/50 font-medium uppercase tracking-wider mt-1">Q3</p>
         </div>
       </div>
     </div>

@@ -21,6 +21,8 @@ export default {
           magenta: '#FF00F0',
           lime: '#39FF14',
           yellow: '#FFF100',
+          orange: '#FF8C00',
+          purple: '#A855F7',
         },
         
         // Quadrant Colors (Eisenhower Matrix)
@@ -37,10 +39,10 @@ export default {
           glow: 'rgba(168, 85, 247, 0.3)',
         },
         q3: {
-          DEFAULT: '#00F0FF',
-          light: 'rgba(0, 240, 255, 0.2)',
-          medium: 'rgba(0, 240, 255, 0.4)',
-          glow: 'rgba(0, 240, 255, 0.3)',
+          DEFAULT: '#FF8C00',
+          light: 'rgba(255, 140, 0, 0.2)',
+          medium: 'rgba(255, 140, 0, 0.4)',
+          glow: 'rgba(255, 140, 0, 0.3)',
         },
         q4: {
           DEFAULT: '#64748B',
@@ -92,7 +94,7 @@ export default {
         // Quadrant glows
         'glow-q1': '0 0 20px rgba(57, 255, 20, 0.3)',
         'glow-q2': '0 0 20px rgba(168, 85, 247, 0.3)',
-        'glow-q3': '0 0 20px rgba(0, 240, 255, 0.3)',
+        'glow-q3': '0 0 20px rgba(255, 140, 0, 0.3)',
         'glow-q4': '0 0 20px rgba(100, 116, 139, 0.3)',
         
         // Glass panels
@@ -265,6 +267,10 @@ export default {
           color: '#A855F7',
           textShadow: '0 0 5px rgba(168, 85, 247, 0.5), 0 0 10px rgba(168, 85, 247, 0.3)',
         },
+        '.text-neon-orange': {
+          color: '#FF8C00',
+          textShadow: '0 0 5px rgba(255, 140, 0, 0.5), 0 0 10px rgba(255, 140, 0, 0.3)',
+        },
         
         // Additional glow intensities (for emphasis)
         '.text-glow-cyan': {
@@ -275,6 +281,9 @@ export default {
         },
         '.text-glow-purple': {
           textShadow: '0 0 10px rgba(168, 85, 247, 0.5), 0 0 20px rgba(168, 85, 247, 0.3)',
+        },
+        '.text-glow-orange': {
+          textShadow: '0 0 10px rgba(255, 140, 0, 0.5), 0 0 20px rgba(255, 140, 0, 0.3)',
         },
         '.text-glow-magenta': {
           textShadow: '0 0 10px rgba(255, 0, 240, 0.5), 0 0 20px rgba(255, 0, 240, 0.3)',
@@ -301,7 +310,7 @@ export default {
         },
         '.border-l-q3': {
           borderLeftWidth: '4px',
-          borderLeftColor: '#00F0FF',
+          borderLeftColor: '#FF8C00',
         },
         '.border-l-q4': {
           borderLeftWidth: '4px',

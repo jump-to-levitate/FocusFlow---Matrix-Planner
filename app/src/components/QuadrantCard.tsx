@@ -10,28 +10,28 @@ interface QuadrantCardProps {
   quadrant: 1 | 2 | 3 | 4;
   title: string;
   subtitle: string;
-  color: 'lime' | 'purple' | 'cyan' | 'slate';
+  color: 'lime' | 'purple' | 'orange' | 'slate';
   children?: ReactNode;
 }
 
 const colorClasses = {
   lime: 'border-[#39FF14] shadow-[0_0_15px_rgba(57,255,20,0.6),0_0_40px_rgba(57,255,20,0.15)]',
-  purple: 'border-[#A855F7] shadow-[0_0_15px_rgba(168,85,247,0.6),0_0_40px_rgba(168,85,247,0.15)]',
-  cyan: 'border-[#00F0FF] shadow-[0_0_15px_rgba(0,240,255,0.6),0_0_40px_rgba(0,240,255,0.15)]',
+  purple: 'border-[#C084FC] shadow-[0_0_18px_rgba(192,132,252,0.7),0_0_45px_rgba(192,132,252,0.2)]',
+  orange: 'border-[#FF8C00] shadow-[0_0_15px_rgba(255,140,0,0.6),0_0_40px_rgba(255,140,0,0.15)]',
   slate: 'border-slate-500/70 shadow-[0_0_10px_rgba(100,116,139,0.3)]',
 };
 
 const bgClasses = {
   lime: 'bg-[rgba(57,255,20,0.08)]',
-  purple: 'bg-[rgba(168,85,247,0.08)]',
-  cyan: 'bg-[rgba(0,240,255,0.08)]',
+  purple: 'bg-[rgba(192,132,252,0.10)]',
+  orange: 'bg-[rgba(255,140,0,0.08)]',
   slate: 'bg-slate-500/5',
 };
 
 const titleColorClasses = {
   lime: 'text-[#39FF14]',
-  purple: 'text-[#A855F7]',
-  cyan: 'text-[#00F0FF]',
+  purple: 'text-[#C084FC]',
+  orange: 'text-[#FF8C00]',
   slate: 'text-slate-400',
 };
 

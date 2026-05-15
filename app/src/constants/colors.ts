@@ -107,7 +107,7 @@ export const COLORS = {
     // Quadrant-specific text
     q1: '#39FF14', // lime green
     q2: '#A855F7', // purple
-    q3: '#00F0FF', // cyan
+    q3: '#FF8C00', // neon orange
     q4: '#94A3B8', // slate-400
   },
 
@@ -117,7 +117,7 @@ export const COLORS = {
   // Based on: FocusFlow – Matrix Planner.pdf
   // Q1 (Pilne/Ważne): Neon green - "Do it now" urgency [cite: 84, 442]
   // Q2 (Nie-pilne/Ważne): Purple - "Schedule" for growth
-  // Q3 (Pilne/Nie-ważne): Blue - "Delegate" administrative
+  // Q3 (Pilne/Nie-ważne): Orange - "Delegate" warning/admin
   // Q4 (Nie-pilne/Nie-ważne): Gray - "Delete" or archive
   // ==========================================================================
   quadrants: {
@@ -144,14 +144,14 @@ export const COLORS = {
     },
     
     q3: {
-      // Pilne i Nie-ważne - ADMIN (cyan)
-      base: '#00F0FF',
-      light: 'rgba(0, 240, 255, 0.2)',
-      medium: 'rgba(0, 240, 255, 0.4)',
-      glow: 'rgba(0, 240, 255, 0.3)',
-      border: 'rgba(0, 240, 255, 0.5)',
-      text: '#00F0FF',
-      gradient: 'linear-gradient(135deg, rgba(0, 240, 255, 0.2) 0%, rgba(0, 240, 255, 0.05) 100%)',
+      // Pilne i Nie-ważne - ADMIN (neon orange)
+      base: '#FF8C00',
+      light: 'rgba(255, 140, 0, 0.2)',
+      medium: 'rgba(255, 140, 0, 0.4)',
+      glow: 'rgba(255, 140, 0, 0.3)',
+      border: 'rgba(255, 140, 0, 0.5)',
+      text: '#FF8C00',
+      gradient: 'linear-gradient(135deg, rgba(255, 140, 0, 0.2) 0%, rgba(255, 140, 0, 0.05) 100%)',
     },
     
     q4: {

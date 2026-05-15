@@ -36,7 +36,7 @@ export const BottomNav = () => {
                 className={({ isActive }) =>
                   `flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-150 active:scale-95 ${
                     isActive
-                      ? 'text-neon-cyan'
+                      ? 'text-[#C084FC] drop-shadow-[0_0_8px_rgba(192,132,252,0.6)]'
                       : 'text-white/50 hover:text-white/70'
                   }`
                 }
@@ -48,7 +48,7 @@ export const BottomNav = () => {
                       size={24} 
                       strokeWidth={isActive ? 2.5 : 1.5}
                       className={isActive 
-                        ? 'fill-neon-cyan/20 transition-all duration-150' 
+                        ? 'fill-[rgba(192,132,252,0.25)] transition-all duration-150' 
                         : 'transition-all duration-150'
                       }
                     />

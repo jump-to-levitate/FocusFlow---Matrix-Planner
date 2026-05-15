@@ -38,7 +38,7 @@ export const MatrixScreen = () => {
           quadrant={3}
           title="Pilne i Nieważne"
           subtitle="Deleguj"
-          color="cyan"
+          color="orange"
         />
 
         {/* Q4 - Not Urgent & Not Important (Waste) */}
