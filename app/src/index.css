@@ -231,7 +231,9 @@
   
   /* App Shell (Mobile-First 480px constraint) */
   .app-shell {
-    @apply w-full max-w-[480px] mx-auto min-h-screen px-4 py-6;
+    @apply w-full max-w-[480px] mx-auto min-h-screen px-4 py-6 
+           border-x border-white/[0.06] relative;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 0, 0, 0.3);
   }
   
   /* Thumb-friendly touch targets */

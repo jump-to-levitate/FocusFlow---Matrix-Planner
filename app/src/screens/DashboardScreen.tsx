@@ -11,40 +11,41 @@ export const DashboardScreen = () => {
     <div className="content-area">
       {/* Header */}
       <header className="mb-6">
-        <h1 className="text-2xl font-bold text-white mb-2">
-          Twój dzisiejszy cel
+        <h1 className="text-2xl font-black text-white uppercase tracking-wide mb-2">
+          Twój cel na teraz
         </h1>
-        <p className="text-sm text-white/60">Q1 - Pilne i Ważne</p>
+        <p className="text-sm text-white/50 font-medium">Q1 - Pilne i Ważne</p>
       </header>
 
       {/* Q1 Task Card (Empty State) */}
-      <div className="glass-card p-6 mb-6">
+      <div className="glass-card p-6 mb-6 border border-white/[0.08]">
         <div className="flex items-center gap-3 mb-4">
-          <span className="w-3 h-3 rounded-full bg-neon-lime shadow-[0_0_10px_rgba(57,255,20,0.5)]" />
-          <span className="text-xs font-semibold text-neon-lime uppercase tracking-wider">
+          <span className="w-3 h-3 rounded-full bg-[#39FF14] shadow-[0_0_12px_rgba(57,255,20,0.8)]" />
+          <span className="text-xs font-black text-[#39FF14] uppercase tracking-widest">
             Q1 Focus
           </span>
         </div>
         
-        <p className="text-white/40 text-center py-8">
+        <p className="text-white/30 text-center py-8 text-sm">
           Brak aktywnego celu Q1
         </p>
         
-        <button className="w-full py-3 px-4 bg-neon-cyan/10 border border-neon-cyan/30 rounded-xl text-neon-cyan font-medium hover:bg-neon-cyan/20 transition-colors flex items-center justify-center gap-2">
-          <Plus size={18} />
-          Dodaj pierwsze zadanie
+        {/* CTA Button - neon green with strong glow per PDF str. 15 */}
+        <button className="w-full py-3.5 px-4 bg-[#39FF14]/15 border-2 border-[#39FF14] rounded-xl text-[#39FF14] font-bold uppercase tracking-wider hover:bg-[#39FF14]/25 active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(57,255,20,0.4),0_0_60px_rgba(57,255,20,0.1)]">
+          <Plus size={20} strokeWidth={2.5} />
+          Start Focus
         </button>
       </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="glass-card p-4 text-center">
-          <p className="text-2xl font-bold text-neon-lime">0</p>
-          <p className="text-xs text-white/50">Zadań Q1</p>
+        <div className="glass-card p-4 text-center border border-[#39FF14]/20">
+          <p className="text-3xl font-black text-[#39FF14]">0</p>
+          <p className="text-xs text-white/50 font-medium uppercase tracking-wider mt-1">Zadań Q1</p>
         </div>
-        <div className="glass-card p-4 text-center">
-          <p className="text-2xl font-bold text-neon-purple">0</p>
-          <p className="text-xs text-white/50">Zadań Q2</p>
+        <div className="glass-card p-4 text-center border border-[#A855F7]/20">
+          <p className="text-3xl font-black text-[#A855F7]">0</p>
+          <p className="text-xs text-white/50 font-medium uppercase tracking-wider mt-1">Zadań Q2</p>
         </div>
       </div>
     </div>

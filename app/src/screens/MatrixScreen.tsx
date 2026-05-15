@@ -10,9 +10,9 @@ export const MatrixScreen = () => {
   return (
     <div className="content-area">
       {/* Header */}
-      <header className="mb-4">
-        <h1 className="text-2xl font-bold text-white mb-1">Macierz</h1>
-        <p className="text-sm text-white/60">Eisenhower Matrix 2×2</p>
+      <header className="mb-5">
+        <h1 className="text-2xl font-black text-white uppercase tracking-wide mb-1">Macierz</h1>
+        <p className="text-sm text-white/50 font-medium">Eisenhower Matrix 2×2</p>
       </header>
 
       {/* Matrix Grid 2×2 */}
@@ -20,7 +20,7 @@ export const MatrixScreen = () => {
         {/* Q1 - Urgent & Important (Fire) */}
         <QuadrantCard
           quadrant={1}
-          title="Pilne & Ważne"
+          title="Pilne i Ważne"
           subtitle="Rób teraz"
           color="lime"
         />
@@ -28,7 +28,7 @@ export const MatrixScreen = () => {
         {/* Q2 - Not Urgent & Important (Growth) */}
         <QuadrantCard
           quadrant={2}
-          title="Niepilne & Ważne"
+          title="Niepilne i Ważne"
           subtitle="Zaplanuj"
           color="purple"
         />
@@ -36,15 +36,15 @@ export const MatrixScreen = () => {
         {/* Q3 - Urgent & Not Important (Admin) */}
         <QuadrantCard
           quadrant={3}
-          title="Pilne & Nieważne"
-          subtitle="Deleguj/Odrzuć"
+          title="Pilne i Nieważne"
+          subtitle="Deleguj"
           color="cyan"
         />
 
         {/* Q4 - Not Urgent & Not Important (Waste) */}
         <QuadrantCard
           quadrant={4}
-          title="Niepilne & Nieważne"
+          title="Niepilne i Nieważne"
           subtitle="Eliminuj"
           color="slate"
         />
