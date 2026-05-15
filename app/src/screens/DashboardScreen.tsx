@@ -5,9 +5,15 @@
 // ============================================================================
 
 import { Plus } from 'lucide-react';
+import { useState } from 'react';
+import { QuizModal } from '../components/quiz/QuizModal';
 
 export const DashboardScreen = () => {
+  const [isQuizOpen, setIsQuizOpen] = useState(false);
+
   return (
+    <>
+    <QuizModal isOpen={isQuizOpen} onClose={() => setIsQuizOpen(false)} />
     <div className="flex flex-col h-full pt-4 pb-4 gap-6">
       {/* Header */}
       <header className="shrink-0">
@@ -31,7 +37,10 @@ export const DashboardScreen = () => {
         </p>
         
         {/* CTA Button - neon green with strong glow */}
-        <button className="w-full py-3.5 px-4 bg-[#39FF14]/15 border-2 border-[#39FF14] rounded-xl text-[#39FF14] font-bold uppercase tracking-wider hover:bg-[#39FF14]/25 active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(57,255,20,0.5),0_0_70px_rgba(57,255,20,0.12)]">
+        <button
+          onClick={() => setIsQuizOpen(true)}
+          className="w-full py-3.5 px-4 bg-[#39FF14]/15 border-2 border-[#39FF14] rounded-xl text-[#39FF14] font-bold uppercase tracking-wider hover:bg-[#39FF14]/25 active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(57,255,20,0.5),0_0_70px_rgba(57,255,20,0.12)]"
+        >
           <Plus size={20} strokeWidth={2.5} />
           Start Focus
         </button>
@@ -61,6 +70,7 @@ export const DashboardScreen = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

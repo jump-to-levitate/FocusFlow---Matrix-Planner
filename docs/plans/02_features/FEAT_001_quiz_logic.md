@@ -11,7 +11,7 @@
 |------|---------|
 | **ID** | FEAT_001 |
 | **Tytuł** | Brain-Dump Quiz Logic Implementation |
-| **Status** | Draft |
+| **Status** | 🚧 In Progress |
 | **Data** | 2026-05-10 |
 | **Autor** | Senior Logic Developer & SDD Specialist |
 | **Dependencies** | TECH_000 (Repo Setup), TECH_001 (Core Data Layer), ADR_001 (IndexedDB) |
@@ -900,6 +900,6 @@ describe('Brain Dump Quiz Flow', () => {
 
 ---
 
-**Status:** Draft - awaiting approval before implementation
-**Next Step:** Review with Product Owner, then create tickets for Phase 1
+**Status:** 🚧 In Progress - Phase A (DB & Logic Utils) started 2026-05-15
+**Next Step:** Phase B - Quiz UI Components (TitleStep, ImportanceStep, UrgencyStep)
 

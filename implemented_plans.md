@@ -21,7 +21,7 @@
 
 ## Oczekujące Plany
 
-- [ ] FEAT_001 - Brain-Dump Quiz Logic (Smart Classification)
+- [ ] FEAT_001 - Brain-Dump Quiz Logic (Smart Classification) — **Phase A: DB & Logic Utils started 2026-05-15**
 - [ ] FEAT_002 - Core Data Layer (Dexie.js schema)
 - [ ] FEAT_003 - Notes System (Free + Linked)
 - [ ] FEAT_004 - Focus Timer

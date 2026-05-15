@@ -4,10 +4,16 @@
 // PDF Reference: str. 16
 // ============================================================================
 
+import { useState } from 'react';
 import { QuadrantCard } from '../components/QuadrantCard';
+import { QuizModal } from '../components/quiz/QuizModal';
 
 export const MatrixScreen = () => {
+  const [isQuizOpen, setIsQuizOpen] = useState(false);
+
   return (
+    <>
+    <QuizModal isOpen={isQuizOpen} onClose={() => setIsQuizOpen(false)} />
     <div className="flex flex-col h-full pt-4 pb-4">
       {/* Header */}
       <header className="mb-4 shrink-0">
@@ -23,6 +29,7 @@ export const MatrixScreen = () => {
           title="Pilne i Ważne"
           subtitle="Rób teraz"
           color="lime"
+          onAdd={() => setIsQuizOpen(true)}
         />
 
         {/* Q2 - Not Urgent & Important (Growth) */}
@@ -31,6 +38,7 @@ export const MatrixScreen = () => {
           title="Niepilne i Ważne"
           subtitle="Zaplanuj"
           color="purple"
+          onAdd={() => setIsQuizOpen(true)}
         />
 
         {/* Q3 - Urgent & Not Important (Admin) */}
@@ -39,6 +47,7 @@ export const MatrixScreen = () => {
           title="Pilne i Nieważne"
           subtitle="Deleguj"
           color="orange"
+          onAdd={() => setIsQuizOpen(true)}
         />
 
         {/* Q4 - Not Urgent & Not Important (Waste) */}
@@ -47,9 +56,11 @@ export const MatrixScreen = () => {
           title="Niepilne i Nieważne"
           subtitle="Eliminuj"
           color="slate"
+          onAdd={() => setIsQuizOpen(true)}
         />
       </div>
     </div>
+    </>
   );
 };
 

@@ -5,6 +5,7 @@
 // ============================================================================
 
 import { ReactNode } from 'react';
+import { Plus } from 'lucide-react';
 
 interface QuadrantCardProps {
   quadrant: 1 | 2 | 3 | 4;
@@ -12,6 +13,7 @@ interface QuadrantCardProps {
   subtitle: string;
   color: 'lime' | 'purple' | 'orange' | 'slate';
   children?: ReactNode;
+  onAdd?: () => void;
 }
 
 const colorClasses = {
@@ -40,7 +42,8 @@ export const QuadrantCard = ({
   title, 
   subtitle, 
   color, 
-  children 
+  children,
+  onAdd,
 }: QuadrantCardProps) => {
   return (
     <div 
@@ -68,10 +71,18 @@ export const QuadrantCard = ({
       </div>
       
       {/* Content (empty state or tasks) */}
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col">
         {children || (
-          <div className="flex flex-col items-center justify-center h-20 min-[360px]:h-24 text-white/30">
+          <div className="flex-1 flex flex-col items-center justify-center gap-2 text-white/30">
             <p className="text-[10px] min-[360px]:text-xs text-center">Brak zadań</p>
+            {onAdd && (
+              <button
+                onClick={onAdd}
+                className={`p-1.5 rounded-lg border border-dashed border-white/20 hover:border-white/40 transition-colors`}
+              >
+                <Plus size={14} className="text-white/30" />
+              </button>
+            )}
           </div>
         )}
       </div>
