@@ -1,7 +1,7 @@
 # TECH_001: Matrix UI Shell Implementation
 
 > Faza 1: Fundamenty i Szkielet (The Shell)  
-> AppShell 480px, Bottom Navigation, Empty Matrix View
+> AppShell 430px (Pro Max Standard), Bottom Navigation, Empty Matrix View
 
 ---
 
@@ -12,8 +12,8 @@
 | **ID** | TECH_001 |
 | **Tytuł** | Matrix UI Shell Implementation |
 | **Faza Roadmap** | Faza 1: The Shell |
-| **Status** | **Final v1.0** - Ready for Implementation |
-| **Data** | 2026-05-14 |
+| **Status** | **v1.3 - COMPLETED & STABILIZED** |
+| **Data** | 2026-05-15 |
 | **Priority** | P0 (MUST HAVE - Foundation) |
 | **Estimated Effort** | 3 dni (1 developer) |
 
@@ -486,8 +486,8 @@ export const MatrixScreen = () => {
 |---------|------------|--------------|
 | Grid 2×2 | str. 16 | `grid-cols-2 grid-rows-2 flex-1 min-h-0`, gap 12px |
 | Q1 (Zielony) | str. 16 | Neon lime `#39FF14`, glow effect |
-| Q2 (Fioletowy) | str. 16 | Neon purple `#A855F7`, glow effect |
-| Q3 (Cyjanowy) | str. 16 | Neon cyan `#00F0FF`, glow effect |
+| Q2 (Fioletowy) | str. 16 | Neon purple `#D000FF`, glow effect |
+| Q3 (Pomarańczowy) | str. 16 | Neon orange `#FF8C00`, glow effect |
 | Q4 (Szary) | str. 16 | Slate gray `#64748B`, no glow |
 | "Dodaj zadanie" | str. 16 | Dashed border, + icon, hover state |
 
@@ -677,7 +677,7 @@ module.exports = {
       },
       
       maxWidth: {
-        'app': '480px',
+        'app': '430px',
       },
       
       animation: {
@@ -693,73 +693,94 @@ module.exports = {
 };
 ```
 
-### 6.2 Global CSS
+### 6.2 Global CSS (v1.3 — Actual Implementation)
 
 ```css
 /* app/src/index.css */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  html {
-    @apply antialiased;
+  :root {
+    --color-bg: #05070A;
+    --color-bg-elevated: #0C1018;
+    --color-neon-cyan: #00F0FF;
+    --color-neon-magenta: #FF00F0;
+    --color-neon-lime: #39FF14;
+    --color-q1: #39FF14;   /* Lime */
+    --color-q2: #D000FF;   /* Purple */
+    --color-q3: #FF8C00;   /* Orange */
+    --color-q4: #64748B;   /* Slate */
   }
-  
+
   body {
-    @apply bg-slate-900 text-white font-sans;
-    font-feature-settings: 'cv11', 'ss01';
+    @apply bg-background text-white;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
 @layer components {
-  /* AppShell container */
-  .app-shell {
-    @apply mx-auto w-full max-w-[480px] min-h-screen px-4 py-6;
+  /* Device frame outer wrapper */
+  .app-outer {
+    min-height: 100vh;
+    background: #020204;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  
-  /* Content area with space for bottom nav - unified pb-28 */
-  .content-area {
-    @apply pb-28; /* 112px = 80px nav + 32px breathing room */
-  }
-  
-  /* Glassmorphism card */
-  .glass-card {
-    @apply bg-white/[0.08] backdrop-blur-xl rounded-xl border border-white/[0.15];
-    -webkit-backdrop-filter: blur(12px); /* Safari support */
-  }
-  
-  /* Neon text gradient */
-  .text-gradient-neon {
-    @apply bg-gradient-to-r from-neon-lime via-neon-cyan to-neon-purple bg-clip-text text-transparent;
-  }
-  
-  /* Quadrant neon borders */
-  .neon-border-q1 {
-    @apply border-neon-lime/50 shadow-[0_0_20px_rgba(57,255,20,0.3)];
-  }
-  
-  .neon-border-q2 {
-    @apply border-neon-purple/50 shadow-[0_0_20px_rgba(168,85,247,0.3)];
-  }
-  
-  .neon-border-q3 {
-    @apply border-neon-cyan/50 shadow-[0_0_20px_rgba(0,240,255,0.3)];
-  }
-}
 
-@layer utilities {
-  /* Hide scrollbar */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
+  /* AppShell - Pro Max Standard */
+  .app-shell {
+    @apply w-full mx-auto px-6 relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 430px;
+    background: var(--color-bg);
   }
-  
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+
+  @media (min-width: 480px) {
+    .app-shell {
+      min-height: auto;
+      width: 430px;
+      height: 932px;
+      overflow: hidden;
+      border-radius: 3.5rem;
+      border: 5px solid rgba(255, 255, 255, 0.08);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        0 0 100px rgba(0, 0, 0, 0.85),
+        0 0 50px rgba(0, 0, 0, 0.6),
+        0 25px 50px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  /* Scale fallback for small viewports */
+  @media (min-width: 480px) and (max-height: 960px) {
+    .app-shell {
+      transform: scale(calc((100vh - 24px) / 932));
+      transform-origin: top center;
+    }
+  }
+
+  /* Quadrant neon glows (actual values from QuadrantCard.tsx) */
+  .neon-glow-q1 {
+    border-color: #39FF14;
+    box-shadow: 0 0 20px rgba(57,255,20,0.6), 0 0 50px rgba(57,255,20,0.15);
+  }
+  .neon-glow-q2 {
+    border-color: #D000FF;
+    box-shadow: 0 0 30px rgba(208,0,255,0.7), 0 0 60px rgba(208,0,255,0.2);
+  }
+  .neon-glow-q3 {
+    border-color: #FF8C00;
+    box-shadow: 0 0 20px rgba(255,140,0,0.6), 0 0 50px rgba(255,140,0,0.15);
+  }
+  .neon-glow-q4 {
+    border-color: rgba(100,116,139,0.7);
+    box-shadow: 0 0 12px rgba(100,116,139,0.3);
   }
 }
 ```
@@ -770,7 +791,7 @@ module.exports = {
 
 ### 7.1 Functional Requirements
 
-- [ ] AppShell wymusza `max-w-[480px]` na wszystkich widokach
+- [ ] AppShell wymusza `430px` (Pro Max) na wszystkich widokach
 - [ ] BottomNav wyświetla 5 items z ikonami Lucide
 - [ ] Routing działa - zmiana route aktualizuje widok
 - [ ] Macierz pokazuje grid 2×2 z 4 ćwiartkami
@@ -780,8 +801,9 @@ module.exports = {
 
 ### 7.2 Visual Requirements
 
-- [ ] 480px constraint działa na desktopie (wycentrowane)
+- [ ] 430px constraint działa na desktopie (wycentrowane)
 - [ ] Mobile layout działa (375px, 414px)
+- [ ] `transform: scale()` działa na małych viewportach (<960px)
 - [ ] Glassmorphism efekty widoczne (BottomNav)
 - [ ] Neon borders działają (Q1, Q2, Q3)
 - [ ] Typography zgodna z design-system.md
@@ -891,8 +913,8 @@ Będziemy mogli:
 
 ---
 
-**Status:** ✅ Final v1.0 - Ready for Implementation  
-**Next Action:** Rozpocząć Day 1 (AppShell + Tailwind Config)
+**Status:** ✅ v1.3 - COMPLETED & STABILIZED  
+**Next Action:** FEAT_001 (Brain-Dump Quiz Logic)
 
 ---
 
@@ -900,6 +922,7 @@ Będziemy mogli:
 
 | Wersja | Data | Zmiany |
 |--------|------|--------|
+| v1.3 | 2026-05-15 | Documentation Sync & Pro Max Specification Freeze — all docs match actual code |
 | v1.2 | 2026-05-15 | Final Dimension Stabilization — fixed 430×932px, CSS scale() fallback, Dynamic Island absolute, no vh units |
 | v1.1 | 2026-05-15 | Full-Screen Normalization & Matrix Proportions fix - h-full layout, grid-rows-2, scrollbar-hide |
 | v1.0 | 2026-05-14 | **Final release** - wszystkie sekcje zweryfikowane i ujednolicone |

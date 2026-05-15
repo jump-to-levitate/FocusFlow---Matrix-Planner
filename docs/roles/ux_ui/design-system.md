@@ -10,9 +10,9 @@
 | Pole | Wartość |
 |------|---------|
 | **Tytuł** | FocusFlow 2.0 Design System |
-| **Wersja** | 1.0 |
-| **Status** | Approved |
-| **Ostatnia aktualizacja** | 2026-05-14 |
+| **Wersja** | 1.3 |
+| **Status** | COMPLETED & STABILIZED |
+| **Ostatnia aktualizacja** | 2026-05-15 |
 | **Autor** | Senior UI/UX Designer & Frontend Architect |
 | **Przegląd** | PLAN_RISK_002 (ADHD ICP validation) |
 
@@ -27,22 +27,42 @@
 
 ## 1. Ograniczenia Fundamentalne (Constraints)
 
-### 1.1 Mobile-First Container (480px Safety Net)
+### 1.1 Pro Max Standard (430px Device Frame)
 
-**ZASADA KRYTYCZNA:** Aplikacja jest **WYŁĄCZNIE** Mobile-First z twardym limitem szerokości.
+**ZASADA KRYTYCZNA:** Aplikacja jest **WYŁĄCZNIE** Mobile-First z twardym limitem szerokości 430px (iPhone 15 Pro Max / Pixel 8 Pro).
 
 ```css
-/* AppShell - Siatka Bezpieczeństwa */
+/* AppShell - Pro Max Standard */
 .app-shell {
   width: 100%;
-  max-width: 480px;        /* TWARDY LIMIT - nigdy więcej! */
-  margin-left: auto;       /* Centrowanie na desktopie */
+  max-width: 430px;        /* TWARDY LIMIT - Pro Max */
+  margin-left: auto;
   margin-right: auto;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  padding-left: 16px;      /* px-4 = bezpieczna strefa */
-  padding-right: 16px;
-  padding-top: 24px;       /* py-6 */
-  padding-bottom: 24px;
+  padding-left: 24px;      /* px-6 = bezpieczna strefa */
+  padding-right: 24px;
+  background: var(--color-bg); /* #05070A */
+}
+
+/* Desktop: fixed device mockup */
+@media (min-width: 480px) {
+  .app-shell {
+    width: 430px;
+    height: 932px;           /* Fixed Pro Max height */
+    overflow: hidden;
+    border-radius: 3.5rem;
+    border: 5px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Scale fallback for small viewports */
+@media (min-width: 480px) and (max-height: 960px) {
+  .app-shell {
+    transform: scale(calc((100vh - 24px) / 932));
+    transform-origin: top center;
+  }
 }
 ```
 
@@ -50,17 +70,18 @@
 
 | Urządzenie | Szerokość viewportu | Zachowanie AppShell |
 |------------|---------------------|---------------------|
-| Mobile S | 320px | 100% szerokości, padding 16px |
-| Mobile M | 375px | 100% szerokości, padding 16px |
-| Mobile L | 414px | 100% szerokości, padding 16px |
-| Tablet/Desktop | >480px | Wycentrowany 480px box |
-| Desktop XL | >1200px | Wycentrowany 480px box |
+| Mobile S | 320px | 100% szerokości, padding 24px |
+| Mobile M | 375px | 100% szerokości, padding 24px |
+| Mobile L | 414px | 100% szerokości, padding 24px |
+| Desktop (≥480px) | 430px | Sztywna ramka 430×932px, wycentrowana |
+| Desktop (h<960px) | 430px | `transform: scale()` — proporcjonalne pomniejszenie |
 
-**Dlaczego 480px?**
+**Dlaczego 430px?**
+- Standard flagshipów 2024-2026 (iPhone 15 Pro Max, Pixel 8 Pro)
 - Optymalne dla obsługi jedną ręką (thumb zone)
-- Odpowiada szerokości iPhone SE / małych Androidów
 - Wymusza skupienie na core functionality
 - ADHD-friendly: mniej clutter = mniej overwhelm
+- Wystarczająco duże dla premium desktop mockupu
 
 ---
 
@@ -128,7 +149,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  max-width: 480px;
+  max-width: 430px;
   margin: 0 auto;
   padding: 16px 24px;
   padding-bottom: max(16px, env(safe-area-inset-bottom));
@@ -156,8 +177,9 @@
 
 | Token | HEX | HSL | Użycie |
 |-------|-----|-----|--------|
-| **bg-primary** | `#0F172A` | `hsl(222, 47%, 11%)` | Główne tło aplikacji |
-| **bg-elevated** | `#1E293B` | `hsl(217, 33%, 17%)` | Karty, modale |
+| **bg-primary** | `#05070A` | Rich Black | Główne tło aplikacji (var(--color-bg)) |
+| **bg-elevated** | `#0C1018` | - | Karty, modale (var(--color-bg-elevated)) |
+| **bg-outer** | `#020204` | Near Black | Desktop wrapper (.app-outer) |
 | **bg-overlay** | `rgba(15,23,42,0.85)` | - | Overlay, modale |
 
 **Gradienty tła (opcjonalne):**
@@ -175,47 +197,50 @@
 | Token | HEX | HSL | Efekt |
 |-------|-----|-----|-------|
 | **q1-primary** | `#39FF14` | `hsl(109, 100%, 54%)` | Neon Lime Green |
-| **q1-glow** | `rgba(57,255,20,0.3)` | - | Box-shadow glow |
-| **q1-light** | `rgba(57,255,20,0.15)` | - | Tło kart |
+| **q1-glow** | `rgba(57,255,20,0.6)` | - | Box-shadow glow (20px) |
+| **q1-glow-outer** | `rgba(57,255,20,0.15)` | - | Outer glow (50px) |
+| **q1-light** | `rgba(57,255,20,0.08)` | - | Tło kart |
 
-**CSS:**
+**CSS (actual from QuadrantCard.tsx):**
 ```css
 .q1-accent {
   color: #39FF14;
-  border-color: rgba(57, 255, 20, 0.5);
-  box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+  border-color: #39FF14;
+  box-shadow: 0 0 20px rgba(57,255,20,0.6), 0 0 50px rgba(57,255,20,0.15);
 }
 ```
 
 #### Q2 - Nie-pilne i Ważne (GROWTH)
 | Token | HEX | HSL | Efekt |
 |-------|-----|-----|-------|
-| **q2-primary** | `#A855F7` | `hsl(270, 91%, 65%)` | Neon Purple |
-| **q2-glow** | `rgba(168,85,247,0.3)` | - | Box-shadow glow |
-| **q2-light** | `rgba(168,85,247,0.15)` | - | Tło kart |
+| **q2-primary** | `#D000FF` | `hsl(288, 100%, 50%)` | Neon Purple (Intensified) |
+| **q2-glow** | `rgba(208,0,255,0.7)` | - | Box-shadow glow (30px) |
+| **q2-glow-outer** | `rgba(208,0,255,0.2)` | - | Outer glow (60px) |
+| **q2-light** | `rgba(208,0,255,0.10)` | - | Tło kart |
 
-**CSS:**
+**CSS (actual from QuadrantCard.tsx):**
 ```css
 .q2-accent {
-  color: #A855F7;
-  border-color: rgba(168, 85, 247, 0.5);
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+  color: #D000FF;
+  border-color: #D000FF;
+  box-shadow: 0 0 30px rgba(208,0,255,0.7), 0 0 60px rgba(208,0,255,0.2);
 }
 ```
 
 #### Q3 - Pilne i Nie-ważne (ADMIN)
 | Token | HEX | HSL | Efekt |
 |-------|-----|-----|-------|
-| **q3-primary** | `#00F0FF` | `hsl(183, 100%, 50%)` | Neon Cyan |
-| **q3-glow** | `rgba(0,240,255,0.3)` | - | Box-shadow glow |
-| **q3-light** | `rgba(0,240,255,0.15)` | - | Tło kart |
+| **q3-primary** | `#FF8C00` | `hsl(33, 100%, 50%)` | Neon Orange |
+| **q3-glow** | `rgba(255,140,0,0.6)` | - | Box-shadow glow (20px) |
+| **q3-glow-outer** | `rgba(255,140,0,0.15)` | - | Outer glow (50px) |
+| **q3-light** | `rgba(255,140,0,0.08)` | - | Tło kart |
 
-**CSS:**
+**CSS (actual from QuadrantCard.tsx):**
 ```css
 .q3-accent {
-  color: #00F0FF;
-  border-color: rgba(0, 240, 255, 0.5);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  color: #FF8C00;
+  border-color: #FF8C00;
+  box-shadow: 0 0 20px rgba(255,140,0,0.6), 0 0 50px rgba(255,140,0,0.15);
 }
 ```
 
@@ -806,8 +831,8 @@ navigator.vibrate?.(100);  // 100ms sustained
 
 **Ale dla FocusFlow:**
 - **NIE** używamy breakpointów do zmiany layoutu
-- **480px to TWARDY LIMIT** - aplikacja nigdy nie rozciąga się szerzej
-- Desktop = tylko wycentrowany container
+- **430px to TWARDY LIMIT** (Pro Max Standard) - aplikacja nigdy nie rozciąga się szerzej
+- Desktop = sztywna ramka 430×932px, `transform: scale()` na małych ekranach
 
 ### 8.2 Safe Areas (Notched Phones)
 
@@ -899,6 +924,7 @@ Przed wdrożeniem komponentu, sprawdź:
 
 | Data | Wersja | Zmiany |
 |------|--------|--------|
+| 2026-05-15 | 1.3 | Pro Max Specification Freeze — 430×932px, Q2=#D000FF, Q3=#FF8C00, px-6, actual glow values |
 | 2026-05-14 | 1.0 | Initial Design System definition |
 
 ---
