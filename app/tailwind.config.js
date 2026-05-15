@@ -22,7 +22,7 @@ export default {
           lime: '#39FF14',
           yellow: '#FFF100',
           orange: '#FF8C00',
-          purple: '#A855F7',
+          purple: '#D000FF',
         },
         
         // Quadrant Colors (Eisenhower Matrix)
@@ -33,10 +33,10 @@ export default {
           glow: 'rgba(57, 255, 20, 0.3)',
         },
         q2: {
-          DEFAULT: '#A855F7',
-          light: 'rgba(168, 85, 247, 0.2)',
-          medium: 'rgba(168, 85, 247, 0.4)',
-          glow: 'rgba(168, 85, 247, 0.3)',
+          DEFAULT: '#D000FF',
+          light: 'rgba(208, 0, 255, 0.2)',
+          medium: 'rgba(208, 0, 255, 0.4)',
+          glow: 'rgba(208, 0, 255, 0.3)',
         },
         q3: {
           DEFAULT: '#FF8C00',
@@ -93,7 +93,7 @@ export default {
         
         // Quadrant glows
         'glow-q1': '0 0 20px rgba(57, 255, 20, 0.3)',
-        'glow-q2': '0 0 20px rgba(168, 85, 247, 0.3)',
+        'glow-q2': '0 0 25px rgba(208, 0, 255, 0.5)',
         'glow-q3': '0 0 20px rgba(255, 140, 0, 0.3)',
         'glow-q4': '0 0 20px rgba(100, 116, 139, 0.3)',
         
@@ -264,8 +264,8 @@ export default {
           textShadow: '0 0 5px rgba(255, 241, 0, 0.5), 0 0 10px rgba(255, 241, 0, 0.3)',
         },
         '.text-neon-purple': {
-          color: '#A855F7',
-          textShadow: '0 0 5px rgba(168, 85, 247, 0.5), 0 0 10px rgba(168, 85, 247, 0.3)',
+          color: '#D000FF',
+          textShadow: '0 0 5px rgba(208, 0, 255, 0.5), 0 0 10px rgba(208, 0, 255, 0.3)',
         },
         '.text-neon-orange': {
           color: '#FF8C00',
@@ -280,7 +280,7 @@ export default {
           textShadow: '0 0 10px rgba(57, 255, 20, 0.5), 0 0 20px rgba(57, 255, 20, 0.3)',
         },
         '.text-glow-purple': {
-          textShadow: '0 0 10px rgba(168, 85, 247, 0.5), 0 0 20px rgba(168, 85, 247, 0.3)',
+          textShadow: '0 0 10px rgba(208, 0, 255, 0.5), 0 0 20px rgba(208, 0, 255, 0.3)',
         },
         '.text-glow-orange': {
           textShadow: '0 0 10px rgba(255, 140, 0, 0.5), 0 0 20px rgba(255, 140, 0, 0.3)',
@@ -306,7 +306,7 @@ export default {
         },
         '.border-l-q2': {
           borderLeftWidth: '4px',
-          borderLeftColor: '#A855F7',
+          borderLeftColor: '#D000FF',
         },
         '.border-l-q3': {
           borderLeftWidth: '4px',

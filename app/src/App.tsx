@@ -23,7 +23,7 @@ interface AppShellProps {
 
 function AppShell({ children }: AppShellProps) {
   return (
-    <div className="min-h-screen bg-[var(--color-bg)]">
+    <div className="app-outer">
       <div className="app-shell">
         {children}
       </div>
@@ -39,8 +39,8 @@ function App() {
   return (
     <BrowserRouter>
       <AppShell>
-        {/* Main content area with padding for bottom nav */}
-        <main className="content-area">
+        {/* Main content - grows to fill available space */}
+        <main className="content-area flex-1">
           <Routes>
             <Route path="/" element={<DashboardScreen />} />
             <Route path="/matrix" element={<MatrixScreen />} />
@@ -50,7 +50,7 @@ function App() {
           </Routes>
         </main>
         
-        {/* Bottom Navigation - fixed at bottom */}
+        {/* Bottom Navigation - sticky at bottom of device frame */}
         <BottomNav />
       </AppShell>
     </BrowserRouter>

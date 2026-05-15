@@ -27,7 +27,7 @@
     
     /* Quadrants */
     --color-q1: #39FF14;
-    --color-q2: #A855F7;
+    --color-q2: #D000FF;
     --color-q3: #FF8C00;
     --color-q4: #64748B;
     
@@ -229,11 +229,45 @@
     @apply border-t border-white/20;
   }
   
+  /* Outer wrapper - centers the device frame on desktop */
+  .app-outer {
+    min-height: 100vh;
+    background: #020204;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   /* App Shell (Mobile-First 480px constraint) */
+  /* On mobile (<480px): full-width, no rounding, natural scroll */
+  /* On desktop (>480px): flagship phone mockup centered on screen */
   .app-shell {
-    @apply w-full max-w-[480px] mx-auto min-h-screen px-4 py-6 
-           border-x border-white/[0.06] relative;
-    box-shadow: 0 0 100px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 0, 0, 0.3);
+    @apply w-full max-w-[480px] mx-auto px-4 relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--color-bg);
+  }
+
+  @media (min-width: 481px) {
+    .app-outer {
+      padding: 1rem 0;
+    }
+
+    .app-shell {
+      min-height: auto;
+      height: 90vh;
+      max-height: 900px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border-radius: 3rem;
+      border: 6px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 0 120px rgba(0, 0, 0, 0.9),
+        0 0 60px rgba(0, 0, 0, 0.6),
+        0 25px 50px rgba(0, 0, 0, 0.5);
+    }
   }
   
   /* Thumb-friendly touch targets */

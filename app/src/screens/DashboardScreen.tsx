@@ -43,8 +43,8 @@ export const DashboardScreen = () => {
           <p className="text-3xl font-black text-[#39FF14]">0</p>
           <p className="text-[10px] text-white/50 font-medium uppercase tracking-wider mt-1">Q1</p>
         </div>
-        <div className="glass-card p-4 text-center border border-[#C084FC]/20">
-          <p className="text-3xl font-black text-[#C084FC]">0</p>
+        <div className="glass-card p-4 text-center border border-[#D000FF]/20">
+          <p className="text-3xl font-black text-[#D000FF]">0</p>
           <p className="text-[10px] text-white/50 font-medium uppercase tracking-wider mt-1">Q2</p>
         </div>
         <div className="glass-card p-4 text-center border border-[#FF8C00]/20">

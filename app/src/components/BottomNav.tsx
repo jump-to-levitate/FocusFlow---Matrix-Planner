@@ -23,7 +23,7 @@ const navItems: NavItem[] = [
 
 export const BottomNav = () => {
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 z-40 w-full max-w-[480px]">
+    <nav className="sticky bottom-0 z-40 w-full mt-auto">
       {/* Padding container - dynamic safe area for gesture bars */}
       <div className="px-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
         {/* Glassmorphism background */}
@@ -36,7 +36,7 @@ export const BottomNav = () => {
                 className={({ isActive }) =>
                   `flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-150 active:scale-95 ${
                     isActive
-                      ? 'text-[#C084FC] drop-shadow-[0_0_8px_rgba(192,132,252,0.6)]'
+                      ? 'text-[#D000FF] drop-shadow-[0_0_12px_rgba(208,0,255,0.7)]'
                       : 'text-white/50 hover:text-white/70'
                   }`
                 }
@@ -48,7 +48,7 @@ export const BottomNav = () => {
                       size={24} 
                       strokeWidth={isActive ? 2.5 : 1.5}
                       className={isActive 
-                        ? 'fill-[rgba(192,132,252,0.25)] transition-all duration-150' 
+                        ? 'fill-[rgba(208,0,255,0.3)] transition-all duration-150' 
                         : 'transition-all duration-150'
                       }
                     />

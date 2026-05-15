@@ -106,7 +106,7 @@ export const COLORS = {
     
     // Quadrant-specific text
     q1: '#39FF14', // lime green
-    q2: '#A855F7', // purple
+    q2: '#D000FF', // electric purple
     q3: '#FF8C00', // neon orange
     q4: '#94A3B8', // slate-400
   },
@@ -133,14 +133,14 @@ export const COLORS = {
     },
     
     q2: {
-      // Nie-pilne i Ważne - GROWTH (purple)
-      base: '#A855F7',
-      light: 'rgba(168, 85, 247, 0.2)',
-      medium: 'rgba(168, 85, 247, 0.4)',
-      glow: 'rgba(168, 85, 247, 0.3)',
-      border: 'rgba(168, 85, 247, 0.5)',
-      text: '#A855F7',
-      gradient: 'linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(168, 85, 247, 0.05) 100%)',
+      // Nie-pilne i Ważne - GROWTH (electric purple)
+      base: '#D000FF',
+      light: 'rgba(208, 0, 255, 0.2)',
+      medium: 'rgba(208, 0, 255, 0.4)',
+      glow: 'rgba(208, 0, 255, 0.3)',
+      border: 'rgba(208, 0, 255, 0.5)',
+      text: '#D000FF',
+      gradient: 'linear-gradient(135deg, rgba(208, 0, 255, 0.2) 0%, rgba(208, 0, 255, 0.05) 100%)',
     },
     
     q3: {

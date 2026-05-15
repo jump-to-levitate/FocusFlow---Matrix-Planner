@@ -16,21 +16,21 @@ interface QuadrantCardProps {
 
 const colorClasses = {
   lime: 'border-[#39FF14] shadow-[0_0_15px_rgba(57,255,20,0.6),0_0_40px_rgba(57,255,20,0.15)]',
-  purple: 'border-[#C084FC] shadow-[0_0_18px_rgba(192,132,252,0.7),0_0_45px_rgba(192,132,252,0.2)]',
+  purple: 'border-[#D000FF] shadow-[0_0_25px_rgba(208,0,255,0.7),0_0_50px_rgba(208,0,255,0.2)]',
   orange: 'border-[#FF8C00] shadow-[0_0_15px_rgba(255,140,0,0.6),0_0_40px_rgba(255,140,0,0.15)]',
   slate: 'border-slate-500/70 shadow-[0_0_10px_rgba(100,116,139,0.3)]',
 };
 
 const bgClasses = {
   lime: 'bg-[rgba(57,255,20,0.08)]',
-  purple: 'bg-[rgba(192,132,252,0.10)]',
+  purple: 'bg-[rgba(208,0,255,0.10)]',
   orange: 'bg-[rgba(255,140,0,0.08)]',
   slate: 'bg-slate-500/5',
 };
 
 const titleColorClasses = {
   lime: 'text-[#39FF14]',
-  purple: 'text-[#C084FC]',
+  purple: 'text-[#D000FF]',
   orange: 'text-[#FF8C00]',
   slate: 'text-slate-400',
 };
