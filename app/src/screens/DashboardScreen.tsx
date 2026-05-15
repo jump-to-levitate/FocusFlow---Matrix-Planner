@@ -8,7 +8,7 @@ import { Plus } from 'lucide-react';
 
 export const DashboardScreen = () => {
   return (
-    <div className="flex flex-col h-full pt-4 pb-4 justify-between">
+    <div className="flex flex-col h-full pt-4 pb-4 gap-6">
       {/* Header */}
       <header className="shrink-0">
         <h1 className="text-2xl font-black text-white uppercase tracking-wide mb-2">

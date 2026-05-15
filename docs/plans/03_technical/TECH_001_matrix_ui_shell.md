@@ -59,12 +59,14 @@ AppShell to **"siatka bezpieczeństwa"** - komponent root layoutu który wymusza
 
 | Viewport | Szerokość | Zachowanie AppShell |
 |----------|-----------|---------------------|
-| Mobile S | 320px | 100% szerokości, padding 16px |
-| Mobile M | 375px | 100% szerokości, padding 16px |
-| Mobile L | 414px | 100% szerokości, padding 16px |
-| Mobile XL | 480px | 100% szerokości, max-width osiągnięty |
-| Tablet/Desktop | >480px | Wycentrowany 480px box, `mx-auto` |
-| Desktop XL | >1200px | Wycentrowany 480px box |
+| Mobile S | 320px | 100% szerokości, padding 24px |
+| Mobile M | 375px | 100% szerokości, padding 24px |
+| Mobile L | 414px | 100% szerokości, padding 24px |
+| Mobile XL | 430px | 100% szerokości, max-width osiągnięty |
+| Desktop (≥480px) | 430px | Sztywna ramka 430×932px, wycentrowana |
+| Desktop (h<960px) | 430px | `transform: scale()` — proporcjonalne pomniejszenie |
+
+> **v1.2:** Żadne jednostki `vh` nie są używane dla wymiarów ramki. Stałe `430px × 932px` z `transform: scale()` jako fallback dla małych ekranów.
 
 ### 2.3 Implementacja (TypeScript + Tailwind)
 
@@ -110,22 +112,26 @@ export const AppShell = ({ children }: AppShellProps) => {
 }
 ```
 
-### 2.5 Full-Screen Normalization (v1.1)
+### 2.5 Full-Screen Normalization (v1.2)
 
-All screens must fill the device frame uniformly (393×852px on desktop):
+All screens must fill the device frame uniformly (430×932px on desktop):
 
-- **Layout model:** `.app-shell` is `display: flex; flex-direction: column`. Main content area is `flex-1 overflow-y-auto scrollbar-hide`.
-- **Screen containers:** Each screen root uses `flex flex-col h-full pt-4` instead of static `content-area` class.
-- **Scrollbar:** Hidden inside device frame via `.scrollbar-hide` utility (existing in index.css).
-- **Result:** Switching between screens causes no height jitter; BottomNav stays fixed at the bottom of the frame.
+- **Layout model:** `.app-shell` is `display: flex; flex-direction: column; width: 430px; height: 932px`. No `vh` units.
+- **Scale fallback:** When viewport height < 960px, `.app-shell` uses `transform: scale()` with `transform-origin: top center` to shrink proportionally.
+- **Dynamic Island:** Absolutely positioned (`absolute top-0 inset-x-0 z-10`), does not affect content flow. `<main>` uses `pt-14` for safe area.
+- **Screen containers:** Each screen root uses `flex flex-col h-full gap-6` instead of `justify-between`.
+- **Scrollbar:** Hidden inside device frame via `.scrollbar-hide` utility.
+- **Result:** Device frame never changes dimensions; it scales down uniformly on small viewports.
 
 ### 2.6 Acceptance Criteria
 
-- [ ] AppShell renderuje się jako `max-w-[393px]` (iPhone 15 Pro)
+- [ ] AppShell renderuje się jako sztywne `430×932px` (Pro Max)
 - [ ] Na desktopie layout jest wycentrowany (`mx-auto`)
 - [ ] Na mobile layout zajmuje 100% szerokości z paddingiem
-- [ ] Tło `#05070A` (Rich Black) na całym ekranie
-- [ ] Brak poziomych scrollbarów na żadnym urządzeniu
+- [ ] Tło `#020204` na `.app-outer`
+- [ ] Brak jednostek `vh` w wymiarach ramki
+- [ ] `transform: scale()` działa przy oknie < 960px wysokości
+- [ ] Dynamic Island nie wpływa na flow — pozycja absolute
 - [ ] Wszystkie ekrany wypełniają ramkę h-full bez skakania
 
 ---
@@ -154,6 +160,12 @@ Bottom Navigation to pasek nawigacyjny na dole ekranu z 5 głównymi sekcjami ap
 - **Inactive Item:** 50% opacity, outline icon
 - **Height:** 80px (z safe area dla iPhone)
 - **Touch Target:** 48×48px minimum (Apple HIG)
+
+#### Dynamic Island (v1.2):
+- **Position:** `absolute top-0 inset-x-0 z-10` — does not push content down
+- **Size:** 150×36px black pill with subtle border
+- **Safe area:** `<main>` uses `pt-14` to clear the island
+- **Visibility:** Desktop only (`hidden min-[480px]:flex`)
 
 #### Behavior:
 - Active route: neon underline + filled icon
@@ -888,6 +900,7 @@ Będziemy mogli:
 
 | Wersja | Data | Zmiany |
 |--------|------|--------|
+| v1.2 | 2026-05-15 | Final Dimension Stabilization — fixed 430×932px, CSS scale() fallback, Dynamic Island absolute, no vh units |
 | v1.1 | 2026-05-15 | Full-Screen Normalization & Matrix Proportions fix - h-full layout, grid-rows-2, scrollbar-hide |
 | v1.0 | 2026-05-14 | **Final release** - wszystkie sekcje zweryfikowane i ujednolicone |
 | v0.9 | 2026-05-14 | Ujednolicono `content-area` do `pb-28` (112px) |
