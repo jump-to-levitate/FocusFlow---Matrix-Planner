@@ -9,9 +9,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { BottomNav } from './components/BottomNav';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { MatrixScreen } from './screens/MatrixScreen';
-import { TodayScreen } from './screens/TodayScreen';
-import { NotesScreen } from './screens/NotesScreen';
 import { TimerScreen } from './screens/TimerScreen';
+import { BrainDumpScreen } from './screens/BrainDumpScreen';
 
 // ============================================================================
 // AppShell Component - "Siatka Bezpieczeństwa 480px"
@@ -40,13 +39,12 @@ function App() {
     <BrowserRouter>
       <AppShell>
         {/* Main content - grows to fill available space */}
-        <main className="content-area flex-1">
+        <main className="content-area flex-1 overflow-y-auto">
           <Routes>
             <Route path="/" element={<DashboardScreen />} />
             <Route path="/matrix" element={<MatrixScreen />} />
-            <Route path="/today" element={<TodayScreen />} />
-            <Route path="/notes" element={<NotesScreen />} />
             <Route path="/timer" element={<TimerScreen />} />
+            <Route path="/braindump" element={<BrainDumpScreen />} />
           </Routes>
         </main>
         

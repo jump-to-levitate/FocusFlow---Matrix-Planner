@@ -1,11 +1,11 @@
 // ============================================================================
 // FocusFlow 2.0 - Bottom Navigation Component
-// 5-item navigation: Pulpit, Macierz, Dzisiaj, Notes, Timer
-// Fixed position with 480px constraint and safe area support
+// 4-item navigation: Pulpit, Macierz, Timer, Brain Dump
+// Sticky position inside device frame with safe area support
 // ============================================================================
 
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Grid2x2, Calendar, StickyNote, Clock } from 'lucide-react';
+import { LayoutDashboard, Grid2x2, Clock, Brain } from 'lucide-react';
 
 interface NavItem {
   to: string;
@@ -16,9 +16,8 @@ interface NavItem {
 const navItems: NavItem[] = [
   { to: '/', label: 'Pulpit', icon: LayoutDashboard },
   { to: '/matrix', label: 'Macierz', icon: Grid2x2 },
-  { to: '/today', label: 'Dzisiaj', icon: Calendar },
-  { to: '/notes', label: 'Notes', icon: StickyNote },
   { to: '/timer', label: 'Timer', icon: Clock },
+  { to: '/braindump', label: 'Brain Dump', icon: Brain },
 ];
 
 export const BottomNav = () => {
