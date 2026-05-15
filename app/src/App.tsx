@@ -23,9 +23,9 @@ interface AppShellProps {
 function AppShell({ children }: AppShellProps) {
   return (
     <div className="app-outer">
-      <div className="app-shell relative">
-        {/* Dynamic Island notch - absolute so it doesn't affect content flow */}
-        <div className="hidden min-[480px]:flex absolute top-0 inset-x-0 z-10 justify-center pt-3">
+      <div className="app-shell">
+        {/* Dynamic Island notch - in normal flow, pushes content down naturally */}
+        <div className="hidden min-[480px]:flex justify-center pt-3 pb-2 shrink-0">
           <div className="w-[150px] h-[36px] bg-black rounded-full border border-white/[0.06]" />
         </div>
         {children}
@@ -43,7 +43,7 @@ function App() {
     <BrowserRouter>
       <AppShell>
         {/* Main content - grows to fill available space */}
-        <main className="flex-1 overflow-y-auto scrollbar-hide min-[480px]:pt-14">
+        <main className="flex-1 overflow-y-auto scrollbar-hide">
           <Routes>
             <Route path="/" element={<DashboardScreen />} />
             <Route path="/matrix" element={<MatrixScreen />} />

@@ -232,7 +232,7 @@
   /* Outer wrapper - centers the device frame on desktop */
   .app-outer {
     min-height: 100vh;
-    background: #020204;
+    background: #000000;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -242,7 +242,7 @@
   /* On mobile (<480px): full-width, no rounding, natural scroll */
   /* On desktop (≥480px): Pro Max mockup centered on screen */
   .app-shell {
-    @apply w-full mx-auto px-6 relative;
+    @apply w-full mx-auto px-8 relative;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -258,29 +258,16 @@
     .app-shell {
       min-height: auto;
       width: 430px;
-      height: 932px;
+      height: 95vh;
+      max-height: 932px;
       overflow: hidden;
       border-radius: 3.5rem;
-      border: 5px solid rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.10);
       box-shadow: 
         0 0 0 1px rgba(255, 255, 255, 0.05),
         0 0 100px rgba(0, 0, 0, 0.85),
         0 0 50px rgba(0, 0, 0, 0.6),
         0 25px 50px rgba(0, 0, 0, 0.5);
-    }
-  }
-
-  /* Scale down the device frame when viewport is too short */
-  @media (min-width: 480px) and (max-height: 960px) {
-    .app-outer {
-      padding: 0.5rem 0;
-      align-items: start;
-      padding-top: 0.5rem;
-    }
-
-    .app-shell {
-      transform: scale(calc((100vh - 24px) / 932));
-      transform-origin: top center;
     }
   }
   
