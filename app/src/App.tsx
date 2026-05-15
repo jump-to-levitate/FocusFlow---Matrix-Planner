@@ -23,7 +23,7 @@ interface AppShellProps {
 
 function AppShell({ children }: AppShellProps) {
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-h-screen bg-[var(--color-bg)]">
       <div className="app-shell">
         {children}
       </div>

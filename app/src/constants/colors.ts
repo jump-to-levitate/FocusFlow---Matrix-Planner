@@ -51,31 +51,31 @@ export const COLORS = {
   // SURFACE - Glassmorphism & Background Layers
   // ==========================================================================
   surface: {
-    // Deep background (app base)
-    background: '#0F172A', // slate-900
-    backgroundElevated: '#1E293B', // slate-800
+    // Deep background (app base) - Rich Black
+    background: '#05070A', // Rich Black - głęboka czerń z minimalnym odcieniem granatu
+    backgroundElevated: '#0C1018', // Elevated surface - lekko jaśniejsza czerń
     
-    // Glassmorphism layers
+    // Glassmorphism layers (reduced opacity for Rich Black base)
     glass: {
-      light: 'rgba(255, 255, 255, 0.08)',
-      medium: 'rgba(255, 255, 255, 0.12)',
-      heavy: 'rgba(255, 255, 255, 0.18)',
-      border: 'rgba(255, 255, 255, 0.15)',
+      light: 'rgba(255, 255, 255, 0.03)',
+      medium: 'rgba(255, 255, 255, 0.06)',
+      heavy: 'rgba(255, 255, 255, 0.10)',
+      border: 'rgba(255, 255, 255, 0.08)',
       borderStrong: 'rgba(255, 255, 255, 0.25)',
     },
     
     // Dark overlay (modals, popovers)
-    overlay: 'rgba(15, 23, 42, 0.85)',
-    overlayHeavy: 'rgba(15, 23, 42, 0.95)',
+    overlay: 'rgba(5, 7, 10, 0.85)',
+    overlayHeavy: 'rgba(5, 7, 10, 0.95)',
     
     // Card surfaces
-    card: 'rgba(30, 41, 59, 0.6)',
-    cardHover: 'rgba(30, 41, 59, 0.8)',
-    cardActive: 'rgba(51, 65, 85, 0.6)',
+    card: 'rgba(12, 16, 24, 0.6)',
+    cardHover: 'rgba(12, 16, 24, 0.8)',
+    cardActive: 'rgba(20, 26, 38, 0.6)',
     
     // Input fields
-    input: 'rgba(15, 23, 42, 0.6)',
-    inputFocus: 'rgba(15, 23, 42, 0.8)',
+    input: 'rgba(5, 7, 10, 0.6)',
+    inputFocus: 'rgba(5, 7, 10, 0.8)',
     inputBorder: 'rgba(255, 255, 255, 0.1)',
     inputBorderFocus: 'rgba(0, 240, 255, 0.5)',
   },
@@ -355,10 +355,10 @@ export type StatusColors = keyof typeof COLORS.status;
 //    <span className="text-glow-strong">Maximum glow effect</span>
 //
 // VIBRANT TEXT BEST PRACTICES:
-// - Always use on dark/glass backgrounds (bg-slate-900, glass-panel)
+// - Always use on dark/glass backgrounds (Rich Black #05070A, glass-panel)
 // - Never use on light/white backgrounds (glow effect is lost)
 // - Use text-neon-* for all interactive/active states
 // - Combine with text-glow-* for emphasis (CTAs, alerts, hero text)
-// - Contrast ratio: All vibrant colors > 7:1 on #0F172A (WCAG AAA)
+// - Contrast ratio: All vibrant colors > 7:1 on #05070A (WCAG AAA)
 //
 // ============================================================================
