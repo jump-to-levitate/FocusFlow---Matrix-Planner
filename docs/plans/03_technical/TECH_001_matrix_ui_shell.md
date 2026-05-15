@@ -110,13 +110,23 @@ export const AppShell = ({ children }: AppShellProps) => {
 }
 ```
 
-### 2.5 Acceptance Criteria
+### 2.5 Full-Screen Normalization (v1.1)
 
-- [ ] AppShell renderuje się jako `max-w-[480px]`
+All screens must fill the device frame uniformly (393×852px on desktop):
+
+- **Layout model:** `.app-shell` is `display: flex; flex-direction: column`. Main content area is `flex-1 overflow-y-auto scrollbar-hide`.
+- **Screen containers:** Each screen root uses `flex flex-col h-full pt-4` instead of static `content-area` class.
+- **Scrollbar:** Hidden inside device frame via `.scrollbar-hide` utility (existing in index.css).
+- **Result:** Switching between screens causes no height jitter; BottomNav stays fixed at the bottom of the frame.
+
+### 2.6 Acceptance Criteria
+
+- [ ] AppShell renderuje się jako `max-w-[393px]` (iPhone 15 Pro)
 - [ ] Na desktopie layout jest wycentrowany (`mx-auto`)
 - [ ] Na mobile layout zajmuje 100% szerokości z paddingiem
-- [ ] Tło `bg-slate-900` (#0F172A) na całym ekranie
+- [ ] Tło `#05070A` (Rich Black) na całym ekranie
 - [ ] Brak poziomych scrollbarów na żadnym urządzeniu
+- [ ] Wszystkie ekrany wypełniają ramkę h-full bez skakania
 
 ---
 
@@ -343,7 +353,7 @@ export const QuadrantCard = ({
         p-2 min-[360px]:p-4   {/* Responsive padding: tight on small screens */}
         ${colorClasses[color]}
         ${bgClasses[color]}
-        min-h-[160px] min-[360px]:min-h-[200px]
+        h-full flex flex-col
         transition-all duration-200 hover:scale-[1.02]
       `}
     >
@@ -392,8 +402,8 @@ export const MatrixScreen = () => {
         </p>
       </header>
 
-      {/* 2×2 Grid */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* 2×2 Grid - flex-1 fills available space, grid-rows-2 ensures equal halves */}
+      <div className="grid grid-cols-2 grid-rows-2 gap-3 flex-1 min-h-0">
         {/* Q1 - Do First */}
         <QuadrantCard
           quadrant={1}
@@ -462,7 +472,7 @@ export const MatrixScreen = () => {
 
 | Element | PDF Strona | Specyfikacja |
 |---------|------------|--------------|
-| Grid 2×2 | str. 16 | `grid-cols-2`, gap 12px |
+| Grid 2×2 | str. 16 | `grid-cols-2 grid-rows-2 flex-1 min-h-0`, gap 12px |
 | Q1 (Zielony) | str. 16 | Neon lime `#39FF14`, glow effect |
 | Q2 (Fioletowy) | str. 16 | Neon purple `#A855F7`, glow effect |
 | Q3 (Cyjanowy) | str. 16 | Neon cyan `#00F0FF`, glow effect |
@@ -878,6 +888,7 @@ Będziemy mogli:
 
 | Wersja | Data | Zmiany |
 |--------|------|--------|
+| v1.1 | 2026-05-15 | Full-Screen Normalization & Matrix Proportions fix - h-full layout, grid-rows-2, scrollbar-hide |
 | v1.0 | 2026-05-14 | **Final release** - wszystkie sekcje zweryfikowane i ujednolicone |
 | v0.9 | 2026-05-14 | Ujednolicono `content-area` do `pb-28` (112px) |
 | v0.8 | 2026-05-14 | Dodano `webkit-backdrop-filter` i `safe-area-inset-bottom` |

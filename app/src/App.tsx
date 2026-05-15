@@ -43,7 +43,7 @@ function App() {
     <BrowserRouter>
       <AppShell>
         {/* Main content - grows to fill available space */}
-        <main className="content-area flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto scrollbar-hide">
           <Routes>
             <Route path="/" element={<DashboardScreen />} />
             <Route path="/matrix" element={<MatrixScreen />} />

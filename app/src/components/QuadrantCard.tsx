@@ -49,7 +49,7 @@ export const QuadrantCard = ({
         p-2 min-[360px]:p-4
         ${colorClasses[color]}
         ${bgClasses[color]}
-        min-h-[160px] min-[360px]:min-h-[200px]
+        h-full flex flex-col
         transition-all duration-200 hover:scale-[1.02]
       `}
     >

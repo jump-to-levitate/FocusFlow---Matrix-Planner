@@ -8,15 +8,15 @@ import { QuadrantCard } from '../components/QuadrantCard';
 
 export const MatrixScreen = () => {
   return (
-    <div className="content-area">
+    <div className="flex flex-col h-full pt-4 pb-4">
       {/* Header */}
-      <header className="mb-5">
+      <header className="mb-4 shrink-0">
         <h1 className="text-xl font-black text-white uppercase tracking-wide mb-1">Macierz</h1>
         <p className="text-sm text-white/50 font-medium">Eisenhower Matrix 2×2</p>
       </header>
 
-      {/* Matrix Grid 2×2 */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* Matrix Grid 2×2 - fills remaining space */}
+      <div className="grid grid-cols-2 grid-rows-2 gap-3 flex-1 min-h-0">
         {/* Q1 - Urgent & Important (Fire) */}
         <QuadrantCard
           quadrant={1}
@@ -54,3 +54,4 @@ export const MatrixScreen = () => {
 };
 
 export default MatrixScreen;
+

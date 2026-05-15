@@ -8,9 +8,9 @@ import { Plus } from 'lucide-react';
 
 export const DashboardScreen = () => {
   return (
-    <div className="content-area">
+    <div className="flex flex-col h-full pt-4 pb-4">
       {/* Header */}
-      <header className="mb-6">
+      <header className="mb-6 shrink-0">
         <h1 className="text-xl font-black text-white uppercase tracking-wide mb-2">
           Twój cel na teraz
         </h1>
@@ -37,8 +37,8 @@ export const DashboardScreen = () => {
         </button>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-3 gap-3">
+      {/* Quick Stats - pushed to bottom */}
+      <div className="grid grid-cols-3 gap-3 mt-auto">
         <div className="glass-card p-4 text-center border border-[#39FF14]/20">
           <p className="text-3xl font-black text-[#39FF14]">0</p>
           <p className="text-[10px] text-white/50 font-medium uppercase tracking-wider mt-1">Q1</p>
