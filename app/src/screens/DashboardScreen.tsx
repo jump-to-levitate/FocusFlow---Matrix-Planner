@@ -11,7 +11,7 @@ export const DashboardScreen = () => {
     <div className="content-area">
       {/* Header */}
       <header className="mb-6">
-        <h1 className="text-2xl font-black text-white uppercase tracking-wide mb-2">
+        <h1 className="text-xl font-black text-white uppercase tracking-wide mb-2">
           Twój cel na teraz
         </h1>
         <p className="text-sm text-white/50 font-medium">Q1 - Pilne i Ważne</p>

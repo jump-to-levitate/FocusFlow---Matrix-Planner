@@ -238,36 +238,36 @@
     justify-content: center;
   }
 
-  /* App Shell (Mobile-First 480px constraint) */
+  /* App Shell (Mobile-First constraint) */
   /* On mobile (<480px): full-width, no rounding, natural scroll */
-  /* On desktop (>480px): flagship phone mockup centered on screen */
+  /* On desktop (≥480px): iPhone 15 Pro mockup centered on screen */
   .app-shell {
-    @apply w-full max-w-[480px] mx-auto px-4 relative;
+    @apply w-full mx-auto px-5 relative;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    max-width: 393px;
     background: var(--color-bg);
   }
 
-  @media (min-width: 481px) {
+  @media (min-width: 480px) {
     .app-outer {
-      padding: 2rem 0;
+      padding: 1.5rem 0;
     }
 
     .app-shell {
       min-height: auto;
-      height: auto;
-      max-height: 92vh;
-      aspect-ratio: 9 / 19.5;
+      width: 393px;
+      height: 852px;
+      max-height: 90vh;
       overflow: hidden;
-      /* Internal scroll handled by flex children */
-      border-radius: 3.5rem;
-      border: 8px solid rgba(255, 255, 255, 0.10);
+      border-radius: 3rem;
+      border: 4px solid rgba(255, 255, 255, 0.08);
       box-shadow: 
-        0 0 0 1px rgba(255, 255, 255, 0.05),
-        0 0 100px rgba(0, 0, 0, 0.8),
-        0 0 60px rgba(0, 0, 0, 0.6),
-        0 30px 60px rgba(0, 0, 0, 0.5);
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 0 80px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(0, 0, 0, 0.5),
+        0 20px 40px rgba(0, 0, 0, 0.4);
     }
   }
   

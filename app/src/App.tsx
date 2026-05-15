@@ -24,6 +24,10 @@ function AppShell({ children }: AppShellProps) {
   return (
     <div className="app-outer">
       <div className="app-shell">
+        {/* Dynamic Island notch (visible only inside device frame) */}
+        <div className="hidden min-[480px]:flex justify-center pt-3 pb-2 shrink-0">
+          <div className="w-[120px] h-[34px] bg-black rounded-full border border-white/[0.06]" />
+        </div>
         {children}
       </div>
     </div>
