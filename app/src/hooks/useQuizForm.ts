@@ -60,6 +60,17 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
 
   const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // --- localStorage draft restore (only when no prefill) ---
+  useEffect(() => {
+    // Restore draft only in normal flow without prefill
+    if (!options?.initialTitle) {
+      try {
+        const savedDraft = localStorage.getItem(DRAFT_KEY);
+        if (savedDraft) setTaskTitleRaw(savedDraft);
+      } catch { /* ignore */ }
+    }
+  }, [options?.initialTitle]);
+
   // --- localStorage draft persistence ---
   useEffect(() => {
     try {
