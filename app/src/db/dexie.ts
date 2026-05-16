@@ -3,7 +3,7 @@ import Dexie, { type Table } from 'dexie';
 export interface Task {
   id?: number;
   title: string;
-  quadrant: 1 | 2 | 3 | 4;
+  quadrant: 0 | 1 | 2 | 3 | 4; // 0 = Inbox Note (unassigned)
   completed: boolean;
   createdAt: Date;
 }

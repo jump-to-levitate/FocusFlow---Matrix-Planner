@@ -7,7 +7,8 @@ interface QuizModalProps {
   onClose: () => void;
   initialQuadrant?: QuadrantNumber | null;
   initialTitle?: string;
-  onClassify?: (quadrant: QuadrantNumber) => void;
+  classifyTaskId?: number;
+  onClassify?: (id: number, quadrant: QuadrantNumber) => void;
 }
 
 const QUADRANT_META: Record<QuadrantNumber, { label: string; color: string; glow: string }> = {
@@ -32,7 +33,7 @@ const URGENCY_QUESTIONS = [
 const IMPORTANCE_LABELS = ['Cel', 'Inwestycja', 'Żal'];
 const URGENCY_LABELS = ['Termin', 'Konsekwencje', 'Blokada'];
 
-export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, onClassify }: QuizModalProps) => {
+export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, classifyTaskId, onClassify }: QuizModalProps) => {
   const quiz = useQuizForm({ initialQuadrant: initialQuadrant ?? null, initialTitle });
 
   if (!isOpen) return null;
@@ -43,8 +44,8 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, onCl
   };
 
   const handleSubmit = async () => {
-    if (onClassify && quiz.predictedQuadrant !== null) {
-      onClassify(quiz.predictedQuadrant);
+    if (onClassify && classifyTaskId !== undefined && quiz.predictedQuadrant !== null) {
+      onClassify(classifyTaskId, quiz.predictedQuadrant);
       quiz.resetQuiz();
       onClose();
       return;

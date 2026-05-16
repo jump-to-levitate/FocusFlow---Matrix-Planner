@@ -14,7 +14,6 @@ export const DashboardScreen = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [completing, setCompleting] = useState<number | null>(null);
   const [quickTitle, setQuickTitle] = useState('');
-  const [quizInitialTitle, setQuizInitialTitle] = useState<string | undefined>(undefined);
   const quickInputRef = useRef<HTMLInputElement>(null);
 
   const allTasks = useLiveQuery(
@@ -28,6 +27,7 @@ export const DashboardScreen = () => {
   const q1Tasks = tasks.filter(t => t.quadrant === 1);
   const q2Tasks = tasks.filter(t => t.quadrant === 2);
   const q3Tasks = tasks.filter(t => t.quadrant === 3);
+  const q0Tasks = tasks.filter(t => t.quadrant === 0);
 
   // Focus task: first Q1, fallback first Q2
   const focusTask = q1Tasks[0] ?? q2Tasks[0] ?? null;
@@ -50,10 +50,8 @@ export const DashboardScreen = () => {
       isOpen={isQuizOpen}
       onClose={() => {
         setIsQuizOpen(false);
-        setQuizInitialTitle(undefined);
         setTimeout(() => quickInputRef.current?.focus(), 100);
       }}
-      initialTitle={quizInitialTitle}
     />
     <div className="flex flex-col h-full pt-4 pb-4 gap-6">
       {/* Header */}
@@ -116,14 +114,23 @@ export const DashboardScreen = () => {
           onChange={e => setQuickTitle(e.target.value)}
           onKeyDown={e => {
             if (e.key === 'Enter' && quickTitle.trim()) {
-              setQuizInitialTitle(quickTitle.trim());
+              db.tasks.add({
+                title: quickTitle.trim(),
+                quadrant: 0,
+                completed: false,
+                createdAt: new Date(),
+              });
               setQuickTitle('');
-              setIsQuizOpen(true);
             }
           }}
           placeholder="Wpisz i naciśnij Enter..."
           className="w-full py-3 px-4 bg-white/[0.04] border border-[#00F0FF]/20 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#00F0FF]/50 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] transition-all"
         />
+        {/* Q0 Live Counter */}
+        <p className="mt-3 text-xs font-medium text-[#00F0FF]/70 flex items-center gap-1.5">
+          <span>📥</span>
+          <span>Notatki w poczekalni: {q0Tasks.length}</span>
+        </p>
       </div>
 
       {/* Quick Stats — live counts */}
