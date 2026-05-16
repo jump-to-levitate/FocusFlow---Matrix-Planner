@@ -14,7 +14,8 @@ export const DashboardScreen = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [completing, setCompleting] = useState<number | null>(null);
 
-  const tasks = useLiveQuery(() => db.tasks.where('completed').equals(0).toArray()) ?? [];
+  const allTasks = useLiveQuery(() => db.tasks.toArray()) ?? [];
+  const tasks = allTasks.filter(t => !t.completed);
   const q1Tasks = tasks.filter(t => t.quadrant === 1);
   const q2Tasks = tasks.filter(t => t.quadrant === 2);
   const q3Tasks = tasks.filter(t => t.quadrant === 3);

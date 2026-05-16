@@ -14,7 +14,8 @@ export const MatrixScreen = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [selectedQuadrant, setSelectedQuadrant] = useState<1 | 2 | 3 | 4 | null>(null);
 
-  const tasks = useLiveQuery(() => db.tasks.where('completed').equals(0).toArray()) ?? [];
+  const allTasks = useLiveQuery(() => db.tasks.toArray()) ?? [];
+  const tasks = allTasks.filter(t => !t.completed);
   const q1 = tasks.filter(t => t.quadrant === 1);
   const q2 = tasks.filter(t => t.quadrant === 2);
   const q3 = tasks.filter(t => t.quadrant === 3);
