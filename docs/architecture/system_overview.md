@@ -58,7 +58,7 @@ interface Task {
   id: string;              // UUID v4
   title: string;           // Max 100 chars
   description?: string;    // Opcjonalne
-  quadrant: 1 | 2 | 3 | 4; // Q1-Q4
+  quadrant: 0 | 1 | 2 | 3 | 4; // 0=Inbox, 1-4=Q1-Q4
   subcategory?: Subcategory; // Tylko Q2, Q3, Q4
   completed: boolean;      // Default: false
   createdAt: Date;
@@ -69,16 +69,29 @@ interface Task {
 
 type Subcategory =
   // Q2 (Strona 10, 22): Strefa wzrostu
-  | 'routine' | 'project' | 'other' // [cite: 233-235]
-  
-  // Q3 (Strona 8, 23): Strategie "Prozy Życia" 
-  | 'do_now'       // Zrób teraz (<10 min) [cite: 212, 574]
-  | 'planned_block' // Zaplanuj blok [cite: 214, 581]
-  | 'on_break'     // W przerwie [cite: 216, 577]
-  
+  | 'routine' | 'project' | 'other'
+  // Q3 (Strona 8, 23): Strategie "Prozy Życia"
+  | 'do_now' | 'planned_block' | 'on_break'
   // Q4 (Strona 9, 24): Kategorie "Nie teraz"
-  | 'entertainment' | 'side_quest' | 'hobby' | 'optimization'; // [cite: 224-227, 591-601]
+  | 'entertainment' | 'side_quest' | 'hobby' | 'optimization';
 ```
+
+### Quadrant 0 — Inbox State (Unassigned Note)
+
+> **Kontrakt techniczny dla stanu "poczekalni"**
+
+| Właściwość | Wartość |
+|------------|---------|
+| **Wartość** | `0` |
+| **Semantyka** | Unassigned Inbox Note (Poczekalnia / Skrzynka odbiorcza) |
+| **Widoczność** | Wykluczone z widoku Macierzy (Q1-Q4) i statystyk Dashboard |
+| **Destynacja** | `BrainDumpScreen` — widok 'notes' |
+| **Przejście** | Re-klasyfikacja przez `onClassify(id, quadrant)` do wartości 1-4 |
+
+**Zasady izolacji:**
+- MatrixScreen MUSI filtrować: `tasks.filter(t => !t.completed && t.quadrant !== 0)`
+- Dashboard stats (Q1/Q2/Q3) NIE liczą zadań z `quadrant === 0`
+- Q0 zadania są widoczne wyłącznie w `BrainDumpScreen` (podzakładka "Twoje Notatki")
 
 ### Encja: Note
 

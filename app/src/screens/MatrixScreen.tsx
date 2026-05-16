@@ -21,7 +21,7 @@ export const MatrixScreen = () => {
     })
   );
   const safeTasks = Array.isArray(allTasks) ? allTasks : [];
-  const tasks = safeTasks.filter(t => !t.completed);
+  const tasks = safeTasks.filter(t => !t.completed && t.quadrant !== 0);
   const q1 = tasks.filter(t => t.quadrant === 1);
   const q2 = tasks.filter(t => t.quadrant === 2);
   const q3 = tasks.filter(t => t.quadrant === 3);

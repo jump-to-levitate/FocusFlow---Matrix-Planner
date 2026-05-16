@@ -6,7 +6,7 @@
 // ============================================================================
 
 import { Brain, Wand2, Plus, Trash2, ArrowLeft } from 'lucide-react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db/dexie';
 import { QuizModal } from '../components/quiz/QuizModal';
@@ -58,6 +58,14 @@ export const BrainDumpScreen = () => {
     setClassifyTask(null);
   };
 
+  // Autofocus recovery when returning to capture view
+  useEffect(() => {
+    if (currentView === 'capture') {
+      const timer = setTimeout(() => inputRef.current?.focus(), 50);
+      return () => clearTimeout(timer);
+    }
+  }, [currentView]);
+
   // ============ NOTES VIEW ============
   if (currentView === 'notes') {
     return (
@@ -69,12 +77,12 @@ export const BrainDumpScreen = () => {
           classifyTaskId={classifyTask?.id}
           onClassify={handleClassifyDone}
         />
-        <div className="flex flex-col h-full pt-4 pb-4 gap-4">
+        <div className="flex flex-col h-full pt-4 pb-4 gap-4 animate-in fade-in slide-in-from-right-4 duration-300 ease-out">
           {/* Header with back button */}
           <header className="shrink-0 flex items-center gap-3">
             <button
               onClick={() => setCurrentView('capture')}
-              className="p-2 -ml-2 text-white/40 hover:text-white/70 transition-colors"
+              className="p-2 -ml-2 text-white/40 hover:text-white/70 transition-all duration-200 hover:shadow-[0_0_10px_rgba(255,255,255,0.1)] rounded-lg"
             >
               <ArrowLeft size={22} />
             </button>
@@ -96,14 +104,14 @@ export const BrainDumpScreen = () => {
                     <div className="flex gap-1">
                       <button
                         onClick={() => task.id !== undefined && handleClassifyClick(task.id, task.title)}
-                        className="p-2 rounded-lg border border-[#D000FF]/30 text-[#D000FF]/60 hover:text-[#D000FF] hover:border-[#D000FF]/60 hover:bg-[#D000FF]/10 transition-all"
+                        className="p-2 rounded-lg border border-[#D000FF]/30 text-[#D000FF]/60 hover:text-[#D000FF] hover:border-[#D000FF]/60 hover:bg-[#D000FF]/10 hover:shadow-[0_0_10px_rgba(208,0,255,0.4)] transition-all duration-200"
                         title="Klasyfikuj"
                       >
                         <Wand2 size={14} />
                       </button>
                       <button
                         onClick={() => task.id !== undefined && handleDelete(task.id)}
-                        className="p-2 rounded-lg border border-white/10 text-white/30 hover:text-red-400 hover:border-red-400/40 hover:bg-red-400/10 transition-all"
+                        className="p-2 rounded-lg border border-white/10 text-white/30 hover:text-red-400 hover:border-red-400/40 hover:bg-red-400/10 hover:shadow-[0_0_8px_rgba(248,113,113,0.4)] transition-all duration-200"
                         title="Usuń"
                       >
                         <Trash2 size={14} />
@@ -135,7 +143,7 @@ export const BrainDumpScreen = () => {
         isOpen={isQuizOpen}
         onClose={handleQuizClose}
       />
-      <div className="flex flex-col h-full pt-4 pb-4 gap-5">
+      <div className="flex flex-col h-full pt-4 pb-4 gap-5 animate-in fade-in slide-in-from-left-4 duration-300 ease-out">
         {/* Header */}
         <header className="shrink-0 text-center">
           <div className="relative inline-block mb-3">
