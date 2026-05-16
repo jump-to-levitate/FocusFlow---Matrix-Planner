@@ -9,6 +9,7 @@ interface QuizModalProps {
   initialTitle?: string;
   classifyTaskId?: number;
   onClassify?: (id: number, quadrant: QuadrantNumber) => void;
+  skipTitleStep?: boolean; // default: true if initialTitle provided
 }
 
 const QUADRANT_META: Record<QuadrantNumber, { label: string; color: string; glow: string }> = {
@@ -33,8 +34,8 @@ const URGENCY_QUESTIONS = [
 const IMPORTANCE_LABELS = ['Cel', 'Inwestycja', 'Żal'];
 const URGENCY_LABELS = ['Termin', 'Konsekwencje', 'Blokada'];
 
-export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, classifyTaskId, onClassify }: QuizModalProps) => {
-  const quiz = useQuizForm({ initialQuadrant: initialQuadrant ?? null, initialTitle });
+export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, classifyTaskId, onClassify, skipTitleStep }: QuizModalProps) => {
+  const quiz = useQuizForm({ initialQuadrant: initialQuadrant ?? null, initialTitle, skipTitleStep });
 
   if (!isOpen) return null;
 
@@ -54,12 +55,15 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
     if (ok) onClose();
   };
 
-  const hasTitleStep = !initialTitle && initialQuadrant == null;
+  const shouldSkipTitle = skipTitleStep ?? (initialTitle ? true : false);
+  const hasTitleStep = !shouldSkipTitle && initialQuadrant == null;
   const stepMap = hasTitleStep
     ? { title: 1, quiz: 2, confirm: 3 } as const
     : initialQuadrant != null
       ? { title: 1, quiz: 1, confirm: initialTitle ? 1 : 2 } as const
-      : { title: 1, quiz: 1, confirm: 2 } as const;
+      : shouldSkipTitle
+        ? { title: 1, quiz: 1, confirm: 2 } as const
+        : { title: 1, quiz: 2, confirm: 3 } as const;
   const stepNumber = stepMap[quiz.currentStep];
   const totalSteps = hasTitleStep ? 3 : (initialQuadrant != null && initialTitle) ? 1 : 2;
 

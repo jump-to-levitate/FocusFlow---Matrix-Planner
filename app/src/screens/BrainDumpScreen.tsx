@@ -19,6 +19,7 @@ export const BrainDumpScreen = () => {
   const [dumpText, setDumpText] = useState('');
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [classifyTask, setClassifyTask] = useState<{ id: number; title: string } | null>(null);
+  const [quizInitialTitle, setQuizInitialTitle] = useState<string | undefined>(undefined);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const allTasks = useLiveQuery(
@@ -56,6 +57,13 @@ export const BrainDumpScreen = () => {
   const handleQuizClose = () => {
     setIsQuizOpen(false);
     setClassifyTask(null);
+    setQuizInitialTitle(undefined);
+  };
+
+  const handleStartQuiz = () => {
+    const title = dumpText.trim() || undefined;
+    setQuizInitialTitle(title);
+    setIsQuizOpen(true);
   };
 
   // Autofocus recovery when returning to capture view
@@ -142,6 +150,8 @@ export const BrainDumpScreen = () => {
       <QuizModal
         isOpen={isQuizOpen}
         onClose={handleQuizClose}
+        initialTitle={quizInitialTitle}
+        skipTitleStep={false}
       />
       <div className="flex flex-col h-full pt-4 pb-4 gap-5 animate-in fade-in slide-in-from-left-4 duration-300 ease-out">
         {/* Header */}
@@ -192,7 +202,7 @@ export const BrainDumpScreen = () => {
         <div className="shrink-0 flex flex-col gap-3">
           {/* Primary: Start Quiz */}
           <button
-            onClick={() => setIsQuizOpen(true)}
+            onClick={handleStartQuiz}
             className="w-full py-3.5 px-4 bg-[#D000FF]/15 border-2 border-[#D000FF] rounded-xl text-[#D000FF] font-bold uppercase tracking-wider hover:bg-[#D000FF]/25 active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(208,0,255,0.4)]"
           >
             <Brain size={20} strokeWidth={2.5} />

@@ -11,6 +11,7 @@ const AUTO_ADVANCE_MS = 250;
 interface UseQuizFormOptions {
   initialQuadrant?: QuadrantNumber | null;
   initialTitle?: string;
+  skipTitleStep?: boolean; // default: true if initialTitle provided
 }
 
 export interface UseQuizFormReturn {
@@ -36,10 +37,11 @@ export interface UseQuizFormReturn {
 export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
   const bypass = options?.initialQuadrant ?? null;
   const prefill = options?.initialTitle?.trim() || null;
+  const skipTitle = options?.skipTitleStep ?? (prefill ? true : false);
 
   const [currentStep, setCurrentStep] = useState<QuizStep>(() => {
     if (prefill && bypass !== null) return 'confirm';
-    if (prefill) return 'quiz';
+    if (prefill && skipTitle) return 'quiz';
     return 'title';
   });
   const [currentSlide, setCurrentSlide] = useState(0);
