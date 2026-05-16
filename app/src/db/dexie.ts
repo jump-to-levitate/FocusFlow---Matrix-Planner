@@ -13,7 +13,7 @@ export class FocusFlowDB extends Dexie {
 
   constructor() {
     super('FocusFlowDB');
-    this.version(1).stores({
+    this.version(2).stores({
       tasks: '++id, quadrant, completed, createdAt',
     });
   }

@@ -14,7 +14,12 @@ export const MatrixScreen = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [selectedQuadrant, setSelectedQuadrant] = useState<1 | 2 | 3 | 4 | null>(null);
 
-  const allTasks = useLiveQuery(() => db.tasks.toArray());
+  const allTasks = useLiveQuery(
+    () => db.tasks.toArray().catch(err => {
+      console.error('[Matrix] Dexie query failed:', err);
+      return [];
+    })
+  );
   const safeTasks = Array.isArray(allTasks) ? allTasks : [];
   const tasks = safeTasks.filter(t => !t.completed);
   const q1 = tasks.filter(t => t.quadrant === 1);

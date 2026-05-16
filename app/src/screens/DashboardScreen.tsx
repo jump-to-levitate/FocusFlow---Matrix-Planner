@@ -14,7 +14,12 @@ export const DashboardScreen = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [completing, setCompleting] = useState<number | null>(null);
 
-  const allTasks = useLiveQuery(() => db.tasks.toArray());
+  const allTasks = useLiveQuery(
+    () => db.tasks.toArray().catch(err => {
+      console.error('[Dashboard] Dexie query failed:', err);
+      return [];
+    })
+  );
   const safeTasks = Array.isArray(allTasks) ? allTasks : [];
   const tasks = safeTasks.filter(t => !t.completed);
   const q1Tasks = tasks.filter(t => t.quadrant === 1);
