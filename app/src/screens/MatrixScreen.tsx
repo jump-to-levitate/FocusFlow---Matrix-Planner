@@ -5,12 +5,24 @@
 // ============================================================================
 
 import { useState } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { QuadrantCard } from '../components/QuadrantCard';
 import { QuizModal } from '../components/quiz/QuizModal';
+import { db } from '../db/dexie';
 
 export const MatrixScreen = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [selectedQuadrant, setSelectedQuadrant] = useState<1 | 2 | 3 | 4 | null>(null);
+
+  const tasks = useLiveQuery(() => db.tasks.where('completed').equals(0).toArray()) ?? [];
+  const q1 = tasks.filter(t => t.quadrant === 1);
+  const q2 = tasks.filter(t => t.quadrant === 2);
+  const q3 = tasks.filter(t => t.quadrant === 3);
+  const q4 = tasks.filter(t => t.quadrant === 4);
+
+  const completeTask = (id: number) => {
+    db.tasks.update(id, { completed: true });
+  };
 
   const openQuiz = (q: 1 | 2 | 3 | 4) => {
     setSelectedQuadrant(q);
@@ -40,6 +52,8 @@ export const MatrixScreen = () => {
           title="Pilne i Ważne"
           subtitle="Rób teraz"
           color="lime"
+          tasks={q1}
+          onComplete={completeTask}
           onAdd={() => openQuiz(1)}
         />
 
@@ -49,6 +63,8 @@ export const MatrixScreen = () => {
           title="Niepilne i Ważne"
           subtitle="Zaplanuj"
           color="purple"
+          tasks={q2}
+          onComplete={completeTask}
           onAdd={() => openQuiz(2)}
         />
 
@@ -58,6 +74,8 @@ export const MatrixScreen = () => {
           title="Pilne i Nieważne"
           subtitle="Deleguj"
           color="orange"
+          tasks={q3}
+          onComplete={completeTask}
           onAdd={() => openQuiz(3)}
         />
 
@@ -67,6 +85,8 @@ export const MatrixScreen = () => {
           title="Niepilne i Nieważne"
           subtitle="Eliminuj"
           color="slate"
+          tasks={q4}
+          onComplete={completeTask}
           onAdd={() => openQuiz(4)}
         />
       </div>

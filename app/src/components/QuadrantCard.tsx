@@ -5,13 +5,17 @@
 // ============================================================================
 
 import { ReactNode } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Circle, CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
+import type { Task } from '../db/dexie';
 
 interface QuadrantCardProps {
   quadrant: 1 | 2 | 3 | 4;
   title: string;
   subtitle: string;
   color: 'lime' | 'purple' | 'orange' | 'slate';
+  tasks?: Task[];
+  onComplete?: (id: number) => void;
   children?: ReactNode;
   onAdd?: () => void;
 }
@@ -42,9 +46,22 @@ export const QuadrantCard = ({
   title, 
   subtitle, 
   color, 
+  tasks = [],
+  onComplete,
   children,
   onAdd,
 }: QuadrantCardProps) => {
+  const [completing, setCompleting] = useState<number | null>(null);
+  const activeTasks = tasks.filter(t => !t.completed);
+
+  const handleComplete = (id: number) => {
+    if (!onComplete) return;
+    setCompleting(id);
+    setTimeout(() => {
+      onComplete(id);
+      setCompleting(null);
+    }, 300);
+  };
   return (
     <div 
       className={`
@@ -70,20 +87,42 @@ export const QuadrantCard = ({
         </p>
       </div>
       
-      {/* Content (empty state or tasks) */}
-      <div className="flex-1 flex flex-col">
-        {children || (
+      {/* Content (tasks or empty state) */}
+      <div className="flex-1 flex flex-col min-h-0">
+        {children ? children : activeTasks.length > 0 ? (
+          <ul className="flex-1 overflow-y-auto space-y-1.5 scrollbar-hide">
+            {activeTasks.map(task => (
+              <li
+                key={task.id}
+                className={`flex items-start gap-2 group transition-all duration-300 ${completing === task.id ? 'opacity-0 scale-95' : ''}`}
+              >
+                <button
+                  onClick={() => task.id !== undefined && handleComplete(task.id)}
+                  className="mt-0.5 shrink-0 text-white/30 hover:text-white/70 transition-colors"
+                >
+                  {completing === task.id
+                    ? <CheckCircle2 size={14} className={titleColorClasses[color]} />
+                    : <Circle size={14} />
+                  }
+                </button>
+                <span className="text-[10px] min-[360px]:text-xs text-white/70 leading-snug break-words">
+                  {task.title}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
           <div className="flex-1 flex flex-col items-center justify-center gap-2 text-white/30">
             <p className="text-[10px] min-[360px]:text-xs text-center">Brak zadań</p>
-            {onAdd && (
-              <button
-                onClick={onAdd}
-                className={`p-1.5 rounded-lg border border-dashed border-white/20 hover:border-white/40 transition-colors`}
-              >
-                <Plus size={14} className="text-white/30" />
-              </button>
-            )}
           </div>
+        )}
+        {onAdd && (
+          <button
+            onClick={onAdd}
+            className="mt-2 mx-auto p-1.5 rounded-lg border border-dashed border-white/20 hover:border-white/40 transition-colors shrink-0"
+          >
+            <Plus size={14} className="text-white/30" />
+          </button>
         )}
       </div>
     </div>
