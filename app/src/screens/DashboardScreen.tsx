@@ -5,7 +5,7 @@
 // ============================================================================
 
 import { Plus, Circle, CheckCircle2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { QuizModal } from '../components/quiz/QuizModal';
 import { db } from '../db/dexie';
@@ -13,6 +13,9 @@ import { db } from '../db/dexie';
 export const DashboardScreen = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [completing, setCompleting] = useState<number | null>(null);
+  const [quickTitle, setQuickTitle] = useState('');
+  const [quizInitialTitle, setQuizInitialTitle] = useState<string | undefined>(undefined);
+  const quickInputRef = useRef<HTMLInputElement>(null);
 
   const allTasks = useLiveQuery(
     () => db.tasks.toArray().catch(err => {
@@ -43,7 +46,15 @@ export const DashboardScreen = () => {
 
   return (
     <>
-    <QuizModal isOpen={isQuizOpen} onClose={() => setIsQuizOpen(false)} />
+    <QuizModal
+      isOpen={isQuizOpen}
+      onClose={() => {
+        setIsQuizOpen(false);
+        setQuizInitialTitle(undefined);
+        setTimeout(() => quickInputRef.current?.focus(), 100);
+      }}
+      initialTitle={quizInitialTitle}
+    />
     <div className="flex flex-col h-full pt-4 pb-4 gap-6">
       {/* Header */}
       <header className="shrink-0">
@@ -95,12 +106,24 @@ export const DashboardScreen = () => {
         </button>
       </div>
 
-      {/* Quick Note Section */}
+      {/* Quick Add Input */}
       <div className="glass-card p-4 border border-white/[0.06]">
-        <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-2">Szybka notatka</p>
-        <div className="min-h-[80px] rounded-lg bg-white/[0.03] border border-white/[0.06] p-3 flex items-start">
-          <p className="text-xs text-white/20 italic">Zapisz myśl...</p>
-        </div>
+        <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-2">Szybki zrzut myśli</p>
+        <input
+          ref={quickInputRef}
+          type="text"
+          value={quickTitle}
+          onChange={e => setQuickTitle(e.target.value)}
+          onKeyDown={e => {
+            if (e.key === 'Enter' && quickTitle.trim()) {
+              setQuizInitialTitle(quickTitle.trim());
+              setQuickTitle('');
+              setIsQuizOpen(true);
+            }
+          }}
+          placeholder="Wpisz i naciśnij Enter..."
+          className="w-full py-3 px-4 bg-white/[0.04] border border-[#00F0FF]/20 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#00F0FF]/50 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] transition-all"
+        />
       </div>
 
       {/* Quick Stats — live counts */}

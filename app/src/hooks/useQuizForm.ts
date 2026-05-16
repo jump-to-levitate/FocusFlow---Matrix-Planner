@@ -10,6 +10,7 @@ const AUTO_ADVANCE_MS = 250;
 
 interface UseQuizFormOptions {
   initialQuadrant?: QuadrantNumber | null;
+  initialTitle?: string;
 }
 
 export interface UseQuizFormReturn {
@@ -34,10 +35,16 @@ export interface UseQuizFormReturn {
 
 export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
   const bypass = options?.initialQuadrant ?? null;
+  const prefill = options?.initialTitle?.trim() || null;
 
-  const [currentStep, setCurrentStep] = useState<QuizStep>('title');
+  const [currentStep, setCurrentStep] = useState<QuizStep>(() => {
+    if (prefill && bypass !== null) return 'confirm';
+    if (prefill) return 'quiz';
+    return 'title';
+  });
   const [currentSlide, setCurrentSlide] = useState(0);
   const [taskTitle, setTaskTitleRaw] = useState<string>(() => {
+    if (prefill) return prefill;
     try {
       return localStorage.getItem(DRAFT_KEY) ?? '';
     } catch {
@@ -185,6 +192,10 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
 
   const prevStep = useCallback(() => {
     if (currentStep === 'confirm') {
+      if (bypass !== null && prefill) {
+        // initialTitle + bypass: nowhere to go back, stay
+        return;
+      }
       if (bypass !== null) {
         setCurrentStep('title');
       } else {
@@ -197,12 +208,12 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     if (currentStep === 'quiz') {
       if (currentSlide > 0) {
         setCurrentSlide(currentSlide - 1);
-      } else {
+      } else if (!prefill) {
         setCurrentStep('title');
       }
       return;
     }
-  }, [currentStep, currentSlide, bypass]);
+  }, [currentStep, currentSlide, bypass, prefill]);
 
   // --- Reset ---
   const resetQuiz = useCallback(() => {
