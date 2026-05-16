@@ -1,4 +1,4 @@
-import { X, Brain, ArrowLeft, Check } from 'lucide-react';
+import { X, Brain, ArrowLeft, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useQuizForm } from '../../hooks/useQuizForm';
 import type { QuadrantNumber } from '../../utils/taskClassifier';
 
@@ -14,6 +14,21 @@ const QUADRANT_META: Record<QuadrantNumber, { label: string; color: string; glow
   3: { label: 'Q3 — Pilne i Nieważne',    color: '#FF8C00', glow: 'rgba(255,140,0,0.4)' },
   4: { label: 'Q4 — Niepilne i Nieważne',  color: '#64748B', glow: 'rgba(100,116,139,0.3)' },
 };
+
+const IMPORTANCE_QUESTIONS = [
+  'Czy wykonanie tego zadania przybliża Cię do Twoich głównych celów na ten miesiąc/rok?',
+  'Czy to zadanie buduje fundament pod Twoją przyszłość (np. zdrowie, finanse, oceny, relacje)?',
+  'Czy za tydzień będziesz żałować, że nie poświęciłeś/aś czasu na tę konkretną rzecz?',
+];
+
+const URGENCY_QUESTIONS = [
+  'Czy masz „twardy" termin realizacji (deadline), który upływa w ciągu najbliższych dni?',
+  'Czy zignorowanie tego zadania wywoła natychmiastowy, realny problem?',
+  'Czy ktoś inny czeka na efekt Twojej pracy, aby móc ruszyć ze swoimi zadaniami?',
+];
+
+const IMPORTANCE_LABELS = ['Cel', 'Inwestycja', 'Żal'];
+const URGENCY_LABELS = ['Termin', 'Konsekwencje', 'Blokada'];
 
 export const QuizModal = ({ isOpen, onClose, initialQuadrant }: QuizModalProps) => {
   const quiz = useQuizForm({ initialQuadrant: initialQuadrant ?? null });
@@ -32,8 +47,8 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant }: QuizModalProps) 
 
   const stepNumber = initialQuadrant != null
     ? (quiz.currentStep === 'title' ? 1 : 2)
-    : ({ title: 1, importance: 2, urgency: 3, confirm: 4 } as const)[quiz.currentStep];
-  const totalSteps = initialQuadrant != null ? 2 : 4;
+    : ({ title: 1, quiz: 2, confirm: 3 } as const)[quiz.currentStep];
+  const totalSteps = initialQuadrant != null ? 2 : 3;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -41,7 +56,7 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant }: QuizModalProps) 
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={handleClose} />
 
       {/* Modal content */}
-      <div className="relative w-full max-w-[430px] mx-auto h-full max-h-[932px] bg-[var(--color-bg)] flex flex-col items-center justify-center px-8">
+      <div className="relative w-full max-w-[430px] mx-auto h-full max-h-[932px] bg-[var(--color-bg)] flex flex-col items-center justify-center px-6">
         {/* Close */}
         <button onClick={handleClose} className="absolute top-6 right-6 text-white/40 hover:text-white/70 transition-colors">
           <X size={24} />
@@ -85,55 +100,120 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant }: QuizModalProps) 
           </div>
         )}
 
-        {/* === IMPORTANCE STEP === */}
-        {quiz.currentStep === 'importance' && (
-          <div className="flex flex-col items-center gap-6 text-center w-full">
-            <div>
-              <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">Krok {stepNumber} z {totalSteps}</p>
-              <h2 className="text-2xl font-black text-white uppercase tracking-wide">Czy to ważne?</h2>
-              <p className="text-sm text-white/50 mt-2 max-w-[300px] mx-auto">Czy przybliża Cię to do Twojego głównego celu?</p>
-            </div>
-            <div className="flex gap-4 w-full max-w-[340px]">
-              <button
-                onClick={() => quiz.answerImportance(true)}
-                className="flex-1 py-4 bg-[#39FF14]/10 border-2 border-[#39FF14] rounded-xl text-[#39FF14] font-black text-lg uppercase tracking-wider hover:bg-[#39FF14]/20 active:scale-[0.97] transition-all shadow-[0_0_15px_rgba(57,255,20,0.3)]"
-              >
-                Tak
-              </button>
-              <button
-                onClick={() => quiz.answerImportance(false)}
-                className="flex-1 py-4 bg-white/[0.04] border-2 border-white/20 rounded-xl text-white/70 font-black text-lg uppercase tracking-wider hover:bg-white/[0.08] active:scale-[0.97] transition-all"
-              >
-                Nie
-              </button>
-            </div>
-          </div>
-        )}
+        {/* === QUIZ CAROUSEL STEP === */}
+        {quiz.currentStep === 'quiz' && (() => {
+          const slide = quiz.currentSlide;
+          const impAnswer = quiz.importanceAnswers[slide];
+          const urgAnswer = quiz.urgencyAnswers[slide];
 
-        {/* === URGENCY STEP === */}
-        {quiz.currentStep === 'urgency' && (
-          <div className="flex flex-col items-center gap-6 text-center w-full">
-            <div>
-              <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">Krok {stepNumber} z {totalSteps}</p>
-              <h2 className="text-2xl font-black text-white uppercase tracking-wide">Czy to pilne?</h2>
-              <p className="text-sm text-white/50 mt-2 max-w-[300px] mx-auto">Czy masz na to twardy termin lub deadline?</p>
+          return (
+            <div className="flex flex-col items-center gap-5 w-full">
+              <div className="text-center">
+                <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-1">Krok {stepNumber} z {totalSteps}</p>
+                <p className="text-[10px] text-white/30 uppercase tracking-widest">Slajd {slide + 1} / 3</p>
+              </div>
+
+              {/* IMPORTANCE SECTION — Vibrant Purple */}
+              <div className="w-full max-w-[360px] p-4 rounded-xl border border-[#D000FF]/40 bg-[#D000FF]/[0.06]">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2 h-2 rounded-full bg-[#D000FF] shadow-[0_0_8px_rgba(208,0,255,0.8)]" />
+                  <span className="text-[10px] font-black text-[#D000FF] uppercase tracking-widest">Ważność — {IMPORTANCE_LABELS[slide]}</span>
+                </div>
+                <p className="text-xs text-white/70 leading-relaxed mb-3">{IMPORTANCE_QUESTIONS[slide]}</p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => quiz.answerImportance(slide, true)}
+                    className={`flex-1 py-2.5 rounded-lg font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.97] ${
+                      impAnswer === true
+                        ? 'bg-[#D000FF]/20 border-2 border-[#D000FF] text-[#D000FF] shadow-[0_0_12px_rgba(208,0,255,0.4)]'
+                        : 'bg-white/[0.04] border border-white/15 text-white/50 hover:bg-white/[0.08]'
+                    }`}
+                  >
+                    Tak
+                  </button>
+                  <button
+                    onClick={() => quiz.answerImportance(slide, false)}
+                    className={`flex-1 py-2.5 rounded-lg font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.97] ${
+                      impAnswer === false
+                        ? 'bg-[#D000FF]/20 border-2 border-[#D000FF]/60 text-[#D000FF]/80 shadow-[0_0_8px_rgba(208,0,255,0.2)]'
+                        : 'bg-white/[0.04] border border-white/15 text-white/50 hover:bg-white/[0.08]'
+                    }`}
+                  >
+                    Nie
+                  </button>
+                </div>
+              </div>
+
+              {/* URGENCY SECTION — Flame Orange */}
+              <div className="w-full max-w-[360px] p-4 rounded-xl border border-[#FF8C00]/40 bg-[#FF8C00]/[0.06]">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2 h-2 rounded-full bg-[#FF8C00] shadow-[0_0_8px_rgba(255,140,0,0.8)]" />
+                  <span className="text-[10px] font-black text-[#FF8C00] uppercase tracking-widest">Pilność — {URGENCY_LABELS[slide]}</span>
+                </div>
+                <p className="text-xs text-white/70 leading-relaxed mb-3">{URGENCY_QUESTIONS[slide]}</p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => quiz.answerUrgency(slide, true)}
+                    className={`flex-1 py-2.5 rounded-lg font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.97] ${
+                      urgAnswer === true
+                        ? 'bg-[#FF8C00]/20 border-2 border-[#FF8C00] text-[#FF8C00] shadow-[0_0_12px_rgba(255,140,0,0.4)]'
+                        : 'bg-white/[0.04] border border-white/15 text-white/50 hover:bg-white/[0.08]'
+                    }`}
+                  >
+                    Tak
+                  </button>
+                  <button
+                    onClick={() => quiz.answerUrgency(slide, false)}
+                    className={`flex-1 py-2.5 rounded-lg font-bold text-sm uppercase tracking-wider transition-all active:scale-[0.97] ${
+                      urgAnswer === false
+                        ? 'bg-[#FF8C00]/20 border-2 border-[#FF8C00]/60 text-[#FF8C00]/80 shadow-[0_0_8px_rgba(255,140,0,0.2)]'
+                        : 'bg-white/[0.04] border border-white/15 text-white/50 hover:bg-white/[0.08]'
+                    }`}
+                  >
+                    Nie
+                  </button>
+                </div>
+              </div>
+
+              {/* Carousel navigation bar */}
+              <div className="flex items-center justify-center gap-6 mt-2">
+                <button
+                  onClick={quiz.prevSlide}
+                  disabled={slide === 0}
+                  className="p-2 text-white/40 hover:text-white/70 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+
+                {/* Dot indicators */}
+                <div className="flex gap-2">
+                  {[0, 1, 2].map(i => {
+                    const bothFilled = quiz.importanceAnswers[i] !== null && quiz.urgencyAnswers[i] !== null;
+                    return (
+                      <div
+                        key={i}
+                        className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${
+                          i === slide
+                            ? 'bg-white scale-125 shadow-[0_0_6px_rgba(255,255,255,0.5)]'
+                            : bothFilled
+                              ? 'bg-white/50'
+                              : 'bg-white/15'
+                        }`}
+                      />
+                    );
+                  })}
+                </div>
+
+                <button
+                  onClick={quiz.nextSlide}
+                  className="p-2 text-white/40 hover:text-white/70 transition-colors"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
             </div>
-            <div className="flex gap-4 w-full max-w-[340px]">
-              <button
-                onClick={() => quiz.answerUrgency(true)}
-                className="flex-1 py-4 bg-[#FF8C00]/10 border-2 border-[#FF8C00] rounded-xl text-[#FF8C00] font-black text-lg uppercase tracking-wider hover:bg-[#FF8C00]/20 active:scale-[0.97] transition-all shadow-[0_0_15px_rgba(255,140,0,0.3)]"
-              >
-                Tak
-              </button>
-              <button
-                onClick={() => quiz.answerUrgency(false)}
-                className="flex-1 py-4 bg-white/[0.04] border-2 border-white/20 rounded-xl text-white/70 font-black text-lg uppercase tracking-wider hover:bg-white/[0.08] active:scale-[0.97] transition-all"
-              >
-                Nie
-              </button>
-            </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* === CONFIRM STEP === */}
         {quiz.currentStep === 'confirm' && quiz.predictedQuadrant !== null && (() => {

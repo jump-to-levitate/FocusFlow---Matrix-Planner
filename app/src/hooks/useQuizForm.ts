@@ -1,10 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { db } from '../db/dexie';
-import { classifyTask, type QuadrantNumber } from '../utils/taskClassifier';
+import { classifyFromScores, type QuadrantNumber } from '../utils/taskClassifier';
 
-export type QuizStep = 'title' | 'importance' | 'urgency' | 'confirm';
+export type QuizStep = 'title' | 'quiz' | 'confirm';
+type TriAnswer = [boolean | null, boolean | null, boolean | null];
 
 const DRAFT_KEY = 'focusflow_quiz_draft';
+const AUTO_ADVANCE_MS = 250;
 
 interface UseQuizFormOptions {
   initialQuadrant?: QuadrantNumber | null;
@@ -12,15 +14,18 @@ interface UseQuizFormOptions {
 
 export interface UseQuizFormReturn {
   currentStep: QuizStep;
+  currentSlide: number;
   taskTitle: string;
-  importance: boolean | null;
-  urgency: boolean | null;
+  importanceAnswers: TriAnswer;
+  urgencyAnswers: TriAnswer;
   predictedQuadrant: QuadrantNumber | null;
   isSubmitting: boolean;
   setTaskTitle: (value: string) => void;
-  answerImportance: (value: boolean) => void;
-  answerUrgency: (value: boolean) => void;
+  answerImportance: (slideIndex: number, value: boolean) => void;
+  answerUrgency: (slideIndex: number, value: boolean) => void;
   setPredictedQuadrant: (value: QuadrantNumber) => void;
+  nextSlide: () => void;
+  prevSlide: () => void;
   nextStep: () => boolean;
   prevStep: () => void;
   resetQuiz: () => void;
@@ -31,6 +36,7 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
   const bypass = options?.initialQuadrant ?? null;
 
   const [currentStep, setCurrentStep] = useState<QuizStep>('title');
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [taskTitle, setTaskTitleRaw] = useState<string>(() => {
     try {
       return localStorage.getItem(DRAFT_KEY) ?? '';
@@ -38,10 +44,12 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
       return '';
     }
   });
-  const [importance, setImportanceRaw] = useState<boolean | null>(null);
-  const [urgency, setUrgencyRaw] = useState<boolean | null>(null);
+  const [importanceAnswers, setImportanceAnswers] = useState<TriAnswer>([null, null, null]);
+  const [urgencyAnswers, setUrgencyAnswers] = useState<TriAnswer>([null, null, null]);
   const [predictedQuadrant, setPredictedQuadrantRaw] = useState<QuadrantNumber | null>(bypass);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // --- localStorage draft persistence ---
   useEffect(() => {
@@ -52,82 +60,163 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     } catch { /* quota or SSR – ignore */ }
   }, [taskTitle]);
 
+  // --- Helpers ---
+  const computeQuadrant = useCallback((imp: TriAnswer, urg: TriAnswer): QuadrantNumber => {
+    return classifyFromScores(imp, urg);
+  }, []);
+
+  const checkAutoAdvance = useCallback((
+    slide: number,
+    impArr: TriAnswer,
+    urgArr: TriAnswer,
+    wasNull: boolean,
+  ) => {
+    if (autoAdvanceTimer.current) {
+      clearTimeout(autoAdvanceTimer.current);
+      autoAdvanceTimer.current = null;
+    }
+
+    // Only auto-advance if this was a first-time answer (null → value)
+    if (!wasNull) return;
+
+    // Both answers on this slide must be filled
+    if (impArr[slide] === null || urgArr[slide] === null) return;
+
+    autoAdvanceTimer.current = setTimeout(() => {
+      if (slide < 2) {
+        setCurrentSlide(slide + 1);
+      } else {
+        // Last slide completed — compute quadrant and go to confirm
+        setPredictedQuadrantRaw(computeQuadrant(impArr, urgArr));
+        setCurrentStep('confirm');
+      }
+      autoAdvanceTimer.current = null;
+    }, AUTO_ADVANCE_MS);
+  }, [computeQuadrant]);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (autoAdvanceTimer.current) clearTimeout(autoAdvanceTimer.current);
+    };
+  }, []);
+
   // --- Setters ---
   const setTaskTitle = useCallback((value: string) => {
     setTaskTitleRaw(value);
   }, []);
 
-  const answerImportance = useCallback((value: boolean) => {
-    setImportanceRaw(value);
-    setCurrentStep('urgency');
-  }, []);
+  const answerImportance = useCallback((slideIndex: number, value: boolean) => {
+    setImportanceAnswers(prev => {
+      const wasNull = prev[slideIndex] === null;
+      const next = [...prev] as TriAnswer;
+      next[slideIndex] = value;
 
-  const answerUrgency = useCallback((value: boolean) => {
-    setUrgencyRaw(value);
-    // importance is guaranteed non-null here (step guard)
-    setImportanceRaw(prev => {
-      const imp = prev!;
-      setPredictedQuadrantRaw(classifyTask(imp, value));
-      return prev;
+      // Read current urgency to check auto-advance
+      setUrgencyAnswers(urgPrev => {
+        checkAutoAdvance(slideIndex, next, urgPrev, wasNull);
+        return urgPrev;
+      });
+
+      return next;
     });
-    setCurrentStep('confirm');
-  }, []);
+  }, [checkAutoAdvance]);
+
+  const answerUrgency = useCallback((slideIndex: number, value: boolean) => {
+    setUrgencyAnswers(prev => {
+      const wasNull = prev[slideIndex] === null;
+      const next = [...prev] as TriAnswer;
+      next[slideIndex] = value;
+
+      // Read current importance to check auto-advance
+      setImportanceAnswers(impPrev => {
+        checkAutoAdvance(slideIndex, impPrev, next, wasNull);
+        return impPrev;
+      });
+
+      return next;
+    });
+  }, [checkAutoAdvance]);
 
   const setPredictedQuadrant = useCallback((value: QuadrantNumber) => {
     setPredictedQuadrantRaw(value);
   }, []);
 
-  // --- Navigation ---
+  // --- Slide Navigation ---
+  const nextSlide = useCallback(() => {
+    if (currentSlide < 2) {
+      setCurrentSlide(currentSlide + 1);
+    } else {
+      // Last slide — go to confirm
+      setPredictedQuadrantRaw(computeQuadrant(importanceAnswers, urgencyAnswers));
+      setCurrentStep('confirm');
+    }
+  }, [currentSlide, importanceAnswers, urgencyAnswers, computeQuadrant]);
+
+  const prevSlide = useCallback(() => {
+    if (currentSlide > 0) {
+      setCurrentSlide(currentSlide - 1);
+    }
+  }, [currentSlide]);
+
+  // --- Step Navigation ---
   const nextStep = useCallback((): boolean => {
     if (currentStep === 'title') {
       if (!taskTitle.trim()) return false;
 
       if (bypass !== null) {
-        // Context-aware bypass: skip classification, go straight to confirm
         setPredictedQuadrantRaw(bypass);
         setCurrentStep('confirm');
         return true;
       }
-      setCurrentStep('importance');
+      setCurrentStep('quiz');
+      setCurrentSlide(0);
       return true;
     }
 
-    // importance and urgency steps are advanced by answerImportance/answerUrgency directly
+    if (currentStep === 'quiz') {
+      setPredictedQuadrantRaw(computeQuadrant(importanceAnswers, urgencyAnswers));
+      setCurrentStep('confirm');
+      return true;
+    }
 
     return false;
-  }, [currentStep, taskTitle, bypass]);
+  }, [currentStep, taskTitle, bypass, importanceAnswers, urgencyAnswers, computeQuadrant]);
 
   const prevStep = useCallback(() => {
     if (currentStep === 'confirm') {
       if (bypass !== null) {
         setCurrentStep('title');
       } else {
-        setCurrentStep('urgency');
+        setCurrentStep('quiz');
+        setCurrentSlide(2);
       }
       return;
     }
 
-    if (currentStep === 'urgency') {
-      setUrgencyRaw(null);
-      setCurrentStep('importance');
+    if (currentStep === 'quiz') {
+      if (currentSlide > 0) {
+        setCurrentSlide(currentSlide - 1);
+      } else {
+        setCurrentStep('title');
+      }
       return;
     }
-
-    if (currentStep === 'importance') {
-      setImportanceRaw(null);
-      setCurrentStep('title');
-      return;
-    }
-  }, [currentStep, bypass]);
+  }, [currentStep, currentSlide, bypass]);
 
   // --- Reset ---
   const resetQuiz = useCallback(() => {
     setCurrentStep('title');
+    setCurrentSlide(0);
     setTaskTitleRaw('');
-    setImportanceRaw(null);
-    setUrgencyRaw(null);
+    setImportanceAnswers([null, null, null]);
+    setUrgencyAnswers([null, null, null]);
     setPredictedQuadrantRaw(bypass);
     setIsSubmitting(false);
+    if (autoAdvanceTimer.current) {
+      clearTimeout(autoAdvanceTimer.current);
+      autoAdvanceTimer.current = null;
+    }
     try {
       localStorage.removeItem(DRAFT_KEY);
     } catch { /* ignore */ }
@@ -147,7 +236,6 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
         createdAt: new Date(),
       });
 
-      // Cleanup after successful save
       try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
       resetQuiz();
       return true;
@@ -159,15 +247,18 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
 
   return {
     currentStep,
+    currentSlide,
     taskTitle,
-    importance,
-    urgency,
+    importanceAnswers,
+    urgencyAnswers,
     predictedQuadrant,
     isSubmitting,
     setTaskTitle,
     answerImportance,
     answerUrgency,
     setPredictedQuadrant,
+    nextSlide,
+    prevSlide,
     nextStep,
     prevStep,
     resetQuiz,

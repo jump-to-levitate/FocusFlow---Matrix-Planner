@@ -16,3 +16,12 @@ export function classifyTask(importance: boolean, urgency: boolean): QuadrantNum
   if (!importance && urgency) return 3;
   return 4;
 }
+
+export function classifyFromScores(
+  impAnswers: (boolean | null)[],
+  urgAnswers: (boolean | null)[],
+): QuadrantNumber {
+  const impCount = impAnswers.filter(a => a === true).length;
+  const urgCount = urgAnswers.filter(a => a === true).length;
+  return classifyTask(impCount >= 2, urgCount >= 2);
+}
