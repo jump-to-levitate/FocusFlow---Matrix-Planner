@@ -14,8 +14,9 @@ export const DashboardScreen = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [completing, setCompleting] = useState<number | null>(null);
 
-  const allTasks = useLiveQuery(() => db.tasks.toArray()) ?? [];
-  const tasks = allTasks.filter(t => !t.completed);
+  const allTasks = useLiveQuery(() => db.tasks.toArray());
+  const safeTasks = Array.isArray(allTasks) ? allTasks : [];
+  const tasks = safeTasks.filter(t => !t.completed);
   const q1Tasks = tasks.filter(t => t.quadrant === 1);
   const q2Tasks = tasks.filter(t => t.quadrant === 2);
   const q3Tasks = tasks.filter(t => t.quadrant === 3);
@@ -24,6 +25,8 @@ export const DashboardScreen = () => {
   const focusTask = q1Tasks[0] ?? q2Tasks[0] ?? null;
   const focusSource = q1Tasks.length > 0 ? 'Q1' : q2Tasks.length > 0 ? 'Q2' : null;
   const focusColor = focusSource === 'Q2' ? '#D000FF' : '#39FF14';
+
+  console.log('[Dashboard] focusTask:', focusTask, '| tasks count:', tasks.length);
 
   const handleComplete = (id: number) => {
     setCompleting(id);

@@ -52,7 +52,8 @@ export const QuadrantCard = ({
   onAdd,
 }: QuadrantCardProps) => {
   const [completing, setCompleting] = useState<number | null>(null);
-  const activeTasks = tasks.filter(t => !t.completed);
+  const safeTasks = Array.isArray(tasks) ? tasks : [];
+  const activeTasks = safeTasks.filter(t => !t.completed);
 
   const handleComplete = (id: number) => {
     if (!onComplete) return;
