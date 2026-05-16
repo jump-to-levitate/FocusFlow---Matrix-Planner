@@ -179,7 +179,7 @@ db.version(1).stores({
 ### Task:
 
 - `title`: required, min 1, max 100 chars
-- `quadrant`: required, enum 1-4
+- `quadrant`: required, enum 0-4 (0=Inbox, 1-4=Q1-Q4)
 - `subcategory`: opcjonalne, ale jeśli podane - musi pasować do quadrant
 - Q1 Capacity Limit: Ćwiartka I (Pilne i Ważne) posiada twardy limit 5 aktywnych zadań. Próba dodania szóstego zadania musi wyzwolić walidację "Przeciążenie Systemu"
   
