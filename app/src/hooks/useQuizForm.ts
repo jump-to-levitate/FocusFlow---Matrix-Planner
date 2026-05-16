@@ -71,6 +71,13 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     }
   }, [options?.initialTitle]);
 
+  // --- Dynamic sync: update title when initialTitle changes ---
+  useEffect(() => {
+    if (options?.initialTitle) {
+      setTaskTitleRaw(options.initialTitle);
+    }
+  }, [options?.initialTitle]);
+
   // --- localStorage draft persistence ---
   useEffect(() => {
     try {
