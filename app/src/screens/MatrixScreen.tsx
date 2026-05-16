@@ -10,10 +10,21 @@ import { QuizModal } from '../components/quiz/QuizModal';
 
 export const MatrixScreen = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [selectedQuadrant, setSelectedQuadrant] = useState<1 | 2 | 3 | 4 | null>(null);
+
+  const openQuiz = (q: 1 | 2 | 3 | 4) => {
+    setSelectedQuadrant(q);
+    setIsQuizOpen(true);
+  };
+
+  const closeQuiz = () => {
+    setIsQuizOpen(false);
+    setSelectedQuadrant(null);
+  };
 
   return (
     <>
-    <QuizModal isOpen={isQuizOpen} onClose={() => setIsQuizOpen(false)} />
+    <QuizModal isOpen={isQuizOpen} onClose={closeQuiz} initialQuadrant={selectedQuadrant} />
     <div className="flex flex-col h-full pt-4 pb-4">
       {/* Header */}
       <header className="mb-4 shrink-0">
@@ -29,7 +40,7 @@ export const MatrixScreen = () => {
           title="Pilne i Ważne"
           subtitle="Rób teraz"
           color="lime"
-          onAdd={() => setIsQuizOpen(true)}
+          onAdd={() => openQuiz(1)}
         />
 
         {/* Q2 - Not Urgent & Important (Growth) */}
@@ -38,7 +49,7 @@ export const MatrixScreen = () => {
           title="Niepilne i Ważne"
           subtitle="Zaplanuj"
           color="purple"
-          onAdd={() => setIsQuizOpen(true)}
+          onAdd={() => openQuiz(2)}
         />
 
         {/* Q3 - Urgent & Not Important (Admin) */}
@@ -47,7 +58,7 @@ export const MatrixScreen = () => {
           title="Pilne i Nieważne"
           subtitle="Deleguj"
           color="orange"
-          onAdd={() => setIsQuizOpen(true)}
+          onAdd={() => openQuiz(3)}
         />
 
         {/* Q4 - Not Urgent & Not Important (Waste) */}
@@ -56,7 +67,7 @@ export const MatrixScreen = () => {
           title="Niepilne i Nieważne"
           subtitle="Eliminuj"
           color="slate"
-          onAdd={() => setIsQuizOpen(true)}
+          onAdd={() => openQuiz(4)}
         />
       </div>
     </div>

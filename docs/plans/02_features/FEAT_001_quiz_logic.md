@@ -132,7 +132,7 @@ export const classifyTask = (
 
 | Krok | Pytanie | Opcje | UX Note |
 |------|---------|-------|---------|
-| **TITLE** | "Co chcesz zrobić?" | Input field | Placeholder: "Np. Napisać raport, Zadzwonić do klienta..." |
+| **TITLE** | "Co chcesz zrobić?" | Input field | Placeholder: "Np. Zrobić prezentację, Zadzwonić do serwisu..." |
 | **Q1 (Importance)** | "Czy przybliża Cię to do Twojego głównego celu?" | Tak / Nie | Subtext: "Pomoże Ci to osiągnąć to, co naprawdę ważne?" |
 | **Q2 (Urgency)** | "Czy masz na to twardy termin lub deadline?" | Tak / Nie | Subtext: "Czy ktoś czeka / konsekwencje po terminie?" |
 | **CONFIRM** | Podsumowanie | "Dodaj do [Quadrant]" | Show quadrant color + name |
