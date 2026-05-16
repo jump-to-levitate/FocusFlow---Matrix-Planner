@@ -57,11 +57,13 @@ export const BrainDumpScreen = () => {
   const handleQuizClose = () => {
     setIsQuizOpen(false);
     setClassifyTask(null);
-    setQuizInitialTitle(undefined);
+    setQuizInitialTitle('');
   };
 
   const handleStartQuiz = () => {
-    const title = dumpText.trim() || undefined;
+    // Snapshot actual input value (including any React sync delays)
+    const rawValue = inputRef.current?.value ?? dumpText;
+    const title = rawValue.trim();
     setQuizInitialTitle(title);
     setIsQuizOpen(true);
   };
@@ -147,12 +149,15 @@ export const BrainDumpScreen = () => {
   // ============ CAPTURE VIEW ============
   return (
     <>
-      <QuizModal
-        isOpen={isQuizOpen}
-        onClose={handleQuizClose}
-        initialTitle={quizInitialTitle}
-        skipTitleStep={false}
-      />
+      {isQuizOpen && (
+        <QuizModal
+          key={`quiz-active-${Date.now()}`}
+          isOpen={isQuizOpen}
+          onClose={handleQuizClose}
+          initialTitle={quizInitialTitle}
+          skipTitleStep={false}
+        />
+      )}
       <div className="flex flex-col h-full pt-4 pb-4 gap-5 animate-in fade-in slide-in-from-left-4 duration-300 ease-out">
         {/* Header */}
         <header className="shrink-0 text-center">
