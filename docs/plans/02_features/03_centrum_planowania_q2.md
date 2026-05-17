@@ -1,20 +1,88 @@
-# Feature Specification: Centrum Planowania (Q2 Sub-Matrix)
+# 03 Centrum Planowania – Głęboki Kontekst Kwadrantu 2
 
-> Wersja: 1.0  
+> Wersja: 2.0  
 > Data: Maj 2026  
 > Status: ✅ Wdrożone
 
 ---
 
-## 1. Cel Funkcjonalny
+## 1. Nazwa Funkcji
 
-Dedykowany sub-widok dla **Ćwiartki 2 (Ważne, Niepilne)** z podziałem na 4 subkategorie. Zapewnia **ADHD-friendly** organizację zadań wymagających planowania, bez przeciążenia informacyjnego głównej Macierzy.
+**Centrum Planowania – Głęboki Kontekst Kwadrantu 2 (Q2 Sub-Matrix)**
 
 ---
 
-## 2. Architektura 2x2 Sub-Matrix
+## 2. Opis Funkcjonalny
 
-### 2.1 Layout Grid
+Dedykowany **pod-ekran wewnątrz zakładki Macierz**, przełączany za pomocą wewnętrznej maszyny stanów widoku (`viewMode: 'grid' | 'q2'`). Zapewnia głęboki kontekst dla zadań **Ważnych, Niepilnych (Q2)** z podziałem na 4 subkategorie, bez przeciążenia informacyjnego głównej Macierzy.
+
+---
+
+## 3. Maszyna Stanów Widoku (viewMode)
+
+### 3.1 Przełączanie Widoków wewnątrz Macierzy
+
+```typescript
+// MatrixScreen.tsx - lokalna maszyna stanów widoku
+const [viewMode, setViewMode] = useState<'grid' | 'q2'>('grid');
+
+// Renderowanie warunkowe
+return (
+  <>
+    {viewMode === 'grid' && <MainMatrixGrid />}
+    {viewMode === 'q2' && <CentrumPlanowaniaSubView />}
+  </>
+);
+```
+
+### 3.2 Flow Nawigacji
+
+```
+Główna Macierz (Grid 2x2)
+    ↓
+Hover nad Q2 → przycisk "Otwórz Centrum Planowania ↗"
+    ↓
+Kliknięcie → setViewMode('q2')
+    ↓
+Centrum Planowania (Pod-widok Q2 z sub-matrycą 2x2)
+    ↓
+Przycisk "← Powrót do Macierzy" → setViewMode('grid')
+```
+
+### 3.3 Header w Trybie Q2
+
+```tsx
+<div className="grid grid-cols-3 items-center w-full gap-2 mb-6 px-2">
+  {/* Lewa: Powrót do głównej Macierzy */}
+  <div className="flex justify-start">
+    <button onClick={() => setViewMode('grid')}>
+      ← Powrót do Macierzy
+    </button>
+  </div>
+  
+  {/* Środek: Tytuł 2-liniowy z neon glow */}
+  <div className="flex flex-col items-center">
+    <span className="text-sm sm:text-base font-black tracking-widest text-[#D000FF]">
+      Centrum
+    </span>
+    <span className="text-[11px] sm:text-xs font-black text-[#D000FF]">
+      Planowania
+    </span>
+    <span className="text-[10px] text-[#D000FF]/70">(Q2)</span>
+  </div>
+  
+  {/* Prawa: Dodaj nowe zadanie Q2 */}
+  <div className="flex justify-end">
+    <button onClick={() => openQuiz(2)}>+ Dodaj</button>
+  </div>
+</div>
+```
+
+---
+
+## 4. Architektura Sub-Matrycy 2x2
+
+### 4.1 Layout Grid
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -30,7 +98,7 @@ Dedykowany sub-widok dla **Ćwiartki 2 (Ważne, Niepilne)** z podziałem na 4 su
 └─────────────────────────────────────────────────────────┘
 ```
 
-### 2.2 Alokacja Kolorów
+### 4.2 Alokacja Kolorów (Dual-Tone)
 
 | Ćwiartka | Subkategoria | Kolor | Kod HEX | Uzasadnienie |
 |----------|--------------|-------|---------|--------------|
@@ -73,45 +141,18 @@ const normalizedSub = !sub || sub === '' ? 'inne' : sub;
 
 ---
 
-## 4. UX Precision: Typografia i Layout
+## 5. Ścisłe Reguły UI z Design Systemu
 
-### 4.1 Problem: Łamanie Słów
+### 5.1 Chirurgiczna Precyzja: Stała Wysokość Nagłówków (h-14)
 
-Tekst "OGÓLNE CELE" przy domyślnej typografii łamał się jako:
-```
-OGÓLNE
-CELE
-```
-
-Ale z dużym odstępem między liniami, co powodowało:
-- Wyższy nagłówek niż pozostałe
-- Niszczenie symetrii 2x2
-
-### 4.2 Rozwiązanie: Kompaktowa Typografia
+Wszystkie 4 nagłówki sub-matrycy mają **identyczną, sztywną wysokość**:
 
 ```tsx
-// Dla "OGÓLNE CELE" - labelSmall: true
-<h3 className="text-[11px] sm:text-xs font-black tracking-wider uppercase leading-none">
-  OGÓLNE<br />CELE
-</h3>
-```
-
-**Kluczowe właściwości:**
-- `text-[11px]` - arbitralna wartość Tailwind (mniejsza niż text-xs)
-- `leading-none` - eliminuje domyślny line-height
-- `<br />` - wymusza kontrolowany podział
-- `whitespace-nowrap` w układzie - zapobiega łamaniu z myślnikiem
-
-### 4.3 Stała Wysokość Nagłówków
-
-Wszystkie 4 nagłówki mają identyczną wysokość:
-
-```tsx
-<div className="h-14 flex items-center justify-between px-3 border-b ...">
-  {/* h-14 = 3.5rem = 56px */}
+{/* Box Header - Fixed height h-14 for uniform alignment */}
+<div className="h-14 flex items-center justify-between px-3 border-b border-[#D000FF] bg-[rgba(208,0,255,0.15)]">
   <div className="flex items-center gap-2">
     <span className="text-xl">{icon}</span>
-    <h3>...</h3>
+    <h3 className="...">{label}</h3>
   </div>
   <span className="px-2.5 py-1 rounded-full text-xs font-bold">
     {count}
@@ -119,14 +160,51 @@ Wszystkie 4 nagłówki mają identyczną wysokość:
 </div>
 ```
 
-### 4.4 Porównanie Nagłówków
+**Kluczowe klasy:**
+- `h-14` (56px) - stała wysokość wszystkich nagłówków
+- `items-center` - pionowe wyśrodkowanie zawartości
+- `justify-between` - rozmieszczenie tytułu i licznika
+
+### 5.2 Zapobieganie Łamaniu Słów (Typography Safety)
+
+**Problem:** Słowo "PLANOWANIA" łamało się na małych ekranach jako "PLANO-WANIA", niszcząc estetykę nagłówka.
+
+**Rozwiązanie:** Klasa `whitespace-nowrap` wymuszająca niełamanie:
+
+```tsx
+// Tytuł główny "Centrum Planowania" - brak łamania
+<span className="text-sm sm:text-base font-black tracking-widest uppercase whitespace-nowrap">
+  Centrum
+</span>
+<span className="text-[11px] sm:text-xs font-black tracking-wider uppercase whitespace-nowrap">
+  Planowania
+</span>
+```
+
+### 5.3 Kompaktowa Typografia dla Dwuliniowych Etykiet
+
+Tekst "OGÓLNE CELE" wymaga specjalnego traktowania:
+
+```tsx
+// Dla "OGÓLNE CELE" - kompaktowa typografia mieszcząca się w h-14
+<h3 className="text-[11px] sm:text-xs font-black tracking-wider uppercase leading-none">
+  OGÓLNE<br />CELE
+</h3>
+```
+
+**Kluczowe właściwości:**
+- `text-[11px]` - mniejsza czcionka niż standardowa (text-xs = 12px)
+- `leading-none` - eliminuje domyślny line-height (zazwyczaj 1.5em)
+- `<br />` - wymuszony podział linii w kontrolowanym miejscu
+
+### 5.4 Porównanie Nagłówków (Uniform h-14)
 
 | Subkategoria | Linie | Font Size | Line Height | Wynik |
 |--------------|-------|-----------|-------------|-------|
-| Rutyny | 1 | text-xs | default | ✅ h-14 |
-| Projekty | 1 | text-xs | default | ✅ h-14 |
-| Ogólne Cele | 2 | text-[11px] | leading-none | ✅ h-14 |
-| Inne | 1 | text-xs | default | ✅ h-14 |
+| Rutyny 🔄 | 1 | text-xs | default | ✅ h-14 |
+| Projekty 📁 | 1 | text-xs | default | ✅ h-14 |
+| Ogólne Cele 🎯 | 2 | text-[11px] | leading-none | ✅ h-14 |
+| Inne 💼 | 1 | text-xs | default | ✅ h-14 |
 
 ---
 

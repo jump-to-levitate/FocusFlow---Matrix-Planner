@@ -1,114 +1,166 @@
-# Feature Specification: Inbox Capture (Q0 Brain Dump)
+# 01 Potok Inbox Capture (Q0 State) & Brain Dump
 
-> Wersja: 1.0  
+> Wersja: 2.0  
 > Data: Maj 2026  
 > Status: ✅ Wdrożone
 
 ---
 
-## 1. Cel Funkcjonalny
+## 1. Nazwa Funkcji
 
-Inbox Capture (Ćwiartka 0) to **przestrzeń bez decyzji** - izolowana strefa do szybkiego zrzutu myśli bez konieczności natychmiastowej klasyfikacji. Eliminuje paraliż decyzyjny przy wprowadzaniu danych.
+**Potok Inbox Capture (Q0 State) & Brain Dump**
 
 ---
 
-## 2. Architektura Q0 (Izolacja)
+## 2. Opis Funkcjonalny
 
-### 2.1 Model Danych
+Funkcjonalność **seryjnego zrzucania myśli bez barier decyzyjnych**. Umożliwia użytkownikom błyskawiczne "opróżnienie głowy" bez konieczności natychmiastowej kategoryzacji zadań. Licznik Q0 na pulpicie informuje o oczekujących pozycjach do kwalifikacji.
+
+---
+
+## 3. Architektura Q0 (Izolacja Stanu)
+
+### 3.1 Model Danych
 
 ```typescript
 interface Task {
   id?: number;
   title: string;
-  quadrant: 0 | 1 | 2 | 3 | 4;  // Q0 = Inbox
+  quadrant: 0 | 1 | 2 | 3 | 4;  // Q0 = Inbox (niezakwalifikowane)
   subcategory?: string | null;     // null dla Q0
   completed: boolean;
   createdAt: Date;
 }
 ```
 
-### 2.2 Izolacja Wizualna
+### 3.2 Izolacja Wizualna
 
 - Zadania z `quadrant: 0` **nie pojawiają się** w głównej Macierzy (Q1-Q4)
 - Q0 ma dedykowany widok "Inbox" - osobna zakładka nawigacji
+- Licznik Q0 na pulpicie: badge z liczbą niezakwalifikowanych zadań
 - Po zakwalifikowaniu (Quiz), zadanie zmienia `quadrant` na 1-4
 
-### 2.3 Filtrowanie w JS
+### 3.3 Filtrowanie w JS
 
 ```typescript
 // Macierz Q1-Q4: wyklucza Q0
-const tasks = safeTasks.filter(t => !t.completed && t.quadrant !== 0);
+const matrixTasks = safeTasks.filter(t => !t.completed && t.quadrant !== 0);
 
 // Inbox (Q0): tylko niezakwalifikowane
 const inboxTasks = safeTasks.filter(t => !t.completed && t.quadrant === 0);
+
+// Licznik na pulpicie
+const q0Count = tasks.filter(t => t.quadrant === 0 && !t.completed).length;
 ```
 
 ---
 
-## 3. Mechanizm Seryjnego Zrzutu (Batch Capture)
+## 4. UX Flow
 
-### 3.1 Flow Użytkownika
+### 4.1 Flow Seryjnego Zrzutu (Brain Dump)
 
 1. **Wejście do Inboxu** → automatyczne focus na textarea
 2. **Wpis myśli** → tekst bez struktury (np. "Zadzwonić do dentysty, kupić mleko, projekt X")
-3. **Enter lub przycisk** → zapis do Q0
-4. **Pozostanie w Inboxie** → możliwość seryjnego dodawania
-5. **Przycisk "Kwalifikuj"** → przejście do Quizu dla zadań z Q0
+3. **Enter lub przycisk** → zapis do Q0 (brak kategoryzacji!)
+4. **Pozostanie w Inboxie** → możliwość seryjnego dodawania kolejnych myśli
+5. **Licznik Q0** → badge na pulpicie pokazuje liczbę "myśli w kolejce"
 
-### 3.2 UX Decyzje
+### 4.2 Wejście do Quizu z Pre-fill
 
-- **Brak walidacji tytułu** - użytkownik może wpisać cokolwiek
-- **Autosave** - draft zapisywany w localStorage
-- **Szybkie usuwanie** - swipe lub przycisk X bez potwierdzenia
+```
+Inbox (lista zadań Q0)
+    ↓
+Kliknięcie "Kwalifikuj" lub ikona edycji
+    ↓
+QuizModal z prefill tytułem zadania
+    ↓
+Quiz (3 pytania o ważność/pilność)
+    ↓
+Ekran potwierdzenia (ćwiartka, opcjonalnie podkategoria dla Q2)
+    ↓
+Zapis: update db.tasks set quadrant=X, subcategory=Y
+    ↓
+Zadanie znika z Inboxu, pojawia się w Macierzy
+```
+
+### 4.3 Rozwidlenie Zapisu (Dual-mode Transaction)
+
+```typescript
+const handleSubmit = async () => {
+  // Mode 1: Reklasyfikacja istniejącego zadania
+  if (onClassify && classifyTaskId !== undefined) {
+    onClassify(classifyTaskId, predictedQuadrant);
+    quiz.resetQuiz();
+    onClose();
+    return;
+  }
+  
+  // Mode 2: Tworzenie nowego zadania
+  const ok = await quiz.submitTask();
+  if (ok) onClose();
+};
+```
 
 ---
 
-## 4. Snapshot State Mechanism (Quiz Integration)
+## 5. Snapshot State Mechanism
 
-### 4.1 Problem: Stale State przy Re-mount
+### 5.1 Problem: Zamrożony Formularz (Stale State)
 
 Gdy użytkownik otwiera Quiz dla zadania z Q0, komponent `QuizModal` musi:
 1. Zresetować swój stan maszyny stanów
-2. Wyczyścić poprzednie odpowiedzi
-3. Rozpocząć od kroku 'title'
+2. Wyczyścić poprzednie odpowiedzi (importance/urgency)
+3. Rozpocząć od kroku 'title' z prefill tytułem zadania
 
-### 4.2 Rozwiązanie: Key-based Remount
+### 5.2 Rozwiązanie: Key-based Remount
 
 ```tsx
-// MatrixScreen.tsx
+// MatrixScreen.tsx - wymuszony re-mount przez dynamiczny klucz
 <QuizModal 
-  key={`quiz-${selectedTaskId}`}  // Wymusza re-mount
+  key={`quiz-${selectedTaskId}`}  // Wymusza unmount/remount
   isOpen={isQuizOpen}
   taskId={selectedTaskId}
   initialMode="classify"
 />
 ```
 
-Zmiana `key` wymusza pełny unmount/remount komponentu, co gwarantuje czysty stan.
+**Dlaczego to działa:**
+- Zmiana `key` w React wymusza pełny unmount/remount komponentu
+- Stany wewnętrzne hooka `useQuizForm` są resetowane do initial values
+- Brak "zombie stanu" z poprzednich sesji quizu
 
-### 4.3 Hook: useQuizForm
+### 5.3 Implementacja Hooka useQuizForm
 
 ```typescript
 const useQuizForm = (options?: QuizOptions) => {
-  // Reset przy mount
+  // Reset przy każdym mount (nowym otwarciu Quizu)
   useEffect(() => {
     resetQuiz();
   }, []);
   
   const resetQuiz = () => {
     setCurrentStep('title');
+    setTaskTitle('');
     setImportanceAnswers([null, null, null]);
     setUrgencyAnswers([null, null, null]);
     setSubcategory(null);
+    setManualQuadrant(null);
   };
+  
+  // Pre-fill dla reklasyfikacji
+  useEffect(() => {
+    if (options?.taskId && options?.taskTitle) {
+      setTaskTitle(options.taskTitle);
+    }
+  }, [options?.taskId]);
 };
 ```
 
 ---
 
-## 5. Interfejs Użytkownika
+## 6. Interfejs Użytkownika
 
-### 5.1 Inbox Screen Layout
+### 6.1 Inbox Screen Layout
 
 ```
 ┌─────────────────────────────────────┐
@@ -135,38 +187,25 @@ const useQuizForm = (options?: QuizOptions) => {
 └─────────────────────────────────────┘
 ```
 
-### 5.2 Stany Puste
+### 6.2 Licznik Q0 na Pulpicie
 
-- **Brak zadań**: "Inbox jest pusty. Dodaj pierwszą myśl!"
+```tsx
+// Dashboard / Header
+<div className="relative">
+  <InboxIcon />
+  {q0Count > 0 && (
+    <span className="absolute -top-1 -right-1 bg-[#D000FF] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+      {q0Count}
+    </span>
+  )}
+</div>
+```
+
+### 6.3 Stany Puste i Edge Cases
+
+- **Brak zadań**: "Inbox jest pusty. Dodaj pierwszą myśl! 🧠"
 - **Samooczyszczenie**: Po zakwalifikowaniu wszystkich zadań, przycisk "Kwalifikuj" jest disabled
-
----
-
-## 6. Integracja z Quizem
-
-### 6.1 Flow Kwalifikacji
-
-```
-Inbox (lista zadań Q0)
-    ↓
-Kliknięcie "Kwalifikuj" lub ikona edycji
-    ↓
-QuizModal z prefill tytułem
-    ↓
-Quiz (3 pytania + subkategoria dla Q2)
-    ↓
-Ekran potwierdzenia (ćwiartka, podkategoria)
-    ↓
-Zapis: update db.tasks set quadrant=X, subcategory=Y
-    ↓
-Zadanie znika z Inboxu, pojawia się w Macierzy
-```
-
-### 6.2 Bulk Classification (Future)
-
-- Możliwość zaznaczenia wielu zadań
-- Jedno przejście Quizu dla wszystkich
-- Wspólna ćwiartka/podkategoria
+- **Autosave draftu**: Zapisywany w localStorage przy zmianie textarea
 
 ---
 
@@ -174,19 +213,23 @@ Zadanie znika z Inboxu, pojawia się w Macierzy
 
 | Decyzja | Uzasadnienie |
 |---------|--------------|
-| **Brak decyzji przy wprowadzaniu** | Redukcja oporu poznawczego |
-| **Izolacja Q0** | Uniknięcie clutteru w głównej Macierzy |
-| **Seryjny zrzut** | dopamina z szybkiego dodawania |
-| **Key-based remount** | Czysty stan, brak confusion |
-| **Swipe to delete** | Szybkie usuwanie bez potwierdzenia |
+| **Brak decyzji przy wprowadzaniu** | Redukcja oporu poznawczego - "po prostu zrzuć" |
+| **Licznik Q0 na pulpicie** | Visual reminder o oczekujących zadaniach |
+| **Izolacja Q0** | Uniknięcie clutteru w głównej Macierzy (Q1-Q4) |
+| **Seryjny zrzut** | Dopamina z szybkiego dodawania - "czysta głowa" |
+| **Key-based remount** | Czysty stan, brak confusion przy ponownym otwarciu Quizu |
+| **Dual-mode transaction** | Elastyczność - reklasyfikacja lub nowe zadanie |
 
 ---
 
 ## 8. Kryteria Akceptacji
 
-- [x] Zadania Q0 nie pojawiają się w Macierzy Q1-Q4
-- [x] Inbox ma dedykowany widok z textarea
-- [x] Quiz resetuje stan przy każdym otwarciu (remount)
-- [x] Po kwalifikacji zadanie znika z Inboxu
-- [x] Obsługa seryjnego dodawania (pozostanie w Inboxie)
+- [x] Zadania Q0 nie pojawiają się w Macierzy Q1-Q4 (izolacja)
+- [x] Inbox ma dedykowany widok z textarea i focus-on-mount
+- [x] Quiz resetuje stan przy każdym otwarciu (key-based remount)
+- [x] Snapshot State - prefill tytułu przy reklasyfikacji
+- [x] Po kwalifikacji zadanie znika z Inboxu, pojawia się w Macierzy
+- [x] Obsługa seryjnego dodawania (pozostanie w Inboxie po zapisie)
+- [x] Licznik Q0 na pulpicie (badge z liczbą niezakwalifikowanych)
+- [x] Dual-mode: reklasyfikacja in-place + tworzenie nowych zadań
 - [x] Autosave draftu w localStorage
