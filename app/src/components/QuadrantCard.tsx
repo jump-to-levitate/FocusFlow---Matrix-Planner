@@ -18,6 +18,7 @@ interface QuadrantCardProps {
   onComplete?: (id: number) => void;
   children?: ReactNode;
   onAdd?: () => void;
+  headerAction?: ReactNode;
 }
 
 const colorClasses = {
@@ -41,15 +42,16 @@ const titleColorClasses = {
   slate: 'text-slate-400',
 };
 
-export const QuadrantCard = ({ 
-  quadrant, 
-  title, 
-  subtitle, 
-  color, 
+export const QuadrantCard = ({
+  quadrant,
+  title,
+  subtitle,
+  color,
   tasks = [],
   onComplete,
   children,
   onAdd,
+  headerAction,
 }: QuadrantCardProps) => {
   const [completing, setCompleting] = useState<number | null>(null);
   const safeTasks = Array.isArray(tasks) ? tasks : [];
@@ -76,8 +78,9 @@ export const QuadrantCard = ({
     >
       {/* Header */}
       <div className="mb-2 min-[360px]:mb-3">
-        <div className="flex items-center gap-1.5 min-[360px]:gap-2 mb-1">
+        <div className="flex items-center justify-between gap-1.5 min-[360px]:gap-2 mb-1">
           <span className={`text-[10px] min-[360px]:text-xs font-black ${titleColorClasses[color]}`}>Q{quadrant}</span>
+          {headerAction}
         </div>
         <h3 className={`text-[11px] min-[360px]:text-sm font-extrabold uppercase tracking-wide leading-tight ${titleColorClasses[color]}`}>
           {title}

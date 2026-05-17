@@ -1,5 +1,6 @@
 import { X, Brain, ArrowLeft, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useQuizForm } from '../../hooks/useQuizForm';
+import { db } from '../../db/dexie';
 import type { QuadrantNumber } from '../../utils/taskClassifier';
 
 interface QuizModalProps {
@@ -13,10 +14,10 @@ interface QuizModalProps {
 }
 
 const QUADRANT_META: Record<QuadrantNumber, { label: string; color: string; glow: string }> = {
-  1: { label: 'Q1 — Pilne i Ważne',      color: '#39FF14', glow: 'rgba(57,255,20,0.4)' },
-  2: { label: 'Q2 — Niepilne i Ważne',    color: '#D000FF', glow: 'rgba(208,0,255,0.4)' },
-  3: { label: 'Q3 — Pilne i Nieważne',    color: '#FF8C00', glow: 'rgba(255,140,0,0.4)' },
-  4: { label: 'Q4 — Niepilne i Nieważne',  color: '#64748B', glow: 'rgba(100,116,139,0.3)' },
+  1: { label: 'Q1 — Rób teraz',      color: '#39FF14', glow: 'rgba(57,255,20,0.4)' },
+  2: { label: 'Q2 — Centrum planowania',    color: '#D000FF', glow: 'rgba(208,0,255,0.4)' },
+  3: { label: 'Q3 — Proza życia',    color: '#FF8C00', glow: 'rgba(255,140,0,0.4)' },
+  4: { label: 'Q4 — Nie teraz',  color: '#64748B', glow: 'rgba(100,116,139,0.3)' },
 };
 
 const IMPORTANCE_QUESTIONS = [
@@ -45,27 +46,62 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
   };
 
   const handleSubmit = async () => {
-    if (onClassify && classifyTaskId !== undefined && quiz.predictedQuadrant !== null) {
-      onClassify(classifyTaskId, quiz.predictedQuadrant);
-      quiz.resetQuiz();
-      onClose();
-      return;
+    try {
+      // Mode A: Reclassification of existing task (from Inbox/Matrix)
+      if (onClassify && classifyTaskId !== undefined && quiz.predictedQuadrant !== null) {
+        await onClassify(classifyTaskId, quiz.predictedQuadrant);
+        // Also update subcategory if set
+        if (quiz.subcategory) {
+          await db.tasks.update(classifyTaskId, { subcategory: quiz.subcategory });
+        }
+        quiz.resetQuiz();
+        onClose();
+        return;
+      }
+
+      // Mode B: Creating new task
+      const ok = await quiz.submitTask();
+      if (ok) {
+        onClose();
+      } else {
+        console.error('Nie udało się zapisać zadania');
+      }
+    } catch (error) {
+      console.error('Błąd podczas zapisywania zadania w Dexie:', error);
     }
-    const ok = await quiz.submitTask();
-    if (ok) onClose();
   };
 
   const shouldSkipTitle = skipTitleStep ?? (initialTitle ? true : false);
   const hasTitleStep = !shouldSkipTitle && initialQuadrant == null;
-  const stepMap = hasTitleStep
-    ? { title: 1, quiz: 2, confirm: 3 } as const
-    : initialQuadrant != null
-      ? { title: 1, quiz: 1, confirm: initialTitle ? 1 : 2 } as const
-      : shouldSkipTitle
-        ? { title: 1, quiz: 1, confirm: 2 } as const
-        : { title: 1, quiz: 2, confirm: 3 } as const;
-  const stepNumber = stepMap[quiz.currentStep];
-  const totalSteps = hasTitleStep ? 3 : (initialQuadrant != null && initialTitle) ? 1 : 2;
+  // Calculate if we need subcategory step (for Q2, Q3, Q4)
+  const needsSubcategory = quiz.predictedQuadrant === 2 || quiz.predictedQuadrant === 3 || quiz.predictedQuadrant === 4;
+
+  const getStepNumber = () => {
+    const baseMap: Record<string, number> = hasTitleStep
+      ? { title: 1, quiz: 2, subcategory: 3, confirm: 4 }
+      : { title: 1, quiz: 1, subcategory: 2, confirm: 3 };
+
+    if (initialQuadrant != null && initialTitle) {
+      // Bypass mode - only confirm step
+      return 1;
+    }
+
+    // Adjust steps based on whether subcategory is needed
+    if (!needsSubcategory && quiz.currentStep === 'confirm') {
+      return hasTitleStep ? 3 : 2;
+    }
+
+    return baseMap[quiz.currentStep] || 1;
+  };
+
+  const getTotalSteps = () => {
+    if (initialQuadrant != null && initialTitle) return 1;
+    if (hasTitleStep) return needsSubcategory ? 4 : 3;
+    return needsSubcategory ? 3 : 2;
+  };
+
+  const stepNumber = getStepNumber();
+  const totalSteps = getTotalSteps();
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -231,6 +267,79 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
             </div>
           );
         })()}
+
+        {/* === SUBCATEGORY STEP (Q2 Only for now) === */}
+        {quiz.currentStep === 'subcategory' && quiz.predictedQuadrant === 2 && (
+          <div className="flex flex-col items-center gap-6 text-center w-full">
+            <div>
+              <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">
+                Krok {stepNumber} z {totalSteps}
+              </p>
+              <h2 className="text-2xl font-black uppercase tracking-wide" style={{ color: '#D000FF' }}>
+                Centrum Planowania (Q2)
+              </h2>
+              <p className="text-sm text-white/50 mt-2">Zdefiniuj charakter tego zadania</p>
+            </div>
+
+            <div className="w-full max-w-[340px] flex flex-col gap-3">
+              {/* Option 1: Rutyna */}
+              <button
+                onClick={() => {
+                  quiz.setSubcategory('rutyna');
+                  quiz.nextStep();
+                }}
+                className="w-full p-4 rounded-xl border border-[#D000FF]/30 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_20px_rgba(208,0,255,0.3)] transition-all"
+              >
+                <div className="font-bold text-[#D000FF] text-lg">Rutyna</div>
+                <div className="text-xs text-white/50 mt-1">
+                  Czy jest to nawyk, system, który chcesz wdrożyć, by doprowadzić cię do celu lub polepszyć twoje funkcjonowanie?
+                </div>
+              </button>
+
+              {/* Option 2: Projekt */}
+              <button
+                onClick={() => {
+                  quiz.setSubcategory('projekt');
+                  quiz.nextStep();
+                }}
+                className="w-full p-4 rounded-xl border border-[#D000FF]/30 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_20px_rgba(208,0,255,0.3)] transition-all"
+              >
+                <div className="font-bold text-[#D000FF] text-lg">Projekt</div>
+                <div className="text-xs text-white/50 mt-1">
+                  Czy jest to konkretny projekt, nad którym będziesz pracować?
+                </div>
+              </button>
+
+              {/* Option 3: Ogólny cel */}
+              <button
+                onClick={() => {
+                  quiz.setSubcategory('ogolny_cel');
+                  quiz.nextStep();
+                }}
+                className="w-full p-4 rounded-xl border border-[#D000FF]/30 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_20px_rgba(208,0,255,0.3)] transition-all"
+              >
+                <div className="font-bold text-[#D000FF] text-lg">Ogólny cel</div>
+                <div className="text-xs text-white/50 mt-1">
+                  Czy jest to na razie tylko ogólny kierunek, dla którego nie masz jeszcze rozplanowanych działań?
+                </div>
+              </button>
+
+              {/* Option 4: Inne */}
+              <button
+                onClick={() => {
+                  quiz.setSubcategory('inne');
+                  quiz.nextStep();
+                }}
+                className="w-full p-4 rounded-xl border border-[#D000FF]/30 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_20px_rgba(208,0,255,0.3)] transition-all"
+              >
+                <div className="font-bold text-[#D000FF] text-lg">Inne</div>
+                <div className="text-xs text-white/50 mt-1">
+                  Inny charakter działania, niewpisujący się w powyższe ramy.
+                </div>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* === CONFIRM STEP === */}
         {quiz.currentStep === 'confirm' && quiz.predictedQuadrant !== null && (() => {

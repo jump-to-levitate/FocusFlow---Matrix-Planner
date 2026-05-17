@@ -11,6 +11,7 @@ import { DashboardScreen } from './screens/DashboardScreen';
 import { MatrixScreen } from './screens/MatrixScreen';
 import { TimerScreen } from './screens/TimerScreen';
 import { BrainDumpScreen } from './screens/BrainDumpScreen';
+import { TimerProvider } from './context/TimerContext';
 
 // ============================================================================
 // AppShell Component - "Siatka Bezpieczeństwa 480px"
@@ -41,20 +42,22 @@ function AppShell({ children }: AppShellProps) {
 function App() {
   return (
     <BrowserRouter>
-      <AppShell>
-        {/* Main content - grows to fill available space */}
-        <main className="flex-1 overflow-y-auto scrollbar-hide">
-          <Routes>
-            <Route path="/" element={<DashboardScreen />} />
-            <Route path="/matrix" element={<MatrixScreen />} />
-            <Route path="/timer" element={<TimerScreen />} />
-            <Route path="/braindump" element={<BrainDumpScreen />} />
-          </Routes>
-        </main>
-        
-        {/* Bottom Navigation - sticky at bottom of device frame */}
-        <BottomNav />
-      </AppShell>
+      <TimerProvider>
+        <AppShell>
+          {/* Main content - grows to fill available space */}
+          <main className="flex-1 overflow-y-auto scrollbar-hide">
+            <Routes>
+              <Route path="/" element={<DashboardScreen />} />
+              <Route path="/matrix" element={<MatrixScreen />} />
+              <Route path="/timer" element={<TimerScreen />} />
+              <Route path="/braindump" element={<BrainDumpScreen />} />
+            </Routes>
+          </main>
+          
+          {/* Bottom Navigation - sticky at bottom of device frame */}
+          <BottomNav />
+        </AppShell>
+      </TimerProvider>
     </BrowserRouter>
   );
 }

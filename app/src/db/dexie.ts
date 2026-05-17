@@ -6,6 +6,7 @@ export interface Task {
   quadrant: 0 | 1 | 2 | 3 | 4; // 0 = Inbox Note (unassigned)
   completed: boolean;
   createdAt: Date;
+  subcategory?: string | null; // Podkategoria: 'rutyna', 'projekt', 'zrob_teraz', 'rozrywka' itp.
 }
 
 export class FocusFlowDB extends Dexie {

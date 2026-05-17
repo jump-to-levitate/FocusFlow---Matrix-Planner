@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { db } from '../db/dexie';
 import { classifyFromScores, type QuadrantNumber } from '../utils/taskClassifier';
 
-export type QuizStep = 'title' | 'quiz' | 'confirm';
+export type QuizStep = 'title' | 'quiz' | 'subcategory' | 'confirm';
 type TriAnswer = [boolean | null, boolean | null, boolean | null];
 
 const DRAFT_KEY = 'focusflow_quiz_draft';
@@ -21,11 +21,13 @@ export interface UseQuizFormReturn {
   importanceAnswers: TriAnswer;
   urgencyAnswers: TriAnswer;
   predictedQuadrant: QuadrantNumber | null;
+  subcategory: string | null;
   isSubmitting: boolean;
   setTaskTitle: (value: string) => void;
   answerImportance: (slideIndex: number, value: boolean) => void;
   answerUrgency: (slideIndex: number, value: boolean) => void;
   setPredictedQuadrant: (value: QuadrantNumber) => void;
+  setSubcategory: (value: string | null) => void;
   nextSlide: () => void;
   prevSlide: () => void;
   nextStep: () => boolean;
@@ -55,8 +57,13 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
   });
   const [importanceAnswers, setImportanceAnswers] = useState<TriAnswer>([null, null, null]);
   const [urgencyAnswers, setUrgencyAnswers] = useState<TriAnswer>([null, null, null]);
-  const [predictedQuadrant, setPredictedQuadrantRaw] = useState<QuadrantNumber | null>(bypass);
+  const [manualQuadrant, setManualQuadrant] = useState<QuadrantNumber | null>(null);
+  const [subcategory, setSubcategory] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Synchronous derived state - eliminates race condition with subcategory step
+  // Uses classifyFromScores directly to avoid circular dependency
+  const predictedQuadrant: QuadrantNumber | null = bypass ?? manualQuadrant ?? classifyFromScores(importanceAnswers, urgencyAnswers);
 
   const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -88,6 +95,7 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
   }, [taskTitle]);
 
   // --- Helpers ---
+  // Wrapper for classifyFromScores to maintain API compatibility
   const computeQuadrant = useCallback((imp: TriAnswer, urg: TriAnswer): QuadrantNumber => {
     return classifyFromScores(imp, urg);
   }, []);
@@ -113,9 +121,14 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
       if (slide < 2) {
         setCurrentSlide(slide + 1);
       } else {
-        // Last slide completed — compute quadrant and go to confirm
-        setPredictedQuadrantRaw(computeQuadrant(impArr, urgArr));
-        setCurrentStep('confirm');
+        // Last slide completed — compute quadrant synchronously and decide next step
+        const computedQuadrant = classifyFromScores(impArr, urgArr);
+        // For Q2, Q3, Q4 go to subcategory step; for Q1 go directly to confirm
+        if (computedQuadrant === 2 || computedQuadrant === 3 || computedQuadrant === 4) {
+          setCurrentStep('subcategory');
+        } else {
+          setCurrentStep('confirm');
+        }
       }
       autoAdvanceTimer.current = null;
     }, AUTO_ADVANCE_MS);
@@ -166,7 +179,7 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
   }, [checkAutoAdvance]);
 
   const setPredictedQuadrant = useCallback((value: QuadrantNumber) => {
-    setPredictedQuadrantRaw(value);
+    setManualQuadrant(value);
   }, []);
 
   // --- Slide Navigation ---
@@ -174,9 +187,14 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     if (currentSlide < 2) {
       setCurrentSlide(currentSlide + 1);
     } else {
-      // Last slide — go to confirm
-      setPredictedQuadrantRaw(computeQuadrant(importanceAnswers, urgencyAnswers));
-      setCurrentStep('confirm');
+      // Last slide — quadrant is computed synchronously, decide next step immediately
+      const computedQuadrant = computeQuadrant(importanceAnswers, urgencyAnswers);
+      // For Q2, Q3, Q4 go to subcategory step; for Q1 go directly to confirm
+      if (computedQuadrant === 2 || computedQuadrant === 3 || computedQuadrant === 4) {
+        setCurrentStep('subcategory');
+      } else {
+        setCurrentStep('confirm');
+      }
     }
   }, [currentSlide, importanceAnswers, urgencyAnswers, computeQuadrant]);
 
@@ -192,7 +210,7 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
       if (!taskTitle.trim()) return false;
 
       if (bypass !== null) {
-        setPredictedQuadrantRaw(bypass);
+        // bypass is handled by synchronous predictedQuadrant
         setCurrentStep('confirm');
         return true;
       }
@@ -202,7 +220,18 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     }
 
     if (currentStep === 'quiz') {
-      setPredictedQuadrantRaw(computeQuadrant(importanceAnswers, urgencyAnswers));
+      // Quadrant is computed synchronously - no need to set state
+      const computedQuadrant = computeQuadrant(importanceAnswers, urgencyAnswers);
+      // For Q2, Q3, Q4 go to subcategory step; for Q1 go directly to confirm
+      if (computedQuadrant === 2 || computedQuadrant === 3 || computedQuadrant === 4) {
+        setCurrentStep('subcategory');
+      } else {
+        setCurrentStep('confirm');
+      }
+      return true;
+    }
+
+    if (currentStep === 'subcategory') {
       setCurrentStep('confirm');
       return true;
     }
@@ -216,12 +245,21 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
         // initialTitle + bypass: nowhere to go back, stay
         return;
       }
-      if (bypass !== null) {
+      // Go back to subcategory if quadrant is 2, 3, or 4, otherwise go to quiz
+      if (predictedQuadrant === 2 || predictedQuadrant === 3 || predictedQuadrant === 4) {
+        setCurrentStep('subcategory');
+      } else if (bypass !== null) {
         setCurrentStep('title');
       } else {
         setCurrentStep('quiz');
         setCurrentSlide(2);
       }
+      return;
+    }
+
+    if (currentStep === 'subcategory') {
+      setCurrentStep('quiz');
+      setCurrentSlide(2);
       return;
     }
 
@@ -242,7 +280,8 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     setTaskTitleRaw('');
     setImportanceAnswers([null, null, null]);
     setUrgencyAnswers([null, null, null]);
-    setPredictedQuadrantRaw(bypass);
+    setManualQuadrant(null);
+    setSubcategory(null);
     setIsSubmitting(false);
     if (autoAdvanceTimer.current) {
       clearTimeout(autoAdvanceTimer.current);
@@ -265,6 +304,7 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
         quadrant: predictedQuadrant,
         completed: false,
         createdAt: new Date(),
+        subcategory: subcategory,
       });
 
       try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
@@ -274,7 +314,7 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
       setIsSubmitting(false);
       return false;
     }
-  }, [isSubmitting, taskTitle, predictedQuadrant, resetQuiz]);
+  }, [isSubmitting, taskTitle, predictedQuadrant, subcategory, resetQuiz]);
 
   return {
     currentStep,
@@ -283,11 +323,13 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     importanceAnswers,
     urgencyAnswers,
     predictedQuadrant,
+    subcategory,
     isSubmitting,
     setTaskTitle,
     answerImportance,
     answerUrgency,
     setPredictedQuadrant,
+    setSubcategory,
     nextSlide,
     prevSlide,
     nextStep,
