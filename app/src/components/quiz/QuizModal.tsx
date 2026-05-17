@@ -268,9 +268,9 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
           );
         })()}
 
-        {/* === SUBCATEGORY STEP (Q2 & Q3) === */}
-        {quiz.currentStep === 'subcategory' && (quiz.predictedQuadrant === 2 || quiz.predictedQuadrant === 3) && (
-          <div className="flex flex-col items-center gap-6 text-center w-full">
+        {/* === SUBCATEGORY STEP (Q2 - Centrum Planowania) === */}
+        {quiz.currentStep === 'subcategory' && quiz.predictedQuadrant === 2 && (
+          <div className="flex flex-col items-center gap-4 text-center w-full">
             <div>
               <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">
                 Krok {stepNumber} z {totalSteps}
@@ -281,62 +281,76 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
               <p className="text-sm text-white/50 mt-2">Zdefiniuj charakter tego zadania</p>
             </div>
 
-            <div className="w-full max-w-[340px] flex flex-col gap-3">
-              {/* Option 1: Rutyna */}
+            {/* 2x2 Grid for Q2 Subcategories */}
+            <div className="w-full max-w-[340px] grid grid-cols-2 gap-3">
+              {/* Option 1: Rutyna - Purple */}
               <button
                 onClick={() => {
                   quiz.setSubcategory('rutyna');
                   quiz.nextStep();
                 }}
-                className="w-full p-4 rounded-xl border border-[#D000FF]/30 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_20px_rgba(208,0,255,0.3)] transition-all"
+                className="p-4 rounded-xl border-2 border-[#D000FF]/50 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_25px_rgba(208,0,255,0.5)] hover:scale-[1.02] transition-all min-h-[160px] flex flex-col"
               >
-                <div className="font-bold text-[#D000FF] text-lg">Rutyna</div>
-                <div className="text-xs text-white/50 mt-1">
-                  Czy jest to nawyk, system, który chcesz wdrożyć, by doprowadzić cię do celu lub polepszyć twoje funkcjonowanie?
+                <div className="text-2xl mb-2">🔄</div>
+                <div className="font-black text-[#D000FF] text-sm uppercase tracking-wide">Rutyna</div>
+                <div className="text-[11px] text-white/60 mt-2 leading-tight">
+                  Czy jest to nawyk, system, który chcesz wdrożyć, by doprowadzić cię do celu?
                 </div>
               </button>
 
-              {/* Option 2: Projekt */}
+              {/* Option 2: Projekt - Purple */}
               <button
                 onClick={() => {
                   quiz.setSubcategory('projekt');
                   quiz.nextStep();
                 }}
-                className="w-full p-4 rounded-xl border border-[#D000FF]/30 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_20px_rgba(208,0,255,0.3)] transition-all"
+                className="p-4 rounded-xl border-2 border-[#D000FF]/50 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_25px_rgba(208,0,255,0.5)] hover:scale-[1.02] transition-all min-h-[160px] flex flex-col"
               >
-                <div className="font-bold text-[#D000FF] text-lg">Projekt</div>
-                <div className="text-xs text-white/50 mt-1">
+                <div className="text-2xl mb-2">📁</div>
+                <div className="font-black text-[#D000FF] text-sm uppercase tracking-wide">Projekt</div>
+                <div className="text-[11px] text-white/60 mt-2 leading-tight">
                   Czy jest to konkretny projekt, nad którym będziesz pracować?
                 </div>
               </button>
 
-              {/* Option 3: Ogólny cel */}
+              {/* Option 3: Ogólny cel - Purple */}
               <button
                 onClick={() => {
                   quiz.setSubcategory('ogolny_cel');
                   quiz.nextStep();
                 }}
-                className="w-full p-4 rounded-xl border border-[#D000FF]/30 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_20px_rgba(208,0,255,0.3)] transition-all"
+                className="p-4 rounded-xl border-2 border-[#D000FF]/50 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_25px_rgba(208,0,255,0.5)] hover:scale-[1.02] transition-all min-h-[160px] flex flex-col"
               >
-                <div className="font-bold text-[#D000FF] text-lg">Ogólny cel</div>
-                <div className="text-xs text-white/50 mt-1">
-                  Czy jest to na razie tylko ogólny kierunek, dla którego nie masz jeszcze rozplanowanych działań?
+                <div className="text-2xl mb-2">🎯</div>
+                <div className="font-black text-[#D000FF] text-sm uppercase tracking-wide leading-tight">
+                  Ogólny<br />cel
+                </div>
+                <div className="text-[11px] text-white/60 mt-2 leading-tight">
+                  Czy to ogólny kierunek bez rozplanowanych działań?
                 </div>
               </button>
 
-              {/* Option 4: Inne */}
+              {/* Option 4: Inne - Purple */}
               <button
                 onClick={() => {
                   quiz.setSubcategory('inne');
                   quiz.nextStep();
                 }}
-                className="w-full p-4 rounded-xl border border-[#D000FF]/30 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_20px_rgba(208,0,255,0.3)] transition-all"
+                className="p-4 rounded-xl border-2 border-[#D000FF]/50 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_25px_rgba(208,0,255,0.5)] hover:scale-[1.02] transition-all min-h-[160px] flex flex-col"
               >
-                <div className="font-bold text-[#D000FF] text-lg">Inne</div>
-                <div className="text-xs text-white/50 mt-1">
+                <div className="text-2xl mb-2">💼</div>
+                <div className="font-black text-[#D000FF] text-sm uppercase tracking-wide">Inne</div>
+                <div className="text-[11px] text-white/60 mt-2 leading-tight">
                   Inny charakter działania, niewpisujący się w powyższe ramy.
                 </div>
               </button>
+            </div>
+
+            {/* Purple Info Box for Q2 */}
+            <div className="w-full max-w-[340px] p-3 rounded-lg border border-[#D000FF]/20 bg-[#D000FF]/5 backdrop-blur-sm">
+              <p className="text-[11px] text-white/60 leading-relaxed">
+                <span className="text-[#D000FF] font-bold">Wskazówka:</span> Kwadrant II to serce Twojego rozwoju. Inwestycja w te zadania redukuje stres w przyszłości.
+              </p>
             </div>
           </div>
         )}
