@@ -268,8 +268,8 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
           );
         })()}
 
-        {/* === SUBCATEGORY STEP (Q2 Only for now) === */}
-        {quiz.currentStep === 'subcategory' && quiz.predictedQuadrant === 2 && (
+        {/* === SUBCATEGORY STEP (Q2 & Q3) === */}
+        {quiz.currentStep === 'subcategory' && (quiz.predictedQuadrant === 2 || quiz.predictedQuadrant === 3) && (
           <div className="flex flex-col items-center gap-6 text-center w-full">
             <div>
               <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">
@@ -337,6 +337,93 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
                   Inny charakter działania, niewpisujący się w powyższe ramy.
                 </div>
               </button>
+            </div>
+          </div>
+        )}
+
+        {/* === SUBCATEGORY STEP (Q3 - Hub Logistyki) === */}
+        {quiz.currentStep === 'subcategory' && quiz.predictedQuadrant === 3 && (
+          <div className="flex flex-col items-center gap-4 text-center w-full">
+            <div>
+              <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">
+                Krok {stepNumber} z {totalSteps}
+              </p>
+              <h2 className="text-2xl font-black uppercase tracking-wide" style={{ color: '#FF8C00' }}>
+                Hub Logistyki (Q3)
+              </h2>
+              <p className="text-sm text-white/50 mt-2">Wybierz strategię dla zadania</p>
+            </div>
+
+            {/* 2x2 Grid for Q3 Subcategories */}
+            <div className="w-full max-w-[340px] grid grid-cols-2 gap-3">
+              {/* Option 1: Zrób teraz - Orange */}
+              <button
+                onClick={() => {
+                  quiz.setSubcategory('zrob_teraz');
+                  quiz.nextStep();
+                }}
+                className="p-4 rounded-xl border-2 border-[#FF8C00]/50 bg-[#FF8C00]/10 text-left hover:border-[#FF8C00] hover:shadow-[0_0_25px_rgba(255,140,0,0.5)] hover:scale-[1.02] transition-all min-h-[140px] flex flex-col"
+              >
+                <div className="text-2xl mb-2">🚀</div>
+                <div className="font-black text-[#FF8C00] text-sm uppercase tracking-wide">Zrób teraz</div>
+                <div className="text-[11px] text-white/60 mt-2 leading-tight">
+                  Zajmie mniej niż 10 min? Działaj!
+                </div>
+              </button>
+
+              {/* Option 2: Zaplanuj - Cyan */}
+              <button
+                onClick={() => {
+                  quiz.setSubcategory('zaplanuj');
+                  quiz.nextStep();
+                }}
+                className="p-4 rounded-xl border-2 border-[#00E5FF]/50 bg-[#00E5FF]/10 text-left hover:border-[#00E5FF] hover:shadow-[0_0_25px_rgba(0,229,255,0.5)] hover:scale-[1.02] transition-all min-h-[140px] flex flex-col"
+              >
+                <div className="text-2xl mb-2">📁</div>
+                <div className="font-black text-[#00E5FF] text-sm uppercase tracking-wide">Zaplanuj</div>
+                <div className="text-[11px] text-white/60 mt-2 leading-tight">
+                  Zbierz drobiazgi w jeden sprint logistyczny
+                </div>
+              </button>
+
+              {/* Option 3: Zrób w przerwie - Cyan */}
+              <button
+                onClick={() => {
+                  quiz.setSubcategory('w_przerwie');
+                  quiz.nextStep();
+                }}
+                className="p-4 rounded-xl border-2 border-[#00E5FF]/50 bg-[#00E5FF]/10 text-left hover:border-[#00E5FF] hover:shadow-[0_0_25px_rgba(0,229,255,0.5)] hover:scale-[1.02] transition-all min-h-[140px] flex flex-col"
+              >
+                <div className="text-2xl mb-2">🔄</div>
+                <div className="font-black text-[#00E5FF] text-sm uppercase tracking-wide leading-tight">
+                  Zrób<br />w przerwie
+                </div>
+                <div className="text-[11px] text-white/60 mt-2 leading-tight">
+                  Użyj tego jako mechanicznego resetu dla mózgu
+                </div>
+              </button>
+
+              {/* Option 4: Inne - Orange */}
+              <button
+                onClick={() => {
+                  quiz.setSubcategory('inne');
+                  quiz.nextStep();
+                }}
+                className="p-4 rounded-xl border-2 border-[#FF8C00]/50 bg-[#FF8C00]/10 text-left hover:border-[#FF8C00] hover:shadow-[0_0_25px_rgba(255,140,0,0.5)] hover:scale-[1.02] transition-all min-h-[140px] flex flex-col"
+              >
+                <div className="text-2xl mb-2">💼</div>
+                <div className="font-black text-[#FF8C00] text-sm uppercase tracking-wide">Inne</div>
+                <div className="text-[11px] text-white/60 mt-2 leading-tight">
+                  Pozostałe codzienne obowiązki i dystraktory
+                </div>
+              </button>
+            </div>
+
+            {/* Dopamine Info Box */}
+            <div className="w-full max-w-[340px] p-3 rounded-lg border border-[#FF8C00]/20 bg-[#FF8C00]/5 backdrop-blur-sm">
+              <p className="text-[11px] text-white/60 leading-relaxed">
+                <span className="text-[#FF8C00] font-bold">Wskazówka:</span> Zadania z III ćwiartki często udają ważne. Wybierz strategię, która nie przerwie Twojego stanu Flow.
+              </p>
             </div>
           </div>
         )}
