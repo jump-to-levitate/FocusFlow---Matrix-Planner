@@ -14,7 +14,7 @@ import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 export const MatrixScreen = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [selectedQuadrant, setSelectedQuadrant] = useState<1 | 2 | 3 | 4 | null>(null);
-  const [viewMode, setViewMode] = useState<'grid' | 'q2'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'q2' | 'q3' | 'q4'>('grid');
 
   const allTasks = useLiveQuery(
     () => db.tasks.toArray().catch(err => {
@@ -69,7 +69,7 @@ export const MatrixScreen = () => {
     <>
     <QuizModal isOpen={isQuizOpen} onClose={closeQuiz} initialQuadrant={selectedQuadrant} />
     <div className="flex flex-col h-full pt-4 pb-4">
-      {/* Header - hidden in Q2 view */}
+      {/* Header - hidden in sub-views */}
       {viewMode === 'grid' && (
         <header className="mb-4 shrink-0">
           <h1 className="text-2xl font-black text-white uppercase tracking-wide mb-1">Macierz</h1>
@@ -122,7 +122,7 @@ export const MatrixScreen = () => {
             onAdd={() => openQuiz(3)}
             headerAction={
               <button
-                onClick={() => alert('Hub Logistyki - Coming Soon')}
+                onClick={() => setViewMode('q3')}
                 className="hover:shadow-[0_0_15px_rgba(255,140,0,0.4)] text-[#FF8C00] text-xs font-semibold px-2 py-1 rounded border border-[#FF8C00]/30 transition-all cursor-pointer"
                 title="Hub Logistyki"
               >
@@ -142,7 +142,7 @@ export const MatrixScreen = () => {
             onAdd={() => openQuiz(4)}
             headerAction={
               <button
-                onClick={() => alert('Archiwum - Coming Soon')}
+                onClick={() => setViewMode('q4')}
                 className="hover:shadow-[0_0_15px_rgba(156,163,175,0.4)] text-[#9CA3AF] text-xs font-semibold px-2 py-1 rounded border border-[#9CA3AF]/30 transition-all cursor-pointer"
                 title="Archiwum"
               >
@@ -152,6 +152,238 @@ export const MatrixScreen = () => {
           />
         </div>
       )}
+
+      {/* VIEW: Q3 Hub Logistyki - Sub-screen with 2x2 Layout */}
+      {viewMode === 'q3' && (() => {
+        // Group Q3 tasks by subcategory - null/undefined/empty treated as 'inne'
+        const groupQ3BySubcategory = (tasks: Task[]) => {
+          const groups: Record<string, Task[]> = {
+            zrob_teraz: [],
+            zaplanuj: [],
+            w_przerwie: [],
+            inne: [],
+          };
+          tasks.forEach(task => {
+            const sub = task.subcategory;
+            // Treat null, undefined, or empty string as 'inne'
+            const normalizedSub = !sub || sub === '' ? 'inne' : sub;
+            if (groups[normalizedSub]) {
+              groups[normalizedSub].push(task);
+            } else {
+              groups.inne.push(task);
+            }
+          });
+          return groups;
+        };
+
+        const groups = groupQ3BySubcategory(q3);
+
+        // Subcategory configuration with Orange & Blue Cyberpunk theme
+        // Row 1: ZRÓB TERAZ (orange), ZAPLANUJ (cyan)
+        // Row 2: ZRÓB W PRZERWIE (cyan), INNE (orange)
+        const subcategoryConfig: Record<string, {
+          label: string;
+          labelSmall?: boolean;
+          icon: string;
+          color: string;
+          glowColor: string;
+        }> = {
+          zrob_teraz: {
+            label: 'ZRÓB TERAZ',
+            icon: '🚀',
+            color: '#FF8C00',
+            glowColor: 'rgba(255, 140, 0, 0.3)',
+          },
+          zaplanuj: {
+            label: 'ZAPLANUJ',
+            icon: '📁',
+            color: '#00E5FF',
+            glowColor: 'rgba(0, 229, 255, 0.3)',
+          },
+          w_przerwie: {
+            label: 'W PRZERWIE',
+            labelSmall: true,
+            icon: '🔄',
+            color: '#00E5FF',
+            glowColor: 'rgba(0, 229, 255, 0.3)',
+          },
+          inne: {
+            label: 'INNE',
+            icon: '💼',
+            color: '#FF8C00',
+            glowColor: 'rgba(255, 140, 0, 0.3)',
+          },
+        };
+
+        // Define the 2x2 grid order
+        const gridOrder = ['zrob_teraz', 'zaplanuj', 'w_przerwie', 'inne'] as const;
+
+        // Helper to get exact Matrix border/shadow classes for Q3 (Orange & Cyan)
+        const getBoxClasses = (isOrange: boolean) => {
+          if (isOrange) {
+            return {
+              border: 'border-[#FF8C00]',
+              shadow: 'shadow-[0_0_30px_rgba(255,140,0,0.7),0_0_60px_rgba(255,140,0,0.2)]',
+              bg: 'bg-[rgba(255,140,0,0.10)]',
+              headerBg: 'bg-[rgba(255,140,0,0.15)]',
+            };
+          }
+          return {
+            border: 'border-[#00E5FF]',
+            shadow: 'shadow-[0_0_20px_rgba(0,229,255,0.6),0_0_50px_rgba(0,229,255,0.15)]',
+            bg: 'bg-[rgba(0,229,255,0.08)]',
+            headerBg: 'bg-[rgba(0,229,255,0.12)]',
+          };
+        };
+
+        const renderTaskBox = (key: typeof gridOrder[number]) => {
+          const tasks = groups[key] || [];
+          const config = subcategoryConfig[key];
+          const isOrange = config.color === '#FF8C00';
+          const classes = getBoxClasses(isOrange);
+
+          return (
+            <div
+              key={key}
+              className={`rounded-xl border backdrop-blur-sm overflow-hidden flex flex-col h-full transition-all duration-200 hover:scale-[1.02] ${classes.border} ${classes.shadow} ${classes.bg}`}
+            >
+              {/* Box Header - Fixed height h-14 for uniform alignment */}
+              <div className={`h-14 flex items-center justify-between px-3 border-b ${classes.border} ${classes.headerBg}`}>
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{config.icon}</span>
+                  {config.labelSmall ? (
+                    <h3
+                      className="text-[11px] sm:text-xs font-black tracking-wider uppercase leading-none"
+                      style={{ color: config.color }}
+                    >
+                      ZRÓB<br />W PRZERWIE
+                    </h3>
+                  ) : (
+                    <h3
+                      className="text-xs sm:text-sm font-black tracking-wide uppercase"
+                      style={{ color: config.color }}
+                    >
+                      {config.label}
+                    </h3>
+                  )}
+                </div>
+                <span
+                  className="px-2.5 py-1 rounded-full text-xs font-bold"
+                  style={{
+                    backgroundColor: isOrange ? 'rgba(255,140,0,0.2)' : 'rgba(0,229,255,0.2)',
+                    color: config.color,
+                  }}
+                >
+                  {tasks.length}
+                </span>
+              </div>
+
+              {/* Tasks List */}
+              <div className="flex-1 p-3 space-y-2 overflow-y-auto">
+                {tasks.length > 0 ? (
+                  tasks.map(task => (
+                    <div
+                      key={task.id}
+                      className="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 group"
+                      style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        border: `1px solid ${isOrange ? 'rgba(255,140,0,0.2)' : 'rgba(0,229,255,0.2)'}`,
+                      }}
+                    >
+                      <button
+                        onClick={() => task.id && completeTask(task.id)}
+                        className="shrink-0 transition-all duration-200 hover:scale-110"
+                        style={{ color: 'rgba(255, 255, 255, 0.3)' }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = isOrange ? '#FF8C00' : '#00E5FF')}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.3)')}
+                      >
+                        <CheckCircle2 size={20} />
+                      </button>
+                      <span className="flex-1 text-sm text-white/90 leading-tight font-medium">
+                        {task.title}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex-1 flex items-center justify-center text-white/20">
+                    <p className="text-xs">Brak zadań w tej ćwiartce</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        };
+
+        return (
+          <div className="flex flex-col flex-1 min-h-0">
+            {/* Q3 Navigation Bar - 3 Column Grid Layout */}
+            <div className="grid grid-cols-3 items-center w-full gap-2 mb-6 px-2 shrink-0">
+              {/* Left Column: Back Button */}
+              <div className="flex justify-start">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-all text-xs font-medium"
+                >
+                  <ArrowLeft size={14} />
+                  <span className="hidden sm:inline">← Powrót do Macierzy</span>
+                  <span className="sm:hidden">←</span>
+                </button>
+              </div>
+
+              {/* Center Column: Title with Neon Glow */}
+              <div className="flex flex-col items-center justify-center leading-none select-none">
+                <span
+                  className="text-sm sm:text-base font-black tracking-widest uppercase whitespace-nowrap"
+                  style={{
+                    color: '#FF8C00',
+                    textShadow: '0 0 15px rgba(255, 140, 0, 0.6), 0 0 30px rgba(255, 140, 0, 0.4)',
+                  }}
+                >
+                  Hub
+                </span>
+                <span
+                  className="text-[11px] sm:text-xs font-black tracking-normal uppercase whitespace-nowrap mt-1"
+                  style={{
+                    color: '#FF8C00',
+                    textShadow: '0 0 10px rgba(255, 140, 0, 0.5), 0 0 20px rgba(255, 140, 0, 0.3)',
+                  }}
+                >
+                  Logistyki
+                </span>
+                <span
+                  className="text-[10px] sm:text-xs font-bold tracking-wider mt-1"
+                  style={{ color: 'rgba(255, 140, 0, 0.7)' }}
+                >
+                  (Q3)
+                </span>
+              </div>
+
+              {/* Right Column: Add Button */}
+              <div className="flex justify-end">
+                <button
+                  onClick={() => openQuiz(3)}
+                  className="px-3 py-1.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all hover:scale-105 w-full max-w-[80px]"
+                  style={{
+                    backgroundColor: 'rgba(255, 140, 0, 0.15)',
+                    border: '1px solid rgba(255, 140, 0, 0.6)',
+                    color: '#FF8C00',
+                    boxShadow: '0 0 15px rgba(255, 140, 0, 0.4), inset 0 0 8px rgba(255, 140, 0, 0.1)',
+                  }}
+                >
+                  + Dodaj
+                </button>
+              </div>
+            </div>
+
+            {/* Q3 2x2 Quadrant Grid */}
+            <div className="flex-1 min-h-0">
+              <div className="grid grid-cols-2 grid-rows-2 gap-4 h-full">
+                {gridOrder.map(key => renderTaskBox(key))}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* VIEW: Q2 Centrum Planowania - Sub-screen with 2x2 Layout */}
       {viewMode === 'q2' && (() => {
