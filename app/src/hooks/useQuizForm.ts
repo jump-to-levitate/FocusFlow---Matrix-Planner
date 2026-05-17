@@ -123,8 +123,8 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
       } else {
         // Last slide completed — compute quadrant synchronously and decide next step
         const computedQuadrant = classifyFromScores(impArr, urgArr);
-        // For Q2, Q3, Q4 go to subcategory step; for Q1 go directly to confirm
-        if (computedQuadrant === 2 || computedQuadrant === 3 || computedQuadrant === 4) {
+        // For Q2, Q3 go to subcategory step; for Q1, Q4 go directly to confirm
+        if (computedQuadrant === 2 || computedQuadrant === 3) {
           setCurrentStep('subcategory');
         } else {
           setCurrentStep('confirm');
@@ -189,8 +189,8 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     } else {
       // Last slide — quadrant is computed synchronously, decide next step immediately
       const computedQuadrant = computeQuadrant(importanceAnswers, urgencyAnswers);
-      // For Q2, Q3, Q4 go to subcategory step; for Q1 go directly to confirm
-      if (computedQuadrant === 2 || computedQuadrant === 3 || computedQuadrant === 4) {
+      // For Q2, Q3 go to subcategory step; for Q1, Q4 go directly to confirm
+      if (computedQuadrant === 2 || computedQuadrant === 3) {
         setCurrentStep('subcategory');
       } else {
         setCurrentStep('confirm');
@@ -222,8 +222,8 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     if (currentStep === 'quiz') {
       // Quadrant is computed synchronously - no need to set state
       const computedQuadrant = computeQuadrant(importanceAnswers, urgencyAnswers);
-      // For Q2, Q3, Q4 go to subcategory step; for Q1 go directly to confirm
-      if (computedQuadrant === 2 || computedQuadrant === 3 || computedQuadrant === 4) {
+      // For Q2, Q3 go to subcategory step; for Q1, Q4 go directly to confirm
+      if (computedQuadrant === 2 || computedQuadrant === 3) {
         setCurrentStep('subcategory');
       } else {
         setCurrentStep('confirm');
@@ -245,8 +245,8 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
         // initialTitle + bypass: nowhere to go back, stay
         return;
       }
-      // Go back to subcategory if quadrant is 2, 3, or 4, otherwise go to quiz
-      if (predictedQuadrant === 2 || predictedQuadrant === 3 || predictedQuadrant === 4) {
+      // Go back to subcategory if quadrant is 2 or 3, otherwise go to quiz
+      if (predictedQuadrant === 2 || predictedQuadrant === 3) {
         setCurrentStep('subcategory');
       } else if (bypass !== null) {
         setCurrentStep('title');
@@ -258,6 +258,7 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     }
 
     if (currentStep === 'subcategory') {
+      setSubcategory(null); // Reset subcategory when going back
       setCurrentStep('quiz');
       setCurrentSlide(2);
       return;

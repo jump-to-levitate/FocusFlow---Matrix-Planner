@@ -73,8 +73,8 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
 
   const shouldSkipTitle = skipTitleStep ?? (initialTitle ? true : false);
   const hasTitleStep = !shouldSkipTitle && initialQuadrant == null;
-  // Calculate if we need subcategory step (for Q2, Q3, Q4)
-  const needsSubcategory = quiz.predictedQuadrant === 2 || quiz.predictedQuadrant === 3 || quiz.predictedQuadrant === 4;
+  // Calculate if we need subcategory step (for Q2, Q3 only)
+  const needsSubcategory = quiz.predictedQuadrant === 2 || quiz.predictedQuadrant === 3;
 
   const getStepNumber = () => {
     const baseMap: Record<string, number> = hasTitleStep
