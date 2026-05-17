@@ -45,29 +45,16 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
     onClose();
   };
 
-  const handleSubmit = async () => {
-    try {
-      // Mode A: Reclassification of existing task (from Inbox/Matrix)
-      if (onClassify && classifyTaskId !== undefined && quiz.predictedQuadrant !== null) {
-        await onClassify(classifyTaskId, quiz.predictedQuadrant);
-        // Also update subcategory if set
-        if (quiz.subcategory) {
-          await db.tasks.update(classifyTaskId, { subcategory: quiz.subcategory });
-        }
-        quiz.resetQuiz();
-        onClose();
-        return;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _handleClassify = async () => {
+    // Reserved for reclassification mode (BrainDumpScreen)
+    if (onClassify && classifyTaskId !== undefined && quiz.predictedQuadrant !== null) {
+      await onClassify(classifyTaskId, quiz.predictedQuadrant);
+      if (quiz.subcategory) {
+        await db.tasks.update(classifyTaskId, { subcategory: quiz.subcategory });
       }
-
-      // Mode B: Creating new task
-      const ok = await quiz.submitTask();
-      if (ok) {
-        onClose();
-      } else {
-        console.error('Nie udało się zapisać zadania');
-      }
-    } catch (error) {
-      console.error('Błąd podczas zapisywania zadania w Dexie:', error);
+      quiz.resetQuiz();
+      onClose();
     }
   };
 
@@ -77,18 +64,14 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
   const needsSubcategory = quiz.predictedQuadrant === 2 || quiz.predictedQuadrant === 3;
 
   const getStepNumber = () => {
+    // New flow: title -> quiz -> confirm -> subcategory (Q2/Q3 only) -> save
     const baseMap: Record<string, number> = hasTitleStep
-      ? { title: 1, quiz: 2, subcategory: 3, confirm: 4 }
-      : { title: 1, quiz: 1, subcategory: 2, confirm: 3 };
+      ? { title: 1, quiz: 2, confirm: 3, subcategory: 4 }
+      : { title: 1, quiz: 1, confirm: 2, subcategory: 3 };
 
     if (initialQuadrant != null && initialTitle) {
       // Bypass mode - only confirm step
       return 1;
-    }
-
-    // Adjust steps based on whether subcategory is needed
-    if (!needsSubcategory && quiz.currentStep === 'confirm') {
-      return hasTitleStep ? 3 : 2;
     }
 
     return baseMap[quiz.currentStep] || 1;
@@ -96,6 +79,7 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
 
   const getTotalSteps = () => {
     if (initialQuadrant != null && initialTitle) return 1;
+    // Always show subcategory step in count if needed, but flow ends at subcategory for Q2/Q3
     if (hasTitleStep) return needsSubcategory ? 4 : 3;
     return needsSubcategory ? 3 : 2;
   };
@@ -281,13 +265,14 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
               <p className="text-sm text-white/50 mt-2">Zdefiniuj charakter tego zadania</p>
             </div>
 
-            {/* 2x2 Grid for Q2 Subcategories */}
+            {/* 2x2 Grid for Q2 Subcategories - Purple/Green Checkerboard */}
             <div className="w-full max-w-[340px] grid grid-cols-2 gap-3">
-              {/* Option 1: Rutyna - Purple */}
+              {/* Option 1: Rutyna - Purple (Top-Left) */}
               <button
-                onClick={() => {
+                onClick={async () => {
                   quiz.setSubcategory('rutyna');
-                  quiz.nextStep();
+                  const success = await quiz.submitTask();
+                  if (success) onClose();
                 }}
                 className="p-4 rounded-xl border-2 border-[#D000FF]/50 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_25px_rgba(208,0,255,0.5)] hover:scale-[1.02] transition-all min-h-[160px] flex flex-col"
               >
@@ -298,31 +283,33 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
                 </div>
               </button>
 
-              {/* Option 2: Projekt - Purple */}
+              {/* Option 2: Projekt - Green (Top-Right) */}
               <button
-                onClick={() => {
+                onClick={async () => {
                   quiz.setSubcategory('projekt');
-                  quiz.nextStep();
+                  const success = await quiz.submitTask();
+                  if (success) onClose();
                 }}
-                className="p-4 rounded-xl border-2 border-[#D000FF]/50 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_25px_rgba(208,0,255,0.5)] hover:scale-[1.02] transition-all min-h-[160px] flex flex-col"
+                className="p-4 rounded-xl border-2 border-[#00FF66]/50 bg-[#00FF66]/10 text-left hover:border-[#00FF66] hover:shadow-[0_0_25px_rgba(0,255,102,0.5)] hover:scale-[1.02] transition-all min-h-[160px] flex flex-col"
               >
                 <div className="text-2xl mb-2">📁</div>
-                <div className="font-black text-[#D000FF] text-sm uppercase tracking-wide">Projekt</div>
+                <div className="font-black text-[#00FF66] text-sm uppercase tracking-wide">Projekt</div>
                 <div className="text-[11px] text-white/60 mt-2 leading-tight">
                   Czy jest to konkretny projekt, nad którym będziesz pracować?
                 </div>
               </button>
 
-              {/* Option 3: Ogólny cel - Purple */}
+              {/* Option 3: Ogólny cel - Green (Bottom-Left) */}
               <button
-                onClick={() => {
+                onClick={async () => {
                   quiz.setSubcategory('ogolny_cel');
-                  quiz.nextStep();
+                  const success = await quiz.submitTask();
+                  if (success) onClose();
                 }}
-                className="p-4 rounded-xl border-2 border-[#D000FF]/50 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_25px_rgba(208,0,255,0.5)] hover:scale-[1.02] transition-all min-h-[160px] flex flex-col"
+                className="p-4 rounded-xl border-2 border-[#00FF66]/50 bg-[#00FF66]/10 text-left hover:border-[#00FF66] hover:shadow-[0_0_25px_rgba(0,255,102,0.5)] hover:scale-[1.02] transition-all min-h-[160px] flex flex-col"
               >
                 <div className="text-2xl mb-2">🎯</div>
-                <div className="font-black text-[#D000FF] text-sm uppercase tracking-wide leading-tight">
+                <div className="font-black text-[#00FF66] text-sm uppercase tracking-wide leading-tight">
                   Ogólny<br />cel
                 </div>
                 <div className="text-[11px] text-white/60 mt-2 leading-tight">
@@ -330,11 +317,12 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
                 </div>
               </button>
 
-              {/* Option 4: Inne - Purple */}
+              {/* Option 4: Inne - Purple (Bottom-Right) */}
               <button
-                onClick={() => {
+                onClick={async () => {
                   quiz.setSubcategory('inne');
-                  quiz.nextStep();
+                  const success = await quiz.submitTask();
+                  if (success) onClose();
                 }}
                 className="p-4 rounded-xl border-2 border-[#D000FF]/50 bg-[#D000FF]/10 text-left hover:border-[#D000FF] hover:shadow-[0_0_25px_rgba(208,0,255,0.5)] hover:scale-[1.02] transition-all min-h-[160px] flex flex-col"
               >
@@ -372,9 +360,10 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
             <div className="w-full max-w-[340px] grid grid-cols-2 gap-3">
               {/* Option 1: Zrób teraz - Orange */}
               <button
-                onClick={() => {
+                onClick={async () => {
                   quiz.setSubcategory('zrob_teraz');
-                  quiz.nextStep();
+                  const success = await quiz.submitTask();
+                  if (success) onClose();
                 }}
                 className="p-4 rounded-xl border-2 border-[#FF8C00]/50 bg-[#FF8C00]/10 text-left hover:border-[#FF8C00] hover:shadow-[0_0_25px_rgba(255,140,0,0.5)] hover:scale-[1.02] transition-all min-h-[140px] flex flex-col"
               >
@@ -387,9 +376,10 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
 
               {/* Option 2: Zaplanuj - Cyan */}
               <button
-                onClick={() => {
+                onClick={async () => {
                   quiz.setSubcategory('zaplanuj');
-                  quiz.nextStep();
+                  const success = await quiz.submitTask();
+                  if (success) onClose();
                 }}
                 className="p-4 rounded-xl border-2 border-[#00E5FF]/50 bg-[#00E5FF]/10 text-left hover:border-[#00E5FF] hover:shadow-[0_0_25px_rgba(0,229,255,0.5)] hover:scale-[1.02] transition-all min-h-[140px] flex flex-col"
               >
@@ -402,9 +392,10 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
 
               {/* Option 3: Zrób w przerwie - Cyan */}
               <button
-                onClick={() => {
+                onClick={async () => {
                   quiz.setSubcategory('w_przerwie');
-                  quiz.nextStep();
+                  const success = await quiz.submitTask();
+                  if (success) onClose();
                 }}
                 className="p-4 rounded-xl border-2 border-[#00E5FF]/50 bg-[#00E5FF]/10 text-left hover:border-[#00E5FF] hover:shadow-[0_0_25px_rgba(0,229,255,0.5)] hover:scale-[1.02] transition-all min-h-[140px] flex flex-col"
               >
@@ -419,9 +410,10 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
 
               {/* Option 4: Inne - Orange */}
               <button
-                onClick={() => {
+                onClick={async () => {
                   quiz.setSubcategory('inne');
-                  quiz.nextStep();
+                  const success = await quiz.submitTask();
+                  if (success) onClose();
                 }}
                 className="p-4 rounded-xl border-2 border-[#FF8C00]/50 bg-[#FF8C00]/10 text-left hover:border-[#FF8C00] hover:shadow-[0_0_25px_rgba(255,140,0,0.5)] hover:scale-[1.02] transition-all min-h-[140px] flex flex-col"
               >
@@ -482,7 +474,14 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
               </div>
 
               <button
-                onClick={handleSubmit}
+                onClick={async () => {
+                  const success = await quiz.nextStep();
+                  if (success && (quiz.predictedQuadrant === 1 || quiz.predictedQuadrant === 4)) {
+                    // Q1 or Q4: task was submitted, close modal
+                    onClose();
+                  }
+                  // Q2 or Q3: nextStep will transition to subcategory step
+                }}
                 disabled={quiz.isSubmitting}
                 className="w-full max-w-[340px] py-3.5 px-4 rounded-xl font-bold uppercase tracking-wider active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
                 style={{
@@ -494,7 +493,9 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
                 }}
               >
                 <Check size={20} strokeWidth={2.5} />
-                {quiz.isSubmitting ? 'Zapisuję...' : 'Zapisz zadanie'}
+                {quiz.predictedQuadrant === 2 || quiz.predictedQuadrant === 3 
+                  ? 'Wybierz podkategorię →' 
+                  : (quiz.isSubmitting ? 'Zapisuję...' : 'Zapisz zadanie')}
               </button>
             </div>
           );

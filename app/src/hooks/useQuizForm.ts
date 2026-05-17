@@ -30,7 +30,7 @@ export interface UseQuizFormReturn {
   setSubcategory: (value: string | null) => void;
   nextSlide: () => void;
   prevSlide: () => void;
-  nextStep: () => boolean;
+  nextStep: () => Promise<boolean>;
   prevStep: () => void;
   resetQuiz: () => void;
   submitTask: () => Promise<boolean>;
@@ -121,14 +121,8 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
       if (slide < 2) {
         setCurrentSlide(slide + 1);
       } else {
-        // Last slide completed — compute quadrant synchronously and decide next step
-        const computedQuadrant = classifyFromScores(impArr, urgArr);
-        // For Q2, Q3 go to subcategory step; for Q1, Q4 go directly to confirm
-        if (computedQuadrant === 2 || computedQuadrant === 3) {
-          setCurrentStep('subcategory');
-        } else {
-          setCurrentStep('confirm');
-        }
+        // Last slide completed — go to confirm step (user confirms quadrant first)
+        setCurrentStep('confirm');
       }
       autoAdvanceTimer.current = null;
     }, AUTO_ADVANCE_MS);
@@ -187,14 +181,8 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     if (currentSlide < 2) {
       setCurrentSlide(currentSlide + 1);
     } else {
-      // Last slide — quadrant is computed synchronously, decide next step immediately
-      const computedQuadrant = computeQuadrant(importanceAnswers, urgencyAnswers);
-      // For Q2, Q3 go to subcategory step; for Q1, Q4 go directly to confirm
-      if (computedQuadrant === 2 || computedQuadrant === 3) {
-        setCurrentStep('subcategory');
-      } else {
-        setCurrentStep('confirm');
-      }
+      // Last slide — go to confirm step (user confirms quadrant first)
+      setCurrentStep('confirm');
     }
   }, [currentSlide, importanceAnswers, urgencyAnswers, computeQuadrant]);
 
@@ -203,76 +191,6 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
       setCurrentSlide(currentSlide - 1);
     }
   }, [currentSlide]);
-
-  // --- Step Navigation ---
-  const nextStep = useCallback((): boolean => {
-    if (currentStep === 'title') {
-      if (!taskTitle.trim()) return false;
-
-      if (bypass !== null) {
-        // bypass is handled by synchronous predictedQuadrant
-        setCurrentStep('confirm');
-        return true;
-      }
-      setCurrentStep('quiz');
-      setCurrentSlide(0);
-      return true;
-    }
-
-    if (currentStep === 'quiz') {
-      // Quadrant is computed synchronously - no need to set state
-      const computedQuadrant = computeQuadrant(importanceAnswers, urgencyAnswers);
-      // For Q2, Q3 go to subcategory step; for Q1, Q4 go directly to confirm
-      if (computedQuadrant === 2 || computedQuadrant === 3) {
-        setCurrentStep('subcategory');
-      } else {
-        setCurrentStep('confirm');
-      }
-      return true;
-    }
-
-    if (currentStep === 'subcategory') {
-      setCurrentStep('confirm');
-      return true;
-    }
-
-    return false;
-  }, [currentStep, taskTitle, bypass, importanceAnswers, urgencyAnswers, computeQuadrant]);
-
-  const prevStep = useCallback(() => {
-    if (currentStep === 'confirm') {
-      if (bypass !== null && prefill) {
-        // initialTitle + bypass: nowhere to go back, stay
-        return;
-      }
-      // Go back to subcategory if quadrant is 2 or 3, otherwise go to quiz
-      if (predictedQuadrant === 2 || predictedQuadrant === 3) {
-        setCurrentStep('subcategory');
-      } else if (bypass !== null) {
-        setCurrentStep('title');
-      } else {
-        setCurrentStep('quiz');
-        setCurrentSlide(2);
-      }
-      return;
-    }
-
-    if (currentStep === 'subcategory') {
-      setSubcategory(null); // Reset subcategory when going back
-      setCurrentStep('quiz');
-      setCurrentSlide(2);
-      return;
-    }
-
-    if (currentStep === 'quiz') {
-      if (currentSlide > 0) {
-        setCurrentSlide(currentSlide - 1);
-      } else if (!prefill) {
-        setCurrentStep('title');
-      }
-      return;
-    }
-  }, [currentStep, currentSlide, bypass, prefill]);
 
   // --- Reset ---
   const resetQuiz = useCallback(() => {
@@ -293,7 +211,7 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     } catch { /* ignore */ }
   }, [bypass]);
 
-  // --- Submit ---
+  // --- Submit (defined before nextStep/prevStep to avoid circular dependency) ---
   const submitTask = useCallback(async (): Promise<boolean> => {
     if (isSubmitting) return false;
     if (!taskTitle.trim() || predictedQuadrant === null) return false;
@@ -316,6 +234,78 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
       return false;
     }
   }, [isSubmitting, taskTitle, predictedQuadrant, subcategory, resetQuiz]);
+
+  // --- Step Navigation (after submitTask to avoid circular dependency) ---
+  const nextStep = useCallback(async (): Promise<boolean> => {
+    if (currentStep === 'title') {
+      if (!taskTitle.trim()) return false;
+
+      if (bypass !== null) {
+        // bypass is handled by synchronous predictedQuadrant
+        setCurrentStep('confirm');
+        return true;
+      }
+      setCurrentStep('quiz');
+      setCurrentSlide(0);
+      return true;
+    }
+
+    if (currentStep === 'quiz') {
+      // After quiz, go to confirm step to show the matrix result
+      setCurrentStep('confirm');
+      return true;
+    }
+
+    if (currentStep === 'confirm') {
+      // User confirmed quadrant - check if we need subcategory step
+      if (predictedQuadrant === 2 || predictedQuadrant === 3) {
+        setCurrentStep('subcategory');
+      } else {
+        // Q1 or Q4 - submit directly
+        return await submitTask();
+      }
+      return true;
+    }
+
+    if (currentStep === 'subcategory') {
+      // After selecting subcategory, submit the task
+      return await submitTask();
+    }
+
+    return false;
+  }, [currentStep, taskTitle, bypass, predictedQuadrant, submitTask]);
+
+  const prevStep = useCallback(() => {
+    if (currentStep === 'confirm') {
+      if (bypass !== null && prefill) {
+        // initialTitle + bypass: nowhere to go back, stay
+        return;
+      }
+      // From confirm, go back to quiz (slide 3 - last question)
+      if (bypass !== null) {
+        setCurrentStep('title');
+      } else {
+        setCurrentStep('quiz');
+        setCurrentSlide(2);
+      }
+      return;
+    }
+
+    if (currentStep === 'subcategory') {
+      // From subcategory, go back to confirm (keep subcategory selection)
+      setCurrentStep('confirm');
+      return;
+    }
+
+    if (currentStep === 'quiz') {
+      if (currentSlide > 0) {
+        setCurrentSlide(currentSlide - 1);
+      } else if (!prefill) {
+        setCurrentStep('title');
+      }
+      return;
+    }
+  }, [currentStep, currentSlide, bypass, prefill]);
 
   return {
     currentStep,
