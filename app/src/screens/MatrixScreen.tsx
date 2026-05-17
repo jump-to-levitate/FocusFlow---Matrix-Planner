@@ -114,23 +114,41 @@ export const MatrixScreen = () => {
           {/* Q3 - Urgent & Not Important (Admin) */}
           <QuadrantCard
             quadrant={3}
-            title="Proza życia"
-            subtitle="Hub logistyki"
+            title="PILNE, NIEWAŻNE"
+            subtitle="proza życia"
             color="orange"
             tasks={q3}
             onComplete={completeTask}
             onAdd={() => openQuiz(3)}
+            headerAction={
+              <button
+                onClick={() => alert('Hub Logistyki - Coming Soon')}
+                className="hover:shadow-[0_0_15px_rgba(255,140,0,0.4)] text-[#FF8C00] text-xs font-semibold px-2 py-1 rounded border border-[#FF8C00]/30 transition-all cursor-pointer"
+                title="Hub Logistyki"
+              >
+                Hub logistyki ↗
+              </button>
+            }
           />
 
           {/* Q4 - Not Urgent & Not Important (Waste) */}
           <QuadrantCard
             quadrant={4}
-            title="Nie teraz"
-            subtitle="Archiwum"
+            title="NIEWAŻNE, NIEPILNE"
+            subtitle="nie teraz"
             color="slate"
             tasks={q4}
             onComplete={completeTask}
             onAdd={() => openQuiz(4)}
+            headerAction={
+              <button
+                onClick={() => alert('Archiwum - Coming Soon')}
+                className="hover:shadow-[0_0_15px_rgba(156,163,175,0.4)] text-[#9CA3AF] text-xs font-semibold px-2 py-1 rounded border border-[#9CA3AF]/30 transition-all cursor-pointer"
+                title="Archiwum"
+              >
+                Archiwum ↗
+              </button>
+            }
           />
         </div>
       )}
