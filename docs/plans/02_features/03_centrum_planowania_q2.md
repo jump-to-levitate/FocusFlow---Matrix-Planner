@@ -353,7 +353,31 @@ const predictedQuadrant = bypass ?? manualQuadrant ?? classifyFromScores(importa
 
 ---
 
-## 8. Kryteria Akceptacji
+## 8. Kryteria Akceptacji (AC)
+
+### Format: GIVEN [kontekst] WHEN [akcja] THEN [oczekiwany rezultat]
+
+**AC-1: Sub-Matryca 2x2 z 4 Szufladami Wykonawczymi**
+> GIVEN użytkownik nawiguje do Centrum Planowania (Q2) WHEN system renderuje pod-ekran sub-matrycy THEN wyświetlane są dokładnie 4 kategorie: Rutyny (🔄), Projekty (📁), Ogólne Cele (🎯), Inne (💼), każda w osobnej ćwiartce layoutu 2x2 z odpowiednim kolorem (fioletowy/zielony) i licznikiem zadań.
+
+**AC-2: Stała Wysokość Nagłówków (h-14) i Uniform Alignment**
+> GIVEN system renderuje nagłówki 4 boxów sub-matrycy WHEN użytkownik przegląda interfejs THEN wszystkie nagłówki mają identyczną, sztywną wysokość `h-14` (56px) z pionowym wyśrodkowaniem (`items-center`), zapewniając wizualną symetrię i przewidywalność layoutu niezależnie od długości etykiet.
+
+**AC-3: Blokada Łamania Słów Kluczowych (whitespace-nowrap)**
+> GIVEN etykieta "Centrum Planowania" lub "OGÓLNE CELE" jest wyświetlana na ekranie o szerokości 480px WHEN system renderuje tekst THEN klasa `whitespace-nowrap` wymusza niełamanie słów, zapobiegając efektowi "PLANO-WANIA" i zachowując estetykę nagłówka (dla dwuliniowych etykiet użyty jest `<br />` w kontrolowanym miejscu).
+
+**AC-4: Normalizacja Null/Undefined → "Inne"**
+> GIVEN zadanie w ćwiartce Q2 nie posiada przypisanej subkategorii (pole `subcategory` jest `null` lub `undefined`) WHEN system grupuje zadania do szuflad THEN zadanie automatycznie trafia do kategorii "Inne" (normalizacja `const normalizedSub = !sub || sub === '' ? 'inne' : sub`), bez awarii interfejsu i z widocznym licznikiem w nagłówku boxu "Inne".
+
+**AC-5: Maszyna Stanów Widoku (viewMode Switching)**
+> GIVEN użytkownik znajduje się w głównej Macierzy (viewMode = 'grid') i klika przycisk "Otwórz Centrum Planowania" WHEN akcja zostanie zainicjowana THEN lokalna maszyna stanów `viewMode` zmienia się na 'q2' i ekran płynnie przełącza się na sub-matrycę Q2 z zachowaniem historii nawigacji (przycisk "← Powrót do Macierzy" przywraca viewMode = 'grid').
+
+**AC-6: Quiz Bypass (initialQuadrant=2) przy Dodawaniu z Q2**
+> GIVEN użytkownik znajduje się w Centrum Planowania i klika "+ Dodaj" WHEN QuizModal otwiera się w trybie dodawania THEN system przekazuje `initialQuadrant={2}` do hooka `useQuizForm`, pomijając etap pytań kwalifikacyjnych (bypass) i przechodząc bezpośrednio do wyboru subkategorii Q2 (Rutyny/Projekty/Cele/Inne).
+
+---
+
+## 9. Checklist Implementacyjna
 
 - [x] Layout 2x2 (Rutyny, Projekty, Cele, Inne)
 - [x] Fioletowo-zielona kolorystyka cyberpunkowa

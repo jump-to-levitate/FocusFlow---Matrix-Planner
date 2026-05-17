@@ -442,7 +442,31 @@ const playTimerComplete = () => {
 
 ---
 
-## 9. Kryteria Akceptacji
+## 9. Kryteria Akceptacji (AC)
+
+### Format: GIVEN [kontekst] WHEN [akcja] THEN [oczekiwany rezultat]
+
+**AC-1: Odporność na Background Throttling**
+> GIVEN użytkownik minimalizuje kartę przeglądarki lub przełącza się na inną aplikację WHEN odliczanie timera trwa w tle THEN silnik oparty na architekturze Unix Delta Timestamp (`expectedEndTime - Date.now()`) gwarantuje zachowanie precyzji czasu bez opóźnień wynikających z throttlingu `setInterval` przez przeglądarkę (błąd maksymalny ≤ 1 sekunda).
+
+**AC-2: Globalny Singleton TimerContext**
+> GIVEN komponent TimerScreen jest odmontowywany i montowany ponownie (np. nawigacja do Macierzy i powrót) WHEN użytkownik obserwuje wyświetlany czas THEN `timeLeft` pozostaje spójny i ciągły, ponieważ stan timera jest przechowywany w globalnym `TimerContext` (poza cyklem życia komponentu), eliminując race conditions przy re-renderach.
+
+**AC-3: 3-Way Strategic Modal z Globalną Synchronizacją**
+> GIVEN timer osiągnie `timeLeft === 0` (zakończenie sesji) WHEN komponent TimerScreen wykryje ten stan w `useEffect` THEN globalny stan `showCompletionModal` w `TimerContext` zmienia się na `true` i modal z 3 opcjami ("Ukończ"/"Kolejna sesja"/"Odłóż") pojawia się natychmiast, niezależnie od tego, który komponent jest aktualnie renderowany.
+
+**AC-4: Safe ID Casting przy Zapisie Ukończenia**
+> GIVEN użytkownik klika "Ukończ Zadanie" w modalu zakończenia WHEN system wykonuje operację aktualizacji w Dexie THEN ID zadania jest bezpiecznie rzutowane na typ `number` (Dexie wymaga number, nie string) poprzez: `const numericId = typeof activeTaskId === 'string' ? parseInt(activeTaskId, 10) : activeTaskId`, zabezpieczając przed błędami TypeScript runtime.
+
+**AC-5: PWA Audio Gesture Unlock**
+> GIVEN przeglądarka blokuje AudioContext zgodnie z Autoplay Policy (brak uprzedniej interakcji użytkownika) WHEN użytkownik klika przycisk "START" timera THEN funkcja `unlockAudio()` inicjalizuje `AudioContext` i wywołuje `ctx.resume()`, odblokowując możliwość odtwarzania dźwięków Web Audio API przy zakończeniu timera.
+
+**AC-6: Eliminacja Paraliżu Decyzyjnego (7 Presets)**
+> GIVEN użytkownik znajduje się na ekranie timera WHEN wyświetla się grid presetów THEN system prezentuje dokładnie 7 predefiniowanych opcji czasowych (5/0, 10/0, 15/5, 25/5, 50/10, 90/15, Time Boxing) bez możliwości wprowadzenia "custom" czasu, eliminując paraliż decyzyjny związany z wyborem czasu trwania sesji.
+
+---
+
+## 10. Checklist Implementacyjna
 
 - [x] 7 sztywnych presetów (5/0, 10/0, 15/5, 25/5, 50/10, 90/15, Time Boxing)
 - [x] Unix Delta Timestamp (odporność na Background Throttling)

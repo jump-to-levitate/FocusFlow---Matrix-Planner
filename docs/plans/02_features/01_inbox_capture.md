@@ -222,7 +222,31 @@ const useQuizForm = (options?: QuizOptions) => {
 
 ---
 
-## 8. Kryteria Akceptacji
+## 8. Kryteria Akceptacji (AC)
+
+### Format: GIVEN [kontekst] WHEN [akcja] THEN [oczekiwany rezultat]
+
+**AC-1: Izolacja Q0 od Macierzy Głównej**
+> GIVEN zadanie zapisane z `quadrant: 0` (Q0) w bazie Dexie WHEN system renderuje główną Macierz Q1-Q4 THEN zadanie Q0 nie pojawia się w żadnej z 4 ćwiartek macierzy (fizyczna izolacja wizualna).
+
+**AC-2: Seryjny Brain Dump bez Barier Decyzyjnych**
+> GIVEN użytkownik znajduje się na ekranie Inbox (Q0) WHEN wpisuje tekst myśli w textarea i naciska Enter lub przycisk "Dodaj" THEN zadanie zapisuje się do bazy z `quadrant: 0` bez konieczności odpowiadania na pytania kwalifikacyjne (Quiz) i użytkownik pozostaje w Inboxie gotowy do dodania kolejnej myśli.
+
+**AC-3: Snapshot State przy Reklasyfikacji**
+> GIVEN użytkownik klika "Kwalifikuj" dla istniejącego zadania z Inboxu WHEN QuizModal otwiera się w trybie reklasyfikacji THEN pole tytułu zadania jest automatycznie prefill'owane tekstem oryginalnego zadania (snapshot state) i maszyna stanów quizu startuje od kroku 'quiz' (pomijając 'title').
+
+**AC-4: Key-Based Remount eliminujący Zombie State**
+> GIVEN użytkownik otworzył i zamknął QuizModal dla zadania X WHEN otwiera QuizModal dla zadania Y (innego ID) THEN komponent wykonuje pełny unmount/remount (dzięki dynamicznemu `key={`quiz-${taskId}`}`), wszystkie stany wewnętrzne (odpowiedzi importance/urgency) są zresetowane i nie występuje "zombie state" z poprzedniej sesji.
+
+**AC-5: Dual-Mode Transaction (Reklasyfikacja vs Nowe Zadanie)**
+> GIVEN QuizModal otwarty w kontekście istniejącego zadania (classifyTaskId !== undefined) WHEN użytkownik zatwierdza quiz THEN system wywołuje `db.tasks.update(classifyTaskId, {quadrant, subcategory})` (rekalasyfikacja in-place) zamiast `db.tasks.add()` (tworzenie nowego).
+
+**AC-6: Propagacja po Kwalifikacji**
+> GIVEN zadanie z Inboxu (Q0) zostało zakwalifikowane przez Quiz do ćwiartki X WHEN operacja zapisu do Dexie zakończy się sukcesem THEN zadanie natychmiast znika z listy Inboxu (Q0) i pojawia się w odpowiedniej ćwiartce Macierzy głównej (Q1-Q4) z uwzględnieniem subkategorii (dla Q2/Q3/Q4).
+
+---
+
+## 9. Checklist Implementacyjna
 
 - [x] Zadania Q0 nie pojawiają się w Macierzy Q1-Q4 (izolacja)
 - [x] Inbox ma dedykowany widok z textarea i focus-on-mount
