@@ -13,7 +13,7 @@
 | **Framework** | React | 18.x | Concurrent features, Suspense, Strict Mode |
 | **Build Tool** | Vite | 5.x | HMR <100ms, ESM native, tree-shaking |
 | **Language** | TypeScript | 5.x | Strict Mode, discriminated unions, type safety |
-| **Database** | Dexie.js | 4.x | IndexedDB wrapper, reaktywne zapytania |
+| **Database** | Dexie.js | 3.2.4 | IndexedDB wrapper, reaktywne zapytania |
 | **Styling** | Tailwind CSS | 3.x | Utility-first, purge, dark mode support |
 | **Icons** | Lucide React | Latest | Lightweight, consistent, accessible |
 
