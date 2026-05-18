@@ -1,51 +1,258 @@
 # System Overview - FocusFlow 2.0
 
-> Single Source of Truth dla architektury systemu
+> High-Level Architecture Specification  
+> Status: STABLE  
+> Last Updated: 2026-05-18
 
-# 📘 FocusFlow 2.0 – System Overview
+---
 
-## 1. Wizja Produktu
+## 1. Executive Summary
 
-FocusFlow 2.0 to inteligentny system zarządzania zadaniami oparty na **Macierzy Eisenhowera**, zaprojektowany w paradygmacie **Mobile-First**. Aplikacja ma na celu eliminację paraliżu decyzyjnego poprzez automatyczne klasyfikowanie zadań (Quiz), ochronę przed przeciążeniem (limit Q1) oraz zintegrowany system skupienia (Timer).
+FocusFlow 2.0 to **local-first, offline-first Progressive Web Application (PWA)** zaprojektowana w paradygmacie **Mobile-First** dla osób z ADHD. System eliminuje paraliż decyzyjny poprzez automatyczną klasyfikację zadań opartą na algorytmie Macierzy Eisenhowera (Q0-Q4).
 
-## 2. Architektura Funkcjonalna (Wybrane Ekrany)
+### Stack Technologiczny
 
-### A. Dashboard i Widok Dnia
+| Warstwa | Technologia | Rationale |
+|---------|-------------|-----------|
+| **Frontend** | React 18 + Vite | Szybkie HMR, tree-shaking, modern ESM |
+| **State Management** | React Context + Hooks | Lokalny stan, brak boilerplate Redux |
+| **Persistence** | Dexie.js (IndexedDB wrapper) | Transakcyjność, reaktywne zapytania, offline-first |
+| **Styling** | Tailwind CSS + CSS Modules | Utility-first, purge unused, dark mode support |
+| **Type Safety** | TypeScript 5.x | Strict mode, discriminated unions dla quiz state |
 
-- **Pulpit (Str. 15):** Centralny punkt kontrolny. Wyświetla aktualny cel (Q1), sekcję „Kolejne w kolejce” oraz szybki dostęp do raportów i notatki Brain Dump .
+---
 
-- **Wszystko na dzisiaj (Str. 5):** Linearny widok planu dnia podzielony na priorytety (Pilne i Ważne vs. Proza Życia) oraz pozostałe aktywności (Nawyki, Projekty) .
+## 2. Architectural Principles
 
-### B. Inteligentna Macierz i Zarządzanie Zadaniami
+### 2.1 Local-First Architecture
 
-- **Macierz Eisenhowera (Str. 16):** Interaktywny widok 2x2. Pozwala na szybki podgląd liczby zadań w każdej ćwiartce i nawigację do szczegółowych centrów planowania .
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    FOCUSFLOW 2.0 PWA                        │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
+│  │   UI Layer  │  │  Logic Layer│  │   Data Layer       │ │
+│  │  (React 18) │  │  (Hooks)    │  │  (Dexie.js + IDB)  │ │
+│  └──────┬──────┘  └──────┬──────┘  └──────────┬──────────┘ │
+│         │                │                    │            │
+│         └────────────────┴────────────────────┘            │
+│                      NO EXTERNAL API                        │
+└─────────────────────────────────────────────────────────────┘
+```
 
-- **Pop-up Opcji (Str. 17):** Menu kontekstowe zadania umożliwiające: edycję, przenoszenie, dodanie notatki, usunięcie lub natychmiastowe uruchomienie sesji Focus .
+**Kluczowa decyzja:** Brak backendu, serwera, ani chmury. Wszystkie dane przechowywane lokalnie w IndexedDB przeglądarki.
 
-- **Limit Przeciążenia (Str. 19):** Systemowa blokada uniemożliwiająca dodanie więcej niż **5 zadań** do I ćwiartki (Pilne i Ważne). Wymusza priorytetyzację lub oddelegowanie zadań do Brain Dump .
+### 2.2 ADHD-Optimized UX Patterns
 
-### C. System Wprowadzania i Klasyfikacji (Smart Quiz)
+| Pattern | Implementacja | Cel |
+|---------|---------------|-----|
+| **Brain Dump** | Seryjne dodawanie bez kategoryzacji | Redukcja friction przy wprowadzaniu |
+| **Quiz AI** | 2 pytania binarne → predykcja Q1-Q4 | Automatyczna klasyfikacja |
+| **Timer Singleton** | Globalny TimerContext | Kontekstowa ciągłość skupienia |
+| **Sub-Matrices** | 2×2 grid per quadrant | Visual hierarchy bez overwhelm |
 
-- **Brain Dump Quiz (Str. 18):** Proces dodawania zadania przez odpowiedź na dwa pytania: „Czy przybliża Cię to do celu?” (Ważność) oraz „Czy masz twardy termin?” (Pilność) .
+---
 
-- **Strategia dla **III** Ćwiartki (Str. 8, 23):** Zadania trafiające do „Prozy Życia” są klasyfikowane według strategii wykonania: „Zrób teraz” (<10 min), „W przerwie” lub „Zaplanuj blok” .
+## 3. Data Flow Architecture (C4 Component Level)
 
-- **Strategia dla IV Ćwiartki (Str. 9, 24):** Zadania niepilne i nieważne są dzielone na subkategorie: Optymalizacja, Side-quest, Hobby lub Rozrywka .
+### 3.1 Task Creation Flow (Quiz → Dexie → UI)
 
-- **Info Pop-ups (Str. 29-31):** Edukacyjne nakładki wyjaśniające użytkownikowi, jak skutecznie zarządzać zadaniami z **III** ćwiartki (delegowanie, automatyzacja, sprinty logistyczne) .
+```
+User Input (QuizModal.tsx)
+       │
+       ▼
+┌──────────────────────────────────────┐
+│  Step 1: Title Input                 │
+│  - Controlled input                  │
+│  - Validation: non-empty             │
+└────────────┬─────────────────────────┘
+             │
+             ▼
+┌──────────────────────────────────────┐
+│  Step 2: Quiz State Machine          │
+│  - importanceAnswers[3]              │
+│  - urgencyAnswers[3]                 │
+│  - Algorithm: classifyFromScores()   │
+└────────────┬─────────────────────────┘
+             │
+             ▼
+┌──────────────────────────────────────┐
+│  Step 3: Confirm / Override          │
+│  - predictedQuadrant display         │
+│  - Manual override buttons           │
+└────────────┬─────────────────────────┘
+             │
+             ▼
+┌──────────────────────────────────────┐
+│  Step 4: Subcategory (Q2/Q3/Q4)      │
+│  - Quadrant-specific options         │
+│  - Destructive Hatch (Q4 only)       │
+└────────────┬─────────────────────────┘
+             │
+             ▼
+┌──────────────────────────────────────┐
+│  useQuizForm.submitTaskWithSubcategory│
+│  - Direct argument passing           │
+│  - Atomic Dexie transaction          │
+└────────────┬─────────────────────────┘
+             │
+             ▼
+┌──────────────────────────────────────┐
+│  Dexie.js / IndexedDB                │
+│  - Table: tasks                      │
+│  - Transaction: readwrite            │
+│  - Auto-generated ID                 │
+└────────────┬─────────────────────────┘
+             │
+             ▼
+┌──────────────────────────────────────┐
+│  useLiveQuery Subscription             │
+│  - Re-render on data change          │
+│  - Optimized via useMemo             │
+└────────────┬─────────────────────────┘
+             │
+             ▼
+┌──────────────────────────────────────┐
+│  MatrixScreen.tsx                    │
+│  - Quadrant filtering                │
+│  - Grouped by subcategory            │
+│  - Task cards with actions           │
+└──────────────────────────────────────┘
+```
 
-### D. Focus i Notatki
+### 3.2 Timer Synchronization Flow (Unix Delta)
 
-- **Timer Focus (Str. 6):** Zintegrowany licznik sesji pracy (np. 25/5 lub 50/10) z licznikiem serii dni skupienia i możliwością dodawania notatek w trakcie sesji .
+```
+User Action (Start Timer)
+       │
+       ▼
+┌──────────────────────────────────────┐
+│  TimerContext.startTimer(minutes)      │
+│  - expectedEndTime = Date.now() + ms   │
+└────────────┬─────────────────────────┘
+             │
+             ▼
+┌──────────────────────────────────────┐
+│  setInterval(updateTimer, 1000)      │
+│  - Throttled in background           │
+│  - Date.now() ALWAYS accurate        │
+└────────────┬─────────────────────────┘
+             │
+             ▼
+┌──────────────────────────────────────┐
+│  updateTimer()                       │
+│  const now = Date.now()              │
+│  const remaining = expectedEnd - now │
+│  - Immune to background throttling   │
+└────────────┬─────────────────────────┘
+             │
+             ▼
+┌──────────────────────────────────────┐
+│  UI Update (TimerDisplay.tsx)          │
+│  - progress = remaining / total      │
+│  - SVG circular progress             │
+│  - Neon glow animation               │
+└──────────────────────────────────────┘
+```
 
-- **Notatki Brain Dump (Str. 7):** Magazyn nieposortowanych myśli i „wrzutek”, które nie stały się jeszcze zadaniami .
+---
 
-## 3. Kluczowe Zasady Techniczne (Constraints)
+## 4. Database Schema (Dexie.js)
 
-- **Mobile-First Design:** Interfejs zablokowany na szerokości **480px**, zoptymalizowany pod kątem obsługi kciukiem (dolne menu nawigacyjne).
-- **Estetyka:** Neon Glassmorphism (ciemne tło, świecące obramowania kwadrantów, wysoki kontrast).
+```typescript
+// Database: focusflow_v2
+interface Task {
+  id?: number;              // Auto-generated primary key
+  title: string;            // Task description
+  quadrant: 0 | 1 | 2 | 3 | 4;  // Eisenhower quadrant
+  subcategory?: string;     // Q2: rutyny/projekt/cele/inne
+                            // Q3: delegacja/automatyzacja/oszczednosciowe/grupowe
+                            // Q4: rozrywka/hobby/side_questy/optymalizacja
+  executionContext?: 'zrob_teraz' | 'zaplanuj_blok' | 'w_przerwie';  // Q3 only
+  completed: boolean;       // Task status
+  createdAt: Date;          // Timestamp
+  updatedAt?: Date;         // Optional update timestamp
+}
+```
 
-- **Single Source of Truth:** Każda zmiana w kodzie musi być poprzedzona planem w `/docs/plans/`.
+---
+
+## 5. Component Architecture
+
+### 5.1 Screen Hierarchy
+
+```
+App (BrowserRouter)
+  ├── DashboardScreen ("/")
+  │     └── QuadrantSummaryCards (Q0 counter badge)
+  │
+  ├── MatrixScreen ("/matrix")
+  │     ├── Grid View (Q1-Q4 overview)
+  │     │     └── QuadrantCard × 4
+  │     ├── Q2 Sub-Matrix (rutyny/projekt/cele/inne)
+  │     ├── Q3 Hub Logistyki (3 execution contexts)
+  │     └── Q4 Archiwum (4 subcategories)
+  │
+  ├── BrainDumpScreen ("/inbox")
+  │     ├── Q0 Task List
+  │     └── "Kwalifikuj" → QuizModal
+  │
+  ├── TimerScreen ("/timer")
+  │     ├── TimerContext Provider
+  │     ├── PresetSelector (7 presets)
+  │     └── TaskAssignmentDropdown
+  │
+  └── QuizModal (global, route-agnostic)
+        ├── useQuizForm hook
+        ├── Step: title
+        ├── Step: quiz (importance/urgency)
+        ├── Step: confirm + manual override
+        └── Step: subcategory (Q2/Q3/Q4)
+```
+
+### 5.2 Key Custom Hooks
+
+| Hook | Responsibility | File |
+|------|----------------|------|
+| `useQuizForm` | Quiz state machine, classification algorithm, task submission | `hooks/useQuizForm.ts` |
+| `useTimer` | Timer state, Unix Delta calculation, background throttling resistance | `context/TimerContext.tsx` |
+| `useTaskOperations` | CRUD operations on Dexie tasks | `hooks/useTaskOperations.ts` |
+
+---
+
+## 6. Security & Privacy
+
+| Aspect | Implementation |
+|--------|----------------|
+| **Data Storage** | Local IndexedDB only - no cloud sync |
+| **Data Ownership** | User retains 100% control over their data |
+| **No Authentication** | Zero login, zero passwords, zero friction |
+| **Export/Backup** | Future: JSON export/import for user-driven backups |
+
+---
+
+## 7. Performance Targets
+
+| Metric | Target | Implementation |
+|--------|--------|----------------|
+| **Time to Interactive** | < 2s | Vite optimized build, code splitting |
+| **IDB Write Latency** | < 50ms | Dexie.js transactions, bulk operations |
+| **UI Re-render** | 60fps | React.memo, useMemo for derived state |
+| **Timer Drift** | < 1s | Unix Delta Timestamp (ADR-002) |
+
+---
+
+## 8. Constraints & Limitations
+
+1. **Single Device** - Data does not sync between devices (by design)
+2. **No Multi-user** - Single-user application architecture
+3. **Browser-dependent** - IndexedDB quotas vary by browser (typically 50MB-2GB)
+4. **Mobile-only** - Interface optimized for 480px width, not desktop
+
+---
+
+**Document ID:** ARCH-SYS-001  
+**Status:** APPROVED  
+**Next Review:** On major feature addition
 
 ---
 
