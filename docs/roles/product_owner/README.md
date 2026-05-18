@@ -1,6 +1,6 @@
-# Rola: Product Owner (PO) - FocusFlow
+# Rola: Product Owner (PO) - FocusFlow 2.0
 
-> **Misja:** Ochrona zasobów kognitywnych osób neuroatypowych poprzez minimalistyczny, frictionless UX eliminujący paraliż decyzyjny.
+> **Misja:** Ochrona zasobów kognitywnych osób neuroatypowych (ADHD/ASD) poprzez minimalistyczny, frictionless UX eliminujący paraliż decyzyjny.
 > **Odpowiedzialność:** Wizja produktu, roadmapa strategiczna, zarządzanie backlogiem i priorytetyzacja MoSCoW.
 
 ---
@@ -29,295 +29,127 @@ FocusFlow to **ADHD-proof productivity system**, którego fundamentalnym celem j
 
 ### 1.3 Unique Value Proposition
 
-> "Gdy Twój mózg nie współpracuje, FocusFlow podejmuje decyzje za Ciebie."
-
-**Dla kogo:** Osoby z executive dysfunction (ADHD, burnout, ASD)  
-**Co robi:** External Executive Function - klasyfikacja, priorytetyzacja, przypomnienia  
-**Jak inaczej:** Local-first (dane nigdy nie opuszczają urządzenia), offline-first, zero rejestracji
+**Dla osób z ADHD, ASD i executive dysfunction**, FocusFlow jest jedynym narzędziem produktywności, które **nie wymaga żadnej konfiguracji** i **działa offline** - eliminując paraliż decyzyjny zamiast go nasilać.
 
 ---
 
-## 2. Backlog Produktu (Epic / Stories)
+## 2. Priorytety Produktu (MoSCoW Integration)
 
-### 2.1 Struktura Modułowa
+### 2.1 Klasyfikacja Must-Have (MVP)
 
-Backlog podzielony na 6 głównych modułów odpowiadających architekturze Deep Context Sub-Matrix:
+| Funkcja | Uzasadnienie Inżynieryjne | ADR Referencja |
+|---------|---------------------------|----------------|
+| **Sub-matryca Q2 (Centrum Planowania)** | **Must-Have**: Zadania "ważne, niepilne" (Q2) to najczęstszy element "cemetery of good intentions" - zamrażarka zamierzeń. Bez kontekstu wykonawczego użytkownik nigdy nie wraca do tych zadań. Sub-matryca 2x2 z fioletowo-zieloną kolorystyką wymusza decyzję: CZY to rutyna na autopilocie (zielony), CZY projekt wymagający planowania (fioletowy). | ADR-004 |
+| **Sub-matryca Q3 (Hub Logistyki)** | **Must-Have**: "Proza życia" (admin, płatności, drobiazgi) stanowią 60% zadań codziennych. Segmentacja na "Zrób teraz" (<10 min), "Zaplanuj blok" (30 min), "W przerwie" (nie wymagające focusu) redukuje przytłoczenie szumem logistycznym. Direct database saving eliminuje race conditions. | ADR-004 |
+| **Sub-matryca Q4 (Archiwum)** | **Must-Have**: Izolacja dystraktorów jest krytyczna dla osób z ADHD. Bez fizycznego przycisku "Odrzuć / Zapomnij" (Destructive Hatch) użytkownik nigdy nie "puszcza" myśli - hoarding mentalny prowadzi do przytłoczenia. Mechanizm ten daje psychologiczne przyzwolenie na odpoczynek bez wyrzutów. | ADR-004 |
+| **Mechanizm Destructive Hatch** | **Must-Have**: Bez możliwości permanentnego usunięcia zadania użytkownik z ADHD nie uzyska psychologicznego "zamknięcia". Guilt-free zone jest fundamentem compassionate UX. | ADR-005 |
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                      PRODUCT BACKLOG STRUCTURE                      │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  EPIC 1: Q0 - Brain Dump & Inbox Capture                           │
-│  ├── Story 1.1: Seryjny zrzut myśli bez barier decyzyjnych         │
-│  ├── Story 1.2: Izolacja Q0 od głównej Macierzy                    │
-│  └── Story 1.3: Pre-fill Quiz dla zadań z Q0                       │
-│                                                                     │
-│  EPIC 2: Core Matrix (Q1-Q4)                                       │
-│  ├── Story 2.1: Macierz Eisenhowera 2x2 z neonowymi ćwiartkami      │
-│  ├── Story 2.2: Smart Quiz z 2 pytaniami binarnymi                 │
-│  └── Story 2.3: Twardy limit Q1 (max 5 zadań) - overload protection│
-│                                                                     │
-│  EPIC 3: Q2 - Centrum Planowania (Sub-Matrix)                      │
-│  ├── Story 3.1: Sub-matryca 2x2 (Rutyny, Projekty, Cele, Inne)     │
-│  ├── Story 3.2: Schema extension: subcategory field (Dexie)        │
-│  └── Story 3.3: Quiz bypass dla Q2 (initialQuadrant=2)             │
-│                                                                     │
-│  EPIC 4: Q3 - Hub Logistyki (Proza Życia)                          │
-│  ├── Story 4.1: Intra-quadrant branching dla Q3                    │
-│  ├── Story 4.2: 3 szuflady: Zrób teraz / Zaplanuj blok / W przerwie│
-│  └── Story 4.3: Seryjny interfejs egzekucji (quick actions)        │
-│                                                                     │
-│  EPIC 5: Q4 - Archiwum & Noise Isolation                           │
-│  ├── Story 5.1: 4 szuflady szumu (Rozrywka, Hobby, Side-questy)    │
-│  └── Story 5.2: Mechanizm "Zapomnij" (destructive, nie zapisuje)   │
-│                                                                     │
-│  EPIC 6: Focus Engine (Timer)                                      │
-│  ├── Story 6.1: Unix Delta Timestamp (throttling-proof)          │
-│  ├── Story 6.2: 7 ADHD-proof presets (brak custom)                 │
-│  ├── Story 6.3: Global TimerContext (singleton)                    │
-│  ├── Story 6.4: 3-Way Strategic Modal (Complete/Continue/Return)   │
-│  └── Story 6.5: PWA Audio Gesture Unlock                         │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
-```
+### 2.2 Klasyfikacja Should-Have (Post-MVP)
 
-### 2.2 Szczegółowy Opis Epiców
+| Funkcja | Uzasadnienie | Timeline |
+|---------|--------------|----------|
+| JSON Export/Import | Backup danych przy przekraczaniu quota IndexedDB | v1.1.0 |
+| Heatmap Produktów | Statystyki (tylko jeśli nie triggeruje FOMO) | v1.2.0 |
 
-#### EPIC 1: Q0 - Brain Dump & Inbox Capture
+### 2.3 Klasyfikacja Won't-Have (Odrzucone)
 
-**Jako** osoba z ADHD  
-**Chcę** błyskawicznie "wylać" myśli z głowy bez decydowania gdzie je dać  
-**Aby** oczyścić pamięć roboczą i zapobiec zapomnieniu pomysłów
-
-**Kryteria Akceptacji:**
-- Dodanie zadania do Q0 w max 2 kliknięcia
-- Brak konieczności odpowiadania na pytania przy dodawaniu
-- Q0 fizycznie izolowane od Macierzy głównej (nie widać w Q1-Q4)
-- Seryjny zrzut - pozostanie w Q0 po dodaniu
-
-#### EPIC 2: Core Matrix (Q1-Q4)
-
-**Jako** użytkownik z executive dysfunction  
-**Chcę** żeby system powiedział mi "gdzie to dać"  
-**Aby** uniknąć paraliżu decyzyjnego przy 4 ćwiartkach
-
-**Kryteria Akceptacji:**
-- Smart Quiz z 2 pytaniami binarnymi (Tak/Nie)
-- Natychmiastowa klasyfikacja (synchroniczny derived state)
-- Q1 Limit - twardy stopień przy 5 zadaniach (overload protection)
-- Visual persistence - Q1 zawsze widoczne na pulpicie
-
-#### EPIC 3: Q2 - Centrum Planowania
-
-**Jako** osoba z "cemetery of good intentions" (zamrażarka ważnych zadań)  
-**Chcę** kontekstu wykonawczego dla zadań "ważnych, niepilnych"  
-**Aby** wiedzieć CZY to rutyna na autopilocie, CZY projekt wymagający planowania
-
-**Kryteria Akceptacji:**
-- 4 szuflady: Rutyny (🔄), Projekty (📁), Ogólne Cele (🎯), Inne (💼)
-- Sub-matryca 2x2 z identycznym layoutem jak główna Macierz
-- Uniform h-14 headers (sztywna wysokość)
-- Quiz bypass dla Q2 (pominięcie pytań kwalifikacyjnych)
-
-#### EPIC 4: Q3 - Hub Logistyki
-
-**Jako** osoba przytłoczona "prozą życia" (drobiazgi, obowiązki)  
-**Chcę** jednoznacznej klasyfikacji czasowej: teraz/blok/przerwa  
-**Aby** przestać się zastanawiać "kiedy to zrobić?"
-
-**Kryteria Akceptacji:**
-- 3 szuflady: "Zrób teraz" (<10min), "Zaplanuj blok", "W przerwie"
-- Intra-quadrant branching - drugi stopień Quizu dla Q3
-- Seryjny interfejs (quick actions: done/block/break)
-- Grupowanie zadań według kontekstu czasowego
-
-#### EPIC 5: Q4 - Archiwum
-
-**Jako** osoba z 50 pomysłami/dzień, 0 egzekucji  
-**Chcę** świadomie "odpuścić" myśli bez poczucia winy  
-**Aby** ochronić przestrzeń mentalną przed szumem
-
-**Kryteria Akceptacji:**
-- 4 szuflady: Rozrywka, Hobby, Side-questy, Optymalizacja
-- Mechanizm "Zapomnij" - nie zapisuje do bazy (psychologiczne przyzwolenie)
-- Izolacja szumu - Q4 nie pojawia się w głównym workflow
-
-#### EPIC 4: Hub Logistyki (Q3) - Micro-Context dla Prozy Życia
-
-**Jako** osoba z ADHD przytłoczona drobnymi zadaniami logistycznymi  
-**Chcę** klasyfikować mikro-obowiązki w 4 kontekstach wykonawczych (Zrób teraz, Zaplanuj, W przerwie, Inne)  
-**Aby** móc wykonywać szybkie zadania natychmiast, a resztę zaplanować lub oddelegować do odpowiednich przedziałów czasowych
-
-**Kryteria Akceptacji:**
-- Sub-matryca 2x2 z kafelkami: 🚀 Zrób teraz, 📁 Zaplanuj, 🔄 W przerwie, 💼 Inne
-- Bypass quizu dla Q3 (`initialQuadrant=3`) - pominięcie pytań przy dodawaniu z pod-widoku
-- Race Condition Fix - bezpośrednie przekazanie podkategorii do Dexie.js
-- Kolorystyka pomarańcz/cyjan (#FF8C00 / #00E5FF) dla neurostymulacji
-
-#### EPIC 5: Archiwum (Q4) - Izolacja Szumu Mentalnego
-
-**Jako** osoba z tendencją do gromadzenia pomysłów i dystraktorów  
-**Chcę** bezpiecznie odłożyć nieważne/niepilne tematy w 4 kategoriach (Rozrywka, Hobby, Optymalizacja, Side-questy)  
-**Aby** uwolnić pamięć roboczą, wiedząc że mogę do nich wrócić lub je całkowicie odrzucić
-
-**Kryteria Akceptacji:**
-- Sub-matryca 2x2 z szufladami: 🎮 Rozrywka, 🎨 Hobby, ⚙️ Optymalizacja, 🗺️ Side-questy
-- **Destructive Hatch ("Odrzuć / Zapomnij")** - psychologiczne prawo do skasowania destrukcyjnej myśli bez zapisu w bazie
-- Manual Override - ręczna zmiana ćwiartki na ekranie potwierdzenia
-- Bypass quizu dla Q4 (`initialQuadrant=4`)
-- Motyw "Neon Chrome / Matte Silver" (#9CA3AF) - wybalansowana jasność niegasząca innych neonów
-
-#### EPIC 6: Focus Engine (Timer)
-
-**Jako** osoba z time blindness i background throttling  
-**Chcę** timera który "nie gubi" czasu gdy karta jest w tle  
-**Aby** móc skupić się na pracy bez pilnowania zegara
-
-**Kryteria Akceptacji:**
-- Unix Delta Timestamp (odporność na throttling)
-- 7 presets (brak opcji "custom" - eliminacja paraliżu)
-- Global TimerContext (singleton, brak race conditions)
-- 3-Way Modal: Ukończ / Kolejna sesja / Wróć później
-- PWA Audio Gesture Unlock (Web Audio API)
+| Funkcja | Powód Odrzucenia |
+|---------|------------------|
+| Cloud Sync/Synchronizacja | Wymaga serwerów, autentykacji = friction dla ADHD |
+| Desktop View (powyżej 430px) | Single responsibility: mobile-only dla lepszego UX |
+| Custom Timer Presets | 7 sztywnych presetów eliminuje paraliż wyboru |
 
 ---
 
-## 3. Priorytetyzacja (MoSCoW Matrix)
+## 3. Ograniczenia i Standardy Operacyjne
 
-### 3.1 Matryca Priorytetów
+### 3.1 Sztywne Ograniczenie Viewportu (430px Pro Max Standard)
 
-| Priorytet | Moduł | Uzasadnienie ADHD/Biznesowe |
-|-----------|-------|----------------------------|
-| **MUST HAVE** | Local-First Offline | **Paraliż przed rejestracją** - jeśli użytkownik musi założyć konto, 70% porzuca przed pierwszym użyciem |
-| **MUST HAVE** | Q0 Brain Dump | **Pamięć robocza** - 50 pomysłów/dzień, muszą gdzieś trafić natychmiast |
-| **MUST HAVE** | Smart Quiz | **Paraliż decyzyjny** - ręczny wybór ćwiartki = freeze/shutdown |
-| **MUST HAVE** | Q2 Sub-Matrix | **Cemetery of good intentions** - bez kontekstu wykonawczego Q2 to "black hole" |
-| **MUST HAVE** | Q3 Hub Logistyki | **Proza życia** - drobiazgi "zalewają" użytkownika; GŁĘBOKA KATEGORYZACJA 2x2 jest kluczowa dla MVP |
-| **MUST HAVE** | Q4 Archiwum | **Noise isolation** - Destructive Hatch jest MUST dla zdrowia psychicznego; sub-matryca 2x2 REDUKUJE PARALIŻ |
-| **SHOULD HAVE** | Timer 7 Presets | **Time blindness** - ale nie krytyczne dla core workflow |
-| **WON'T HAVE** | Multi-User / Backend | **Faza 2** - celowo poza MVP, aby zachować local-first simplicity |
-| **WON'T HAVE** | AI/ML Suggestions | **Complexity** - dodatkowa zależność, potential privacy concerns |
+**Standard:** `max-w-[430px]` (iPhone 14/15 Pro Max width)
 
-### 3.2 Szczegółowe Uzasadnienie "Must-Have: Local-First Offline"
+**Uzasadnienie Inżynieryjne:**
+- **Pro Max Standard** to najszerszy popularny iPhone - optymalizacja pod najtrudniejszy przypadek zapewnia responsywność na wszystkich urządzeniach
+- **Kciuk (Thumb Zone)** - wszystkie interakcje primary muszą być w reachable zone (dolne 2/3 ekranu)
+- **Eliminacja "szukania myszką"** - brak hover states, wszystko tap/click
 
-**Problem:** Użytkownicy ADHD doświadczają "paraliżu przed rozpoczęciem" - im więcej kroków do startu, tym większa szansa, że nigdy nie zaczną.
-
-**Standardowy flow aplikacji:**
-```
-Otwórz app → "Zarejestruj się" → Email → Potwierdź email → Utwórz hasło → 
-Zaakceptuj ToS → Konfiguracja profilu → ... → ZAPOMNIJ O APLIKACJI
+**Weryfikacja:**
+```css
+/* Tailwind constraint */
+max-w-[430px] /* iPhone 14/15 Pro Max */
 ```
 
-**FocusFlow Approach:**
-```
-Otwórz app → ZACZNIJ ZRZUCAĆ MYŚLI (2 sekundy)
-```
+Szczegóły w: [`docs/tech/conventions.md`](../tech/conventions.md)
 
-**Konsekwencje:**
-- **Zero kosztów serwerowych** - brak backendu, hostingu, maintenance
-- **Maksymalna prywatność** - dane nigdy nie opuszczają urządzenia
-- **Niezniszczalność** - aplikacja działa nawet gdy nasza infrastruktura padnie
-- **Natychmiastowy dostęp** - offline-first = działa w metro, samolocie, górach
+### 3.2 Granularność Planów (SDD Strict)
 
-### 3.3 Uzasadnienie "Won't Have: Multi-User / Backend"
+**Zasada:** Jeden Epic = Jeden Plan = Jeden Quadrant
 
-**Intencja:** Celowo ograniczamy zakres MVP do local-first, aby:
-1. **Wyeliminować barierę rejestracji** (największy drop-off dla ADHD)
-2. **Zachować maksymalną prywatność** (dane osobiste = local-only)
-3. **Zredukować complexity** (brak auth, backend API, server maintenance)
-4. **Zapewnić niezawodność** (brak single point of failure)
+| Epic | Plan | Scope |
+|------|------|-------|
+| EPIC-01 | PLAN_inbox_capture.md | Tylko Q0 Brain Dump |
+| EPIC-02 | PLAN_focus_timer.md | Tylko Timer |
+| EPIC-03 | PLAN_centrum_planowania_q2.md | Tylko Q2 Sub-matryca |
+| EPIC-04 | PLAN_hub_logistyki_q3.md | Tylko Q3 Sub-matryca |
+| EPIC-05 | PLAN_archiwum_q4.md | Tylko Q4 Archiwum + Destructive Hatch |
+| EPIC-06 | PLAN_smart_quiz.md | Tylko Maszyna Stanów Quizu |
 
-### 3.4 Uzasadnienie Elevation Q3 i Q4 do MUST-HAVE
-
-**Początkowo** Q3 i Q4 były klasyfikowane jako SHOULD-HAVE/COULD-HAVE. **Po analizie paraliżu decyzyjnego** użytkowników ADHD podniesiono je do MUST-HAVE:
-
-- **Głęboka kategoryzacja 2x2** w Q2, Q3, Q4 jest niezbędna do redukcji **cognitive overload**
-- **Destructive Hatch** w Q4 eliminuje **guilt spiral** przy odrzucaniu zadań
-- **Quiz Bypass** dla Q2/Q3/Q4 zapewnia frictionless flow przy seryjnym dodawaniu
-- Bez sub-matryc użytkownicy wracają do stanu "wszystko w jednym worku" = paraliż
-
-**Faza 2 (Post-MVP):** CRDT Multi-Device Sync - opcjonalna, opt-in, bez konieczności kont.
+**Cel:** Możliwość iteracyjnego wdrażania - każdy Epic może być zaimplementowany niezależnie.
 
 ---
 
-## 4. Key Documents & Deliverables
+## 4. Rejestr i Linki (SSOT Artifact Mapping)
 
-### 4.1 Kluczowe Dokumenty (SSOT)
+### 4.1 Składowe Dokumentacji Roli PO
 
-| Dokument | Cel | Częstotliwość Aktualizacji |
-|----------|-----|---------------------------|
-| [`docs/plans/master_implementation_plan.md`](../../plans/master_implementation_plan.md) | Architektoniczna mapa drogowa | Co kwartał |
-| [`docs/plans/01_strategy/01_mvp_roadmap.md`](../../plans/01_strategy/01_mvp_roadmap.md) | Fazy 1A-1D, timeline | Co sprint |
-| [`docs/business/adhd_persona.md`](../../business/adhd_persona.md) | ICP, psychologia użytkownika | Co kwartał |
-| [`implemented_plans.md`](../../../implemented_plans.md) | Rejestr ukończonych modułów | Real-time |
-| [`implemented_features.md`](../../../implemented_features.md) | Lista funkcjonalności | Real-time |
+| Dokument | Cel | Lokalizacja |
+|----------|-----|-------------|
+| **Wizja i Priorytety** | Niniejszy plik - strategiczny hub roli | [readme.md](./readme.md) |
+| **Oficjalny Backlog** | User Stories, Epics, Acceptance Criteria | [backlog.md](./backlog.md) |
+| **Wymagania Biznesowe** | Cele produktu, Przypadki użycia, Ograniczenia | [docs/business/business_goals.md](../../business/business_goals.md) |
 
-### 4.2 Deliverables Cykliczne
+### 4.2 Linki Zewnętrzne
 
-**Co Sprint/Tydzień:**
-- Aktualizacja `01_mvp_roadmap.md` (status modułów)
-- Definicja nowych User Stories (z AC w formacie GIVEN-WHEN-THEN)
-- Priorytetyzacja backlogu (MoSCoW review)
+| Kategoria | Dokument | Opis |
+|-----------|----------|------|
+| **Architektura** | [system_overview.md](../../architecture/system_overview.md) | High-level system architecture |
+| **ADRs** | [adr_001.md](../../architecture/adr_001.md) - [adr_007.md](../../architecture/adr_007.md) | Architecture Decision Records |
+| **Plans** | [implemented_plans.md](../../../../implemented_plans.md) | Registry of all PLAN_*.md files |
+| **Features** | [implemented_features.md](../../../../implemented_features.md) | Feature implementation status |
 
-**Przed Każdym Release:**
-- Go/No-Go decyzja na podstawie raportów QA
-- Verification Report review (`docs/roles/tester/reports/`)
-- ADHD UX Audit (czy friction jest minimalny?)
+### 4.3 Powiązane Role
+
+| Rola | Odpowiedzialność | Link |
+|------|------------------|------|
+| **Architect** | Decyzje techniczne, ADRs | [../architect/readme.md](../architect/readme.md) |
+| **Developer** | Implementacja, Code Standards | [../developer/readme.md](../developer/readme.md) |
+| **UX/UI** | Design System, Accessibility | [../ux_ui/readme.md](../ux_ui/readme.md) |
 
 ---
 
-## 5. Workflow Product Ownera
+## 5. Proces Zarządzania Backlogiem
+
+### 5.1 Cykl Życia User Story
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                    PRODUCT OWNER WORKFLOW                          │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  1. VISION                                                          │
-│     └── Aktualizacja misji i ICP (adhd_persona.md)                 │
-│                         ↓                                           │
-│  2. ROADMAP                                                         │
-│     └── Master Plan (master_implementation_plan.md)                │
-│     └── MVP Roadmap (01_mvp_roadmap.md)                            │
-│                         ↓                                           │
-│  3. BACKLOG                                                         │
-│     └── Epic breakdown (Q0, Core, Q2, Q3, Q4, Timer)               │
-│     └── MoSCoW prioritization                                      │
-│     └── Story definition (z AC)                                    │
-│                         ↓                                           │
-│  4. SPRINT                                                          │
-│     └── Sprint Planning z zespołem                                 │
-│     └── Definicja Definition of Done                               │
-│                         ↓                                           │
-│  5. REVIEW                                                          │
-│     └── Acceptance Testing (czy spełnia AC?)                       │
-│     └── UX Review (czy spełnia ADHD principles?)                  │
-│     └── 480px Constraint Check                                     │
-│                         ↓                                           │
-│  6. RELEASE                                                         │
-│     └── Go/No-Go Decision                                          │
-│     └── Release Notes                                              │
-│     └── Post-mortem (lessons learned)                              │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
+[Backlog] -> [Sprint Ready] -> [In Progress] -> [Review] -> [Done]
+    ↓
+[Rejected] (przyczyna dokumentowana)
 ```
 
----
+### 5.2 Definicja "Done" (DoD)
 
-## 6. ADHD-Focused Success Metrics
-
-| Metryka | Target | Mierzalność |
-|---------|--------|-------------|
-| **Time to First Task** | < 2 sekundy | Analytics: open → first interaction |
-| **Brain Dump Completion** | 80% użytkowników dodaje ≥3 zadania w pierwszej sesji | Funnel analysis |
-| **Quiz Adoption** | 70% zadań dodawanych przez Quiz (nie manualnie) | DB metrics |
-| **Q2 Utilization** | 60% zadań Q2 ma przypisaną subkategorię | DB metrics |
-| **Timer Sessions/User** | 3+ sesje tygodniowo | Analytics |
-| **Task Completion Rate** | 40% (branżowa średnia: 20%) | DB metrics |
-| **Retention (7-day)** | > 30% | Analytics |
+- [ ] Kod zaimplementowany zgodnie z AC
+- [ ] Unit testy przechodzą (>80% coverage)
+- [ ] Integracyjne testy E2E przechodzą
+- [ ] Code review zatwierdzone
+- [ ] Dokumentacja zaktualizowana
+- [ ] QA sign-off
 
 ---
 
-**Zasada:** "Nie budujemy kolejnego todo app. Budujemy external executive function dla mózgów, które nie potrafią same zarządzać priorytetami."
+**Document ID:** PO-README-001  
+**Owner:** Product Owner  
+**Status:** ACTIVE  
+**Last Updated:** 2026-05-18  
+**Version:** 2.0 (Modular SDD Architecture)
 
