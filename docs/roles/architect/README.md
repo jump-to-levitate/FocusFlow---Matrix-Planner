@@ -322,11 +322,13 @@ User Request → Service Worker
 
 | ADR | Tytuł | Status | Kluczowa Decyzja |
 |-----|-------|--------|------------------|
-| [ADR 001](../../architecture/adr/adr_001_initial_stack.md) | Initial Technology Stack | ✅ Accepted | React + Vite + Dexie.js |
-| [ADR 002](../../architecture/adr/adr_002_q0_isolation.md) | Q0 Isolation as Inbox | ✅ Accepted | Fizyczna separacja Q0 od Matrix |
-| [ADR 003](../../architecture/adr/adr_003_timer_timestamp_delta.md) | Timer Delta Timestamp | ✅ Accepted | Unix delta zamiast setInterval |
-| [ADR 004](../../architecture/adr/adr_004_synchronous_derived_state.md) | Synchronous Derived State | ✅ Accepted | useMemo zamiast useEffect |
-| [ADR 005](../../architecture/adr/adr_005_pwa_offline_first.md) | PWA Offline-First | ✅ Accepted | Local-first, IndexedDB, no backend |
+| [ADR 001](../../architecture/adr_001.md) | Wybór silnika bazy danych | ✅ Accepted | IndexedDB + Dexie.js |
+| [ADR 002](../../architecture/adr_002.md) | Mobile-First Constraint | ✅ Accepted | Szerokość 480px, optymalizacja pod kciuk |
+| [ADR 003](../../architecture/adr_003.md) | Initial Technology Stack | ✅ Accepted | React + Vite + Dexie.js |
+| [ADR 004](../../architecture/adr_004.md) | Q0 Isolation as Inbox | ✅ Accepted | Fizyczna separacja Q0 od Matrix |
+| [ADR 005](../../architecture/adr_005.md) | Timer Delta Timestamp | ✅ Accepted | Unix delta zamiast setInterval |
+| [ADR 006](../../architecture/adr_006.md) | Synchronous Derived State | ✅ Accepted | useMemo zamiast useEffect |
+| [ADR 007](../../architecture/adr_007.md) | PWA Offline-First | ✅ Accepted | Local-first, IndexedDB, no backend |
 
 ### 4.2 Proces Tworzenia ADR
 
@@ -351,7 +353,7 @@ Nowa Decyzja Architektoniczna
 | Dokument | Cel | Częstotliwość Aktualizacji |
 |----------|-----|---------------------------|
 | [`docs/plans/master_implementation_plan.md`](../../plans/master_implementation_plan.md) | Task Pipeline, moduły | Co kwartał |
-| [`docs/architecture/adr/`](../../architecture/adr/) | Decyzje architektoniczne | Na bieżąco |
+| [`docs/architecture/`](../../architecture/) | Decyzje architektoniczne | Na bieżąco |
 | [`docs/plans/03_technical/01_database_schema.md`](../../plans/03_technical/01_database_schema.md) | Dexie.js schema | Na zmianę schema |
 | [`docs/plans/03_technical/02_timer_engine.md`](../../plans/03_technical/02_timer_engine.md) | Unix Delta Timestamp | Na zmianę logiki |
 
