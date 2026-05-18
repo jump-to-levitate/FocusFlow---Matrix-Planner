@@ -34,6 +34,7 @@ export interface UseQuizFormReturn {
   prevStep: () => void;
   resetQuiz: () => void;
   submitTask: () => Promise<boolean>;
+  submitTaskWithSubcategory: (subcategoryValue: string | null) => Promise<boolean>;
 }
 
 export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
@@ -62,8 +63,8 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Synchronous derived state - eliminates race condition with subcategory step
-  // Uses classifyFromScores directly to avoid circular dependency
-  const predictedQuadrant: QuadrantNumber | null = bypass ?? manualQuadrant ?? classifyFromScores(importanceAnswers, urgencyAnswers);
+  // Priority: manual override > bypass (initialQuadrant) > computed from quiz answers
+  const predictedQuadrant: QuadrantNumber | null = manualQuadrant ?? bypass ?? classifyFromScores(importanceAnswers, urgencyAnswers);
 
   const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -235,6 +236,30 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     }
   }, [isSubmitting, taskTitle, predictedQuadrant, subcategory, resetQuiz]);
 
+  // Submit with explicit subcategory value (avoids race condition with React state)
+  const submitTaskWithSubcategory = useCallback(async (subcategoryValue: string | null): Promise<boolean> => {
+    if (isSubmitting) return false;
+    if (!taskTitle.trim() || predictedQuadrant === null) return false;
+
+    setIsSubmitting(true);
+    try {
+      await db.tasks.add({
+        title: taskTitle.trim(),
+        quadrant: predictedQuadrant,
+        completed: false,
+        createdAt: new Date(),
+        subcategory: subcategoryValue, // Use the passed value directly, not state
+      });
+
+      try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
+      resetQuiz();
+      return true;
+    } catch {
+      setIsSubmitting(false);
+      return false;
+    }
+  }, [isSubmitting, taskTitle, predictedQuadrant, resetQuiz]);
+
   // --- Step Navigation (after submitTask to avoid circular dependency) ---
   const nextStep = useCallback(async (): Promise<boolean> => {
     if (currentStep === 'title') {
@@ -258,10 +283,11 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
 
     if (currentStep === 'confirm') {
       // User confirmed quadrant - check if we need subcategory step
-      if (predictedQuadrant === 2 || predictedQuadrant === 3) {
+      if (predictedQuadrant === 2 || predictedQuadrant === 3 || predictedQuadrant === 4) {
+        // Q2, Q3, Q4 all go to subcategory step
         setCurrentStep('subcategory');
       } else {
-        // Q1 or Q4 - submit directly
+        // Q1 - submit directly (no subcategories for Q1)
         return await submitTask();
       }
       return true;
@@ -327,5 +353,6 @@ export function useQuizForm(options?: UseQuizFormOptions): UseQuizFormReturn {
     prevStep,
     resetQuiz,
     submitTask,
+    submitTaskWithSubcategory,
   };
 }

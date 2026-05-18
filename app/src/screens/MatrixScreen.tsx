@@ -64,7 +64,6 @@ export const MatrixScreen = () => {
     return groups;
   };
 
-
   return (
     <>
     <QuizModal isOpen={isQuizOpen} onClose={closeQuiz} initialQuadrant={selectedQuadrant} />
@@ -115,7 +114,7 @@ export const MatrixScreen = () => {
           <QuadrantCard
             quadrant={3}
             title="PILNE, NIEWAŻNE"
-            subtitle="proza życia"
+            subtitle="Proza życia"
             color="orange"
             tasks={q3}
             onComplete={completeTask}
@@ -135,7 +134,7 @@ export const MatrixScreen = () => {
           <QuadrantCard
             quadrant={4}
             title="NIEWAŻNE, NIEPILNE"
-            subtitle="nie teraz"
+            subtitle="Nie teraz"
             color="slate"
             tasks={q4}
             onComplete={completeTask}
@@ -385,6 +384,15 @@ export const MatrixScreen = () => {
         );
       })()}
 
+      {/* VIEW: Q4 Archiwum - Sub-screen with 2x2 Layout */}
+      {viewMode === 'q4' && (
+        <Q4ArchiwumView
+          tasks={q4}
+          onBack={() => setViewMode('grid')}
+          onAdd={() => openQuiz(4)}
+        />
+      )}
+
       {/* VIEW: Q2 Centrum Planowania - Sub-screen with 2x2 Layout */}
       {viewMode === 'q2' && (() => {
         const groups = groupQ2BySubcategory(q2);
@@ -607,7 +615,210 @@ export const MatrixScreen = () => {
     </div>
     </>
   );
+}
+
+// Group Q4 tasks by subcategory - null/undefined/empty treated as 'side_questy'
+const groupQ4BySubcategory = (tasks: Task[]) => {
+  const groups: Record<string, Task[]> = {
+    rozrywka: [],
+    hobby: [],
+    optymalizacja: [],
+    side_questy: [],
+  };
+  tasks.forEach(task => {
+    const sub = task.subcategory;
+    // Treat null, undefined, or empty string as 'side_questy' (fallback for Q4)
+    const normalizedSub = !sub || sub === '' ? 'side_questy' : sub;
+    if (groups[normalizedSub]) {
+      groups[normalizedSub].push(task);
+    } else {
+      groups.side_questy.push(task);
+    }
+  });
+  return groups;
 };
+
+// VIEW: Q4 Archiwum - Sub-screen with 2x2 Layout
+function Q4ArchiwumView({ tasks, onBack, onAdd }: { tasks: Task[]; onBack: () => void; onAdd: () => void }) {
+  const groups = groupQ4BySubcategory(tasks);
+
+  // Subcategory configuration with NEON CHROME/SILVER-WHITE theme
+  // All quadrants illuminated - bright cyberpunk glow
+  const subcategoryConfig: Record<string, {
+    label: string;
+    labelSmall?: boolean;
+    icon: string;
+    color: string;
+    glowColor: string;
+  }> = {
+    rozrywka: {
+      label: 'ROZRYWKA',
+      icon: '🎮',
+      color: '#FFFFFF',
+      glowColor: 'rgba(255, 255, 255, 0.4)',
+    },
+    hobby: {
+      label: 'HOBBY',
+      icon: '🎨',
+      color: '#FFFFFF',
+      glowColor: 'rgba(255, 255, 255, 0.4)',
+    },
+    optymalizacja: {
+      label: 'OPTYMALIZACJA',
+      labelSmall: true,
+      icon: '⚙️',
+      color: '#FFFFFF',
+      glowColor: 'rgba(255, 255, 255, 0.4)',
+    },
+    side_questy: {
+      label: 'SIDE-QUESTY',
+      labelSmall: true,
+      icon: '🗺️',
+      color: '#FFFFFF',
+      glowColor: 'rgba(255, 255, 255, 0.4)',
+    },
+  };
+
+  const gridOrder = ['rozrywka', 'hobby', 'optymalizacja', 'side_questy'] as const;
+
+  const completeTask = async (taskId: number) => {
+    await db.tasks.update(taskId, { completed: true });
+  };
+
+  const renderTaskBox = (key: typeof gridOrder[number]) => {
+    const config = subcategoryConfig[key];
+    const subTasks = groups[key];
+    const isGrey = config.color === '#4B5563';
+
+    return (
+      <div
+        key={key}
+        className="flex flex-col h-full rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02]"
+        style={{
+          backgroundColor: 'rgba(30, 30, 40, 0.6)',
+          border: `2px solid ${config.color}40`,
+          boxShadow: `0 0 15px ${config.glowColor}`,
+        }}
+      >
+        {/* Subcategory Header */}
+        <div
+          className="p-3 border-b shrink-0"
+          style={{
+            backgroundColor: `${config.color}15`,
+            borderColor: `${config.color}30`,
+          }}
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-base">{config.icon}</span>
+              <h3
+                className={`font-black uppercase tracking-wider ${config.labelSmall ? 'text-[10px]' : 'text-xs'}`}
+                style={{ color: config.color }}
+              >
+                {config.label}
+              </h3>
+            </div>
+            <span className="text-[10px] font-bold text-white/40">{subTasks.length}</span>
+          </div>
+        </div>
+
+        {/* Tasks List */}
+        <div className="flex-1 p-3 space-y-2 overflow-y-auto">
+          {subTasks.length > 0 ? (
+            subTasks.map(task => (
+              <div
+                key={task.id}
+                className="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 group"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  border: `1px solid ${isGrey ? 'rgba(75,85,99,0.2)' : 'rgba(243,244,246,0.2)'}`,
+                }}
+              >
+                <button
+                  onClick={() => task.id && completeTask(task.id)}
+                  className="shrink-0 transition-all duration-200 hover:scale-110"
+                  style={{ color: 'rgba(255, 255, 255, 0.3)' }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = isGrey ? '#4B5563' : '#F3F4F6')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.3)')}
+                >
+                  <CheckCircle2 size={20} />
+                </button>
+                <span className="flex-1 text-sm text-white/90 leading-tight font-medium">
+                  {task.title}
+                </span>
+              </div>
+            ))
+          ) : (
+            <div className="flex-1 flex items-center justify-center text-white/20">
+              <p className="text-xs">Brak zadań w tej ćwiartce</p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="flex flex-col flex-1 min-h-0">
+      {/* Q4 Navigation Bar - 3 Column Grid Layout */}
+      <div className="grid grid-cols-3 items-center w-full gap-2 mb-6 px-2 shrink-0">
+        {/* Left Column: Back Button */}
+        <div className="flex justify-start">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-all text-xs font-medium"
+          >
+            <ArrowLeft size={14} />
+            <span className="hidden sm:inline">← Powrót do Macierzy</span>
+            <span className="sm:hidden">←</span>
+          </button>
+        </div>
+
+        {/* Center Column: Title with Neon Glow */}
+        <div className="flex flex-col items-center justify-center leading-none select-none">
+          <span
+            className="text-sm sm:text-base font-black tracking-widest uppercase whitespace-nowrap"
+            style={{
+              color: '#4B5563',
+              textShadow: '0 0 15px rgba(75, 85, 99, 0.6), 0 0 30px rgba(75, 85, 99, 0.4)',
+            }}
+          >
+            Archiwum
+          </span>
+          <span
+            className="text-[10px] sm:text-xs font-bold tracking-wider mt-1"
+            style={{ color: 'rgba(243, 244, 246, 0.7)' }}
+          >
+            (Q4)
+          </span>
+        </div>
+
+        {/* Right Column: Add Button */}
+        <div className="flex justify-end">
+          <button
+            onClick={onAdd}
+            className="px-3 py-1.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all hover:scale-105 w-full max-w-[80px]"
+            style={{
+              backgroundColor: 'rgba(75, 85, 99, 0.15)',
+              border: '1px solid rgba(75, 85, 99, 0.6)',
+              color: '#F3F4F6',
+              boxShadow: '0 0 15px rgba(75, 85, 99, 0.4), inset 0 0 8px rgba(75, 85, 99, 0.1)',
+            }}
+          >
+            + Dodaj
+          </button>
+        </div>
+      </div>
+
+      {/* Q4 2x2 Quadrant Grid */}
+      <div className="flex-1 min-h-0">
+        <div className="grid grid-cols-2 grid-rows-2 gap-4 h-full">
+          {gridOrder.map(key => renderTaskBox(key))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default MatrixScreen;
 
