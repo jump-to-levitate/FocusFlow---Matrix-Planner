@@ -394,5 +394,81 @@ Nowa Decyzja Architektoniczna
 
 ---
 
+## 7. Wzorce Architektoniczne (Patterns)
+
+### 7.1 Direct Argument Passing (Eliminacja Race Condition)
+
+**Problem:** Asynchroniczny wyścig stanów Reacta przy zapisie podkategorii - `useState` nie gwarantuje atomowości zapisu do IndexedDB.
+
+**Rozwiązanie:** Bezpośrednie przekazanie wartości podkategorii jako argument funkcji zapisu:
+
+```typescript
+// Anti-pattern: Odczyt ze stanu = race condition
+const submitTask = async () => {
+  await db.tasks.add({ subcategory: state.subcategory }); // ❌ Stara wartość!
+};
+
+// Pattern: Direct Argument Passing
+const submitTaskWithSubcategory = async (subcategory: string) => {
+  await db.tasks.add({ subcategory }); // ✅ Gwarantowana wartość
+};
+```
+
+**Lokalizacja:** `useQuizForm.ts` - funkcja `submitTaskWithSubcategory`
+
+### 7.2 Manual Override State (Priorytet Predykcji)
+
+**Problem:** Algorytm wylicza ćwiartkę, ale użytkownik chce ją nadpisać ręcznie na ekranie confirm.
+
+**Architektura:** Trójstopniowy priorytet wyboru ćwiartki:
+
+```typescript
+const predictedQuadrant: QuadrantNumber | null = 
+  manualQuadrant ??      // 1. Ręczny override (najwyższy priorytet)
+  bypass ??              // 2. Bypass z pod-widoku
+  computed;               // 3. Wyliczenie algorytmu (najniższy priorytet)
+```
+
+**Stan:** `const [manualQuadrant, setManualQuadrant] = useState<QuadrantNumber | null>(null)`
+
+**Integracja:** `QuizModal.tsx` - kafelki Q1-Q4 na ekranie confirm wywołują `setManualQuadrant()`
+
+### 7.3 Normalizacja Danych (Reaktywne Fallbacki)
+
+**Problem:** Pola `subcategory` mogą być `null`, `undefined` lub `''`, co powoduje crash grupowania w `useLiveQuery`.
+
+**Rozwiązanie:** Automatyczna normalizacja w zapytaniach reaktywnych:
+
+```typescript
+// Q2 Normalization
+const normalizedSub = !sub || sub === '' ? 'inne' : sub;
+
+// Q4 Normalization  
+const normalizedSub = !sub || sub === '' ? 'side_questy' : sub;
+```
+
+**Lokalizacja:** `MatrixScreen.tsx` - funkcje `groupQ2BySubcategory`, `groupQ4BySubcategory`
+
+### 7.4 Architektura Bazy Danych (Dexie.js)
+
+**Schema IndexedDB:**
+```typescript
+interface Task {
+  id?: number;
+  title: string;
+  quadrant: 0 | 1 | 2 | 3 | 4;
+  subcategory?: string; // Deep context dla Q2/Q3/Q4
+  completed: boolean;
+  createdAt: number;
+  updatedAt: number;
+}
+```
+
+**Reaktywność:** `useLiveQuery()` z Dexie.js zapewnia natychmiastowe odświeżanie UI po zmianach CRUD.
+
+**Offline-First:** Cała aplikacja działa bez połączenia z siecią - dane przechowywane lokalnie w IndexedDB.
+
+---
+
 **Zasada:** "Architektura nie jest abstrakcją. Architektura to zbiór decyzji, które ułatwiają lub utrudniają zmiany w przyszłości. Decydujemy o tym, co jest łatwe, a co trudne."
 

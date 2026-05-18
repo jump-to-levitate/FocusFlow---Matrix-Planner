@@ -346,7 +346,25 @@ Nieważne + Niepilne = Q4 (Noise)
 
 ---
 
-## 5. Powiązane Dokumenty
+## 5. Kryteria Akceptacji (AC) - MVP
+
+### Format: GIVEN [kontekst] WHEN [akcja] THEN [oczekiwany rezultat]
+
+**AC-1: Offline-First Data Persistence**
+> GIVEN system działa w trybie offline (brak połączenia z siecią) WHEN użytkownik wykonuje operacje CRUD na zadaniach THEN baza Dexie.js zapewnia atomowość i trwałość danych bez błędów synchronizacji, a wszystkie zmiany są przechowywane lokalnie w IndexedDB.
+
+**AC-2: Quiz State Machine Integrity**
+> GIVEN użytkownik rozpoczyna kwalifikację zadania WHEN przechodzi przez kolejne kroki quizu (title → quiz → confirm → subcategory) THEN maszyna stanów zachowuje spójność danych, nie gubi odpowiedzi użytkownika i deterministycznie przewiduje ćwiartkę na podstawie odpowiedzi.
+
+**AC-3: Reactive UI Synchronization**
+> GIVEN zadanie zostanie dodane, zmodyfikowane lub usunięte w dowolnym widoku WHEN operacja zakończy się sukcesem THEN wszystkie komponenty UI korzystające z `useLiveQuery` natychmiast odświeżają się bez manualnego refreshu strony.
+
+**AC-4: ADHD-Proof Input Flow**
+> GIVEN użytkownik z diagnozą ADHD/ADD znajduje się w dowolnym widoku wprowadzania danych WHEN podejmuje próbę interakcji z formularzem THEN system nie wyświetla paraliżujących modali decyzyjnych, nie wymusza natychmiastowych wyborów i pozwala na "bezpieczne" (safe-to-fail) eksperymentowanie z danymi.
+
+---
+
+## 6. Powiązane Dokumenty
 
 | Dokument | Opis |
 |----------|------|

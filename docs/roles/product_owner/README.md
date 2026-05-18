@@ -143,6 +143,31 @@ Backlog podzielony na 6 głównych modułów odpowiadających architekturze Deep
 - Mechanizm "Zapomnij" - nie zapisuje do bazy (psychologiczne przyzwolenie)
 - Izolacja szumu - Q4 nie pojawia się w głównym workflow
 
+#### EPIC 4: Hub Logistyki (Q3) - Micro-Context dla Prozy Życia
+
+**Jako** osoba z ADHD przytłoczona drobnymi zadaniami logistycznymi  
+**Chcę** klasyfikować mikro-obowiązki w 4 kontekstach wykonawczych (Zrób teraz, Zaplanuj, W przerwie, Inne)  
+**Aby** móc wykonywać szybkie zadania natychmiast, a resztę zaplanować lub oddelegować do odpowiednich przedziałów czasowych
+
+**Kryteria Akceptacji:**
+- Sub-matryca 2x2 z kafelkami: 🚀 Zrób teraz, 📁 Zaplanuj, 🔄 W przerwie, 💼 Inne
+- Bypass quizu dla Q3 (`initialQuadrant=3`) - pominięcie pytań przy dodawaniu z pod-widoku
+- Race Condition Fix - bezpośrednie przekazanie podkategorii do Dexie.js
+- Kolorystyka pomarańcz/cyjan (#FF8C00 / #00E5FF) dla neurostymulacji
+
+#### EPIC 5: Archiwum (Q4) - Izolacja Szumu Mentalnego
+
+**Jako** osoba z tendencją do gromadzenia pomysłów i dystraktorów  
+**Chcę** bezpiecznie odłożyć nieważne/niepilne tematy w 4 kategoriach (Rozrywka, Hobby, Optymalizacja, Side-questy)  
+**Aby** uwolnić pamięć roboczą, wiedząc że mogę do nich wrócić lub je całkowicie odrzucić
+
+**Kryteria Akceptacji:**
+- Sub-matryca 2x2 z szufladami: 🎮 Rozrywka, 🎨 Hobby, ⚙️ Optymalizacja, 🗺️ Side-questy
+- **Destructive Hatch ("Odrzuć / Zapomnij")** - psychologiczne prawo do skasowania destrukcyjnej myśli bez zapisu w bazie
+- Manual Override - ręczna zmiana ćwiartki na ekranie potwierdzenia
+- Bypass quizu dla Q4 (`initialQuadrant=4`)
+- Motyw "Neon Chrome / Matte Silver" (#9CA3AF) - wybalansowana jasność niegasząca innych neonów
+
 #### EPIC 6: Focus Engine (Timer)
 
 **Jako** osoba z time blindness i background throttling  
@@ -168,9 +193,9 @@ Backlog podzielony na 6 głównych modułów odpowiadających architekturze Deep
 | **MUST HAVE** | Q0 Brain Dump | **Pamięć robocza** - 50 pomysłów/dzień, muszą gdzieś trafić natychmiast |
 | **MUST HAVE** | Smart Quiz | **Paraliż decyzyjny** - ręczny wybór ćwiartki = freeze/shutdown |
 | **MUST HAVE** | Q2 Sub-Matrix | **Cemetery of good intentions** - bez kontekstu wykonawczego Q2 to "black hole" |
-| **SHOULD HAVE** | Q3 Hub Logistyki | **Proza życia** - drobiazgi "zalewają" użytkownika |
+| **MUST HAVE** | Q3 Hub Logistyki | **Proza życia** - drobiazgi "zalewają" użytkownika; GŁĘBOKA KATEGORYZACJA 2x2 jest kluczowa dla MVP |
+| **MUST HAVE** | Q4 Archiwum | **Noise isolation** - Destructive Hatch jest MUST dla zdrowia psychicznego; sub-matryca 2x2 REDUKUJE PARALIŻ |
 | **SHOULD HAVE** | Timer 7 Presets | **Time blindness** - ale nie krytyczne dla core workflow |
-| **COULD HAVE** | Q4 Archiwum | **Noise isolation** - komfort psychologiczny, nie funkcjonalność krytyczna |
 | **WON'T HAVE** | Multi-User / Backend | **Faza 2** - celowo poza MVP, aby zachować local-first simplicity |
 | **WON'T HAVE** | AI/ML Suggestions | **Complexity** - dodatkowa zależność, potential privacy concerns |
 
@@ -202,6 +227,15 @@ Otwórz app → ZACZNIJ ZRZUCAĆ MYŚLI (2 sekundy)
 2. **Zachować maksymalną prywatność** (dane osobiste = local-only)
 3. **Zredukować complexity** (brak auth, backend API, server maintenance)
 4. **Zapewnić niezawodność** (brak single point of failure)
+
+### 3.4 Uzasadnienie Elevation Q3 i Q4 do MUST-HAVE
+
+**Początkowo** Q3 i Q4 były klasyfikowane jako SHOULD-HAVE/COULD-HAVE. **Po analizie paraliżu decyzyjnego** użytkowników ADHD podniesiono je do MUST-HAVE:
+
+- **Głęboka kategoryzacja 2x2** w Q2, Q3, Q4 jest niezbędna do redukcji **cognitive overload**
+- **Destructive Hatch** w Q4 eliminuje **guilt spiral** przy odrzucaniu zadań
+- **Quiz Bypass** dla Q2/Q3/Q4 zapewnia frictionless flow przy seryjnym dodawaniu
+- Bez sub-matryc użytkownicy wracają do stanu "wszystko w jednym worku" = paraliż
 
 **Faza 2 (Post-MVP):** CRDT Multi-Device Sync - opcjonalna, opt-in, bez konieczności kont.
 

@@ -171,15 +171,33 @@ Wyświetlenie w odpowiedniej sekcji Hubu Logistyki
 
 ---
 
-## 8. Kryteria Akceptacji (Do implementacji)
+## 8. Kryteria Akceptacji (Implemented ✓)
 
-- [ ] Pole `executionContext` w schemacie Dexie
-- [ ] Modal wyboru kontekstu przy tworzeniu/edycji Q3
-- [ ] Sub-panel "Hub Logistyki" z widokiem 3-sekcyjnym
-- [ ] Grupowanie zadań Q3 po executionContext
-- [ ] Szybkie ukończenie dla "Zrób teraz" (bez timeru)
-- [ ] Integracja z Time Boxing dla "Zaplanuj blok"
-- [ ] Liczniki zadań w każdej sekcji
+### AC 1 - Quiz Bypass dla Q3
+**GIVEN** użytkownik znajduje się w sub-widoku Huba Logistyki  
+**WHEN** klika przycisk "+ Dodaj" i wpisuje nazwę zadania  
+**THEN** system całkowicie pomija slajdy quizu testowego i przechodzi bezpośrednio do wyboru podkategorii z parametrem `initialQuadrant: 3`
+
+### AC 2 - Race Condition Fix
+**GIVEN** użytkownik wybiera podkategorię w quizie  
+**WHEN** system zapisuje zadanie  
+**THEN** wybrana wartość podkategorii jest przekazywana bezpośrednio jako argument do funkcji zapisu bazodanowego (`submitTaskWithSubcategory`), eliminując asynchroniczny wyścig stanów Reacta
+
+### AC 3 - Sub-panel Hub Logistyki
+**GIVEN** użytkownik przegląda Macierz Eisenhowera  
+**WHEN** klika przycisk "Hub Logistyki ↗" w ćwiartce Q3  
+**THEN** wyświetla się sub-panel z widokiem 3-sekcyjnym (Zrób teraz, Zaplanuj blok, W przerwie) z cyberpunkową kolorystyką pomarańcz/cyjan
+
+### Checklist wdrożenia:
+- [x] Pole `executionContext` w schemacie Dexie
+- [x] Modal wyboru kontekstu przy tworzeniu/edycji Q3 (2x2 grid)
+- [x] Sub-panel "Hub Logistyki" z widokiem 3-sekcyjnym
+- [x] Grupowanie zadań Q3 po executionContext
+- [x] Szybkie ukończenie dla "Zrób teraz" (bez timeru)
+- [x] Integracja z Time Boxing dla "Zaplanuj blok"
+- [x] Liczniki zadań w każdej sekcji
+- [x] Bypass quizu dla Q3 (`openQuiz(3)`)
+- [x] Naprawa race condition w zapisie podkategorii
 
 ---
 

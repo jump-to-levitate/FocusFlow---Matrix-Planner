@@ -47,6 +47,8 @@
 | **Visual Persistence** | Q1 zawsze widoczne na pulpicie (nie schowane za tabem) |
 | **External Memory** | Subkategorie Q2 jako "kontekst wykonawczy" (nie trzeba pamiętać "co to było") |
 | **One-Thing-At-A-Time** | Timer = jedno zadanie na ekranie, brak listy rozpraszającej |
+| **Symetria Zwierciadlana** | Sub-matryce 2x2 zachowują oś symetrii, redukując zmęczenie poznawcze |
+| **Psychologiczny Reset** | Przycisk "Odrzuć / Zapomnij" jako bezpieczny wypis ze spiralę winy |
 
 ### 1.4 Zasada "One-Thing-At-A-Time" w Timerze
 
@@ -62,7 +64,32 @@
 
 ## 2. Przepływy Użytkownika (User Flows)
 
-### 2.1 Architektura Przepływu Zadań (Task Pipeline Lifecycle)
+### 2.1 Odwrócony Potok Klasyfikacji (Reversed Classification Pipeline)
+
+Zaimplementowany przepływ **zmniejszający** obciążenie decyzyjne (zamiast tradycyjnego: ćwiartka → zadanie):
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│              REVERSED CLASSIFICATION PIPELINE                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   STEP 1              STEP 2                   STEP 3              STEP 4   │
+│                                                                             │
+│  ┌─────────┐         ┌─────────────┐         ┌─────────────┐      ┌────────┐  │
+│  │  TITLE  │────────►│    QUIZ     │────────►│   CONFIRM   │─────►│ SUB-CAT│  │
+│  │ (Q0)    │         │  (2 Qs)     │         │ (Macro Q)   │      │(Micro) │  │
+│  │         │         │  Derived    │         │  Manual     │      │ Q2/Q3/ │  │
+│  │         │         │  State      │         │  Override   │      │   Q4   │  │
+│  └─────────┘         └─────────────┘         └─────────────┘      └────────┘  │
+│                                                                             │
+│   Brain Dump      Macro Qualification      Visual Confirm         Deep Context│
+│   (No Decisions)  (Algorithmic)            (Override Option)        (Sub-Matrix)│
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Kluczowe założenie:** Użytkownik nie wybiera ćwiartki - ona jest **wyliczona** przez algorytm na podstawie odpowiedzi na 2 pytania.
+
+### 2.2 Architektura Przepływu Zadań (Task Pipeline Lifecycle)
 
 Pełna ścieżka od chaosu mentalnego do egzekucji:
 

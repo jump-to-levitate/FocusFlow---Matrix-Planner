@@ -168,6 +168,11 @@ const predictedQuadrant = useMemo(() => {
 │  └── Koduj zgodnie ze specyfikacją                                  │
 │  └── UNIKAJ scope creep (nie dodawaj funkcji spoza planu!)         │
 │  └── Używaj Derived State (useMemo) zamiast useEffect             │
+│  └── Rygorystyczne typowanie unii dla subkategorii:
+│      type Q2Subcategory = 'rutyny' | 'projekt' | 'ogolny_cel' | 'inne';
+│      type Q3Subcategory = 'zrob_teraz' | 'zaplanuj' | 'w_przerwie' | 'inne';
+│      type Q4Subcategory = 'rozrywka' | 'hobby' | 'optymalizacja' | 'side_questy';
+│  └── Izolacja logiki do hooka `useQuizForm.ts` - UI tylko renderuje, logika w hooku             │
 │  └── 480px Constraint Check (wszystkie komponenty)                  │
 │  └── Tailwind tokens (brak hardcoded colors)                        │
 │                          ↓                                          │

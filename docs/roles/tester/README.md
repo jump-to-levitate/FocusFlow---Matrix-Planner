@@ -221,6 +221,14 @@ THEN system prawidłowo rejestruje OSTATNI wybór
 | I-003 | Badge counter | P1 | Add 3 tasks to Q0 | Badge on Inbox shows "3" |
 | I-004 | Pre-fill Quiz | P1 | 1. Create task in Q0<br>2. Click "Kwalifikuj" | Quiz opens with title pre-filled |
 
+### 3.5 Advanced Quiz State Machine Edge-Cases
+
+| ID | Scenario | Priority | Steps | Expected |
+|----|----------|----------|-------|----------|
+| E-001 | Quiz Bypass Verification | P1 | 1. Navigate to Q2/Q3/Q4 sub-view<br>2. Click "+ Dodaj"<br>3. Enter task title<br>4. Submit | Quiz slides skipped, confirm screen opens with correct `initialQuadrant` (2/3/4) |
+| E-002 | Manual Override Correctness | P1 | 1. Let algorithm predict Q1<br>2. On confirm screen click Q4 tile<br>3. Select subcategory<br>4. Save | Task saved to Q4 in Dexie, original prediction ignored. Verify via database inspection. |
+| E-003 | Destructive Hatch Integrity | P1 | 1. Create task, qualify to Q4<br>2. Reach subcategory step<br>3. Click "Odrzuć / Zapomnij"<br>4. Inspect IndexedDB | Modal closes immediately, NO record added to Dexie `tasks` table. Ghost records test. |
+
 ---
 
 ## 4. ADHD UX Heurystyki (ADHD Testing Heuristics)

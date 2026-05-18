@@ -201,16 +201,31 @@ Wyświetlenie w Archiwum (lub ukrycie jeśli odrzucone)
 
 ---
 
-## 8. Kryteria Akceptacji (Do implementacji)
+## 8. Kryteria Akceptacji (Implemented ✓)
 
-- [ ] Pole `q4Category` w schemacie Dexie
-- [ ] Pola `deleted` i `deletedAt` dla soft delete
-- [ ] Modal wyboru kategorii Q4 z opcją "Odrzuć"
-- [ ] Sub-panel "Archiwum" z widokiem 4-kolumnowym
-- [ ] Grupowanie zadań Q4 po q4Category
-- [ ] Przyciski awansu do Q2 i Q3
-- [ ] Opcja szybkiego ukończenia (bez timeru) dla Rozrywki
-- [ ] Kosz (widok odrzuconych) z możliwością przywrócenia
+### AC 1 - Destructive Hatch (Odrzuć / Zapomnij)
+**GIVEN** użytkownik przydziela zadanie do Q4 i przechodzi do kroku subkategorii  
+**WHEN** klika awaryjny przycisk "Odrzuć / Zapomnij"  
+**THEN** modal natychmiast się zamyka, formularz jest resetowany, a zadanie NIE zostaje zapisane w bazie IndexedDB
+
+### AC 2 - Manual Override w Ekranie Confirm
+**GIVEN** użytkownik znajduje się na ekranie potwierdzenia (confirm)  
+**WHEN** klika kafelki ręcznej zmiany ćwiartki (Q1-Q4)  
+**THEN** stan `manuallySelectedQuadrant` nadpisuje wyliczenia algorytmu i zadanie trafia do wskazanej przez użytkownika ćwiartki
+
+### AC 3 - Quiz Bypass dla Q4
+**GIVEN** użytkownik znajduje się w sub-widoku Archiwum  
+**WHEN** klika przycisk "+ Dodaj" i wpisuje nazwę zadania  
+**THEN** system pomija slajdy quizu i przechodzi bezpośrednio do wyboru subkategorii z parametrem `initialQuadrant: 4`
+
+### Checklist wdrożenia:
+- [x] Pole `subcategory` w schemacie Dexie dla Q4
+- [x] Modal wyboru kategorii Q4 z opcją "Odrzuć" (Destructive Hatch)
+- [x] Sub-panel "Archiwum" z widokiem 4-kolumnowym (2x2 grid)
+- [x] Grupowanie zadań Q4 po subcategory (rozrywka, hobby, optymalizacja, side_questy)
+- [x] Kolorystyka "Neon Chrome / Matte Silver" (#9CA3AF)
+- [x] Bypass quizu dla Q4 (`openQuiz(4)`)
+- [x] Manual override priorytet nad algorytmem
 
 ---
 

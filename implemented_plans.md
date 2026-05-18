@@ -2,7 +2,7 @@
 
 > Rejestr zakończonych planów implementacyjnych  
 > Struktura: Plan (1) → Implementacja (1) → Weryfikacja (AC)  
-> Ostatnia aktualizacja: 2026-05-17
+> Ostatnia aktualizacja: 2026-05-18
 
 ---
 
@@ -10,9 +10,12 @@
 
 | Plik Planu | Nazwa Planu | Status | Data | Commit |
 |------------|-------------|--------|------|--------|
+| [`docs/plans/master_implementation_plan.md`](docs/plans/master_implementation_plan.md) | Główny Plan Wdrożenia (MVP Architecture) | ✅ 100% UKOŃCZONE | 2026-05-18 | - |
 | [`docs/plans/02_features/01_inbox_capture.md`](docs/plans/02_features/01_inbox_capture.md) | Inbox Capture (Q0) & Brain Dump | ✅ 100% UKOŃCZONE | 2026-05-17 | 7bf646b |
 | [`docs/plans/02_features/02_focus_timer.md`](docs/plans/02_features/02_focus_timer.md) | Cyberpunk Focus Timer (7 ADHD-Proof Presets) | ✅ 100% UKOŃCZONE | 2026-05-17 | 7bf646b |
 | [`docs/plans/02_features/03_centrum_planowania_q2.md`](docs/plans/02_features/03_centrum_planowania_q2.md) | Centrum Planowania (Sub-Matrix Q2) | ✅ 100% UKOŃCZONE | 2026-05-17 | 7bf646b |
+| [`docs/plans/02_features/04_hub_logistyki_q3.md`](docs/plans/02_features/04_hub_logistyki_q3.md) | Hub Logistyki (Q3) | ✅ 100% UKOŃCZONE | 2026-05-18 | - |
+| [`docs/plans/02_features/05_archiwum_q4.md`](docs/plans/02_features/05_archiwum_q4.md) | Archiwum (Q4) | ✅ 100% UKOŃCZONE | 2026-05-18 | - |
 
 ---
 
@@ -99,14 +102,66 @@
 
 ---
 
+### PL-04: `04_hub_logistyki_q3.md` - Hub Logistyki (Sub-Matrix Q3)
+
+**Status:** ✅ IMPLEMENTED & VERIFIED  
+**Data implementacji:** 2026-05-18  
+**Related Feature:** Hub Logistyki Q3 (Logistics & Life Admin)
+
+#### Podsumowanie Techniczne:
+- ✅ Maszyna stanów widoku (`viewMode: 'grid' | 'q3'`)
+- ✅ Sub-matryca 2x2 z 4 kategoriami: Zrób teraz, Zaplanuj, W przerwie, Inne
+- ✅ Cyberpunkowa kolorystyka pomarańcz (#FF8C00) i cyjan (#00E5FF)
+- ✅ Bypass quizu dla Q3 (`initialQuadrant={3}`)
+- ✅ Naprawa race condition przy zapisie podkategorii (`submitTaskWithSubcategory`)
+
+#### Kryteria Akceptacji (AC) - Status:
+
+| AC | Opis | Status | Weryfikacja |
+|----|------|--------|-------------|
+| AC-1 | Bypass Quiz dla Q3 | ✅ PASS | Pominięcie quizu, przejście bezpośrednio do subkategorii |
+| AC-2 | Race Condition Fix | ✅ PASS | Bezpośrednie przekazanie podkategorii do funkcji zapisu |
+| AC-3 | Sub-panel Hub Logistyki | ✅ PASS | Widok 3-sekcyjny z cyberpunkową kolorystyką |
+
+---
+
+### PL-05: `05_archiwum_q4.md` - Archiwum (Sub-Matrix Q4)
+
+**Status:** ✅ IMPLEMENTED & VERIFIED  
+**Data implementacji:** 2026-05-18  
+**Related Feature:** Archiwum Q4 (Cognitive Noise & Distractions)
+
+#### Podsumowanie Techniczne:
+- ✅ Maszyna stanów widoku (`viewMode: 'grid' | 'q4'`)
+- ✅ Sub-matryca 2x2 z 4 kategoriami: Rozrywka, Hobby, Optymalizacja, Side-questy
+- ✅ Kolorystyka "Neon Chrome / Matte Silver" (#9CA3AF) - wybalansowana jasność
+- ✅ Destructive Hatch ("Odrzuć / Zapomnij") - psychologiczne prawo do skasowania
+- ✅ Bypass quizu dla Q4 (`initialQuadrant={4}`)
+- ✅ Manual override priorytet nad algorytmem (`manualQuadrant ?? bypass ?? computed`)
+
+#### Kryteria Akceptacji (AC) - Status:
+
+| AC | Opis | Status | Weryfikacja |
+|----|------|--------|-------------|
+| AC-1 | Destructive Hatch | ✅ PASS | Zadanie nie zostaje zapisane, modal zamyka się natychmiast |
+| AC-2 | Manual Override | ✅ PASS | Ręczny wybór nadpisuje wyliczenia algorytmu |
+| AC-3 | Bypass Quiz dla Q4 | ✅ PASS | Pominięcie quizu, przejście bezpośrednio do subkategorii |
+
+---
+
 ## Plany w Trakcie / Oczekujące
 
 | Plik Planu | Nazwa Planu | Status | Estymacja |
 |------------|-------------|--------|-----------|
-| `docs/plans/02_features/04_hub_logistyki_q3.md` | Hub Logistyki (Q3 - Proza Życia) | 🔄 W TRAKCIE | Q3 2026 |
-| `docs/plans/02_features/05_archiwum_q4.md` | Archiwum (Q4 - Nie Teraz) | 📋 PLANOWANE | Q3 2026 |
 | `docs/plans/03_technical/04_design_system_tokens.md` | Design System Tokens | 📋 PLANOWANE | Q2 2026 |
 | `docs/plans/03_technical/05_pwa_assets_audio.md` | PWA Assets & Audio Engine | ✅ CZĘŚCIOWO | - |
+
+---
+
+## Archiwum Zakończonych Planów
+
+Wszystkie plany z sekcji [Szczegółowy Status Realizacji](#szczegółowy-status-realizacji) zostały w pełni wdrożone i zweryfikowane.
+**Ostatnia aktualizacja:** 2026-05-18
 
 ---
 

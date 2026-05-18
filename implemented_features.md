@@ -2,7 +2,7 @@
 
 > Single Source of Truth dla zaimplementowanych funkcji FocusFlow 2.0  
 > Struktura: Feature ↔ Plan (1:1) + AC Coverage  
-> Ostatnia aktualizacja: 2026-05-17
+> Ostatnia aktualizacja: 2026-05-18
 
 ---
 
@@ -13,6 +13,8 @@
 | Inbox Capture (Q0) | [`01_inbox_capture.md`](docs/plans/02_features/01_inbox_capture.md) | ✅ VERIFIED | 2026-05-17 | 6/6 ✅ |
 | Cyberpunk Focus Timer | [`02_focus_timer.md`](docs/plans/02_features/02_focus_timer.md) | ✅ VERIFIED | 2026-05-17 | 6/6 ✅ |
 | Centrum Planowania Q2 | [`03_centrum_planowania_q2.md`](docs/plans/02_features/03_centrum_planowania_q2.md) | ✅ VERIFIED | 2026-05-17 | 6/6 ✅ |
+| Hub Logistyki Q3 | [`04_hub_logistyki_q3.md`](docs/plans/02_features/04_hub_logistyki_q3.md) | ✅ VERIFIED | 2026-05-18 | 3/3 ✅ |
+| Archiwum Q4 | [`05_archiwum_q4.md`](docs/plans/02_features/05_archiwum_q4.md) | ✅ VERIFIED | 2026-05-18 | 3/3 ✅ |
 
 ---
 
@@ -185,6 +187,28 @@ AC-6: Quiz Bypass (initialQuadrant=2) przy Dodawaniu z Q2
 
 ---
 
+## [WDROŻONE] FE-05: Archiwum Q4 (Sub-Matrix)
+
+**Status:** ✅ IMPLEMENTED & VERIFIED  
+**Powiązany Plan:** [`docs/plans/02_features/05_archiwum_q4.md`](docs/plans/02_features/05_archiwum_q4.md)  
+**Data implementacji:** 2026-05-18
+
+### Opis Funkcjonalny
+Izolacja szumu kognitywnego i dystraktorów (ćwiartka Q4: Nieważne, Niepilne) w układzie siatki 2x2. Kolorystyka: "Neon Chrome / Matte Silver" (#9CA3AF).
+
+### Kluczowe Elementy Implementacji
+
+| Element | Implementacja | AC |
+|---------|---------------|-----|
+| Sub-Matryca 2x2 | `viewMode: 'q4'` + 4 kafelki | AC-3 ✅ |
+| Podkategorie | Rozrywka, Hobby, Optymalizacja, Side-questy | AC-2 ✅ |
+| Destructive Hatch | Przycisk "Odrzuć / Zapomnij" | AC-1 ✅ |
+| Manual Override | `manualQuadrant ?? bypass ?? computed` | AC-2 ✅ |
+| Bypass Quizu | `openQuiz(4)` | AC-3 ✅ |
+| Kolorystyka | `#9CA3AF` (Cool Steel) | AC-2 ✅ |
+
+---
+
 ## Podsumowanie Statusu (Summary)
 
 | Feature | Plan | AC | Status | Data |
@@ -192,7 +216,9 @@ AC-6: Quiz Bypass (initialQuadrant=2) przy Dodawaniu z Q2
 | Inbox Capture (Q0) | `01_inbox_capture.md` | 6/6 ✅ | VERIFIED | 2026-05-17 |
 | Cyberpunk Focus Timer | `02_focus_timer.md` | 6/6 ✅ | VERIFIED | 2026-05-17 |
 | Centrum Planowania Q2 | `03_centrum_planowania_q2.md` | 6/6 ✅ | VERIFIED | 2026-05-17 |
-| **TOTAL** | 3 plany | **18/18** | **100%** | - |
+| Hub Logistyki Q3 | `04_hub_logistyki_q3.md` | 3/3 ✅ | VERIFIED | 2026-05-18 |
+| Archiwum Q4 | `05_archiwum_q4.md` | 3/3 ✅ | VERIFIED | 2026-05-18 |
+| **TOTAL** | 5 planów | **24/24** | **100%** | - |
 
 ---
 
