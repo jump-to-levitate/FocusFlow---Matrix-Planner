@@ -61,7 +61,7 @@ export const TimerScreen = () => {
   const isPaused = state === 'paused';
 
   return (
-    <div className="max-w-[430px] mx-auto w-full min-h-screen bg-[#0A0512] text-white flex flex-col justify-between font-sans">
+    <div className="w-full min-h-screen bg-[#0A0512] text-white flex flex-col justify-between font-sans">
       <header className="h-14 w-full border-b border-[#1F192F] px-4 flex items-center justify-between bg-[#0E081B]/80 backdrop-blur-md sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="text-[#9CA3AF] hover:text-white transition-colors text-sm flex items-center gap-1">
           ← <span className="whitespace-nowrap">Matryca</span>

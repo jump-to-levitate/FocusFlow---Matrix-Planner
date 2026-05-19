@@ -20,20 +20,38 @@
 
 ---
 
+### PL-02: `02_focus_timer.md` - Focus Timer (Delta Timestamp Engine)
+
+**Status:** ✅ IMPLEMENTED & VERIFIED  
+**Data Ukończenia:** 2026-05-19
+
+| Moduł | Opis | Status |
+|-------|------|--------|
+| `TimerContext` | Globalny singleton z `useReducer`, `useMemo`, `useEffect` | ✅ |
+| `timerEngine.ts` | Delta Timestamp Algorithm (Background Throttling proof) | ✅ |
+| `timerPresets.ts` | 7 ADHD-proof presets (5-90 min) | ✅ |
+| `TimerScreen.tsx` | UI 430px Pro Max, neon UX | ✅ |
+| `useTimer()` | Hook do konsumpcji kontekstu | ✅ |
+
+---
+
 ### PL-03: `03_centrum_planowania_q2.md` - Centrum Planowania (Sub-Matrix Q2)
 
 **Status:** ✅ IMPLEMENTED & VERIFIED  
-**Data implementacji:** 2026-05-17  
+**Data implementacji:** 2026-05-19  
 **Related Feature:** Centrum Planowania Q2 (Deep Context)
 
 #### Podsumowanie Techniczne:
-- ✅ Maszyna stanów widoku (`viewMode: 'grid' | 'q2'`)
-- ✅ Sub-matryca 2x2 z 4 kategoriami: Rutyny, Projekty, Ogólne Cele, Inne
-- ✅ Rozszerzenie schematu Dexie o pole `subcategory?: string`
+- ✅ Komponent `Q2Tile.tsx` z atomową architekturą i `useMemo` dla sortowania
+- ✅ Ekran `Q2PlanningCenter.tsx` z siatką `grid-cols-2 gap-3` (symetria osiowa 2x2)
+- ✅ Silne typowanie `Q2Subcategory` (String Union: 'rutyna' | 'projekt' | 'ogolny_cel' | 'inne')
+- ✅ Rozszerzenie schematu Dexie o pole `subcategory?: Q2Subcategory`
+- ✅ Synchronizacja IndexedDB pod kątem spójności literałów tekstowych ('rutyna')
 - ✅ Stała wysokość nagłówków (`h-14`) - uniform alignment
 - ✅ Blokada łamania słów (`whitespace-nowrap`)
 - ✅ Normalizacja null → "Inne" (brak pustych kategorii)
-- ✅ Quiz bypass dla Q2 (`initialQuadrant={2}`)
+- ✅ Quiz bypass dla Q2 (`bypassMode={true}`, `initialQuadrant={2}`)
+- ✅ Usunięcie martwego kodu sub-widoków w MatrixScreen
 
 #### Kryteria Akceptacji (AC) - Status:
 
@@ -104,10 +122,21 @@
 
 ---
 
+## Wdrożone Funkcjonalności (Stan na: Maj 2026)
+
+- [x] PLAN_focus_timer.md (Silnik Delta Timestamp, odporność na throttling, ekran zegara)
+- [x] PLAN_centrum_planowania_q2.md (Siatka 2x2, silne typowanie subkategorii, integracja Quiz Bypass Flow)
+
+### Notatka Techniczna (2026-05-19)
+
+Wdrożono ekran Centrum Planowania Q2 z pełnym rygorem Type Safety (Q2Subcategory). Zsynchronizowano bazę danych IndexedDB pod kątem spójności literałów tekstowych ('rutyna'). Usunięto martwy kod sub-widoków w MatrixScreen.
+
+---
+
 ## Archiwum Zakończonych Planów
 
 Wszystkie plany z sekcji [Szczegółowy Status Realizacji](#szczegółowy-status-realizacji) zostały w pełni wdrożone i zweryfikowane.
-**Ostatnia aktualizacja:** 2026-05-18
+**Ostatnia aktualizacja:** 2026-05-19
 
 ---
 

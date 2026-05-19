@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { BottomNav } from './components/BottomNav';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { MatrixScreen } from './screens/MatrixScreen';
+import { Q2PlanningCenter } from './screens/Q2PlanningCenter';
 import { TimerScreen } from './screens/TimerScreen';
 import { BrainDumpScreen } from './screens/BrainDumpScreen';
 import { TimerProvider } from './context/TimerContext';
@@ -49,6 +50,7 @@ function App() {
             <Routes>
               <Route path="/" element={<DashboardScreen />} />
               <Route path="/matrix" element={<MatrixScreen />} />
+              <Route path="/q2" element={<Q2PlanningCenter />} />
               <Route path="/timer" element={<TimerScreen />} />
               <Route path="/braindump" element={<BrainDumpScreen />} />
             </Routes>

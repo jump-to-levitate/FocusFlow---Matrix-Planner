@@ -1,5 +1,7 @@
 import Dexie, { type Table } from 'dexie';
 
+export type Q2Subcategory = 'rutyna' | 'projekt' | 'ogolny_cel' | 'inne';
+
 export interface Task {
   id?: number;
   title: string;

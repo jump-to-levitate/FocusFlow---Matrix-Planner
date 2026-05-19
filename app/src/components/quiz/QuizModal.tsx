@@ -10,6 +10,7 @@ interface QuizModalProps {
   classifyTaskId?: number;
   onClassify?: (id: number, quadrant: QuadrantNumber) => void;
   skipTitleStep?: boolean; // default: true if initialTitle provided
+  bypassMode?: boolean; // 🆕 NOWE: Pomija quiz dla Q2, przechodzi do subcategory
 }
 
 const QUADRANT_META: Record<QuadrantNumber, { label: string; color: string; glow: string }> = {
@@ -34,19 +35,27 @@ const URGENCY_QUESTIONS = [
 const IMPORTANCE_LABELS = ['Cel', 'Inwestycja', 'Żal'];
 const URGENCY_LABELS = ['Termin', 'Konsekwencje', 'Blokada'];
 
-export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, classifyTaskId: _classifyTaskId, onClassify: _onClassify, skipTitleStep }: QuizModalProps) => {
+export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, classifyTaskId: _classifyTaskId, onClassify: _onClassify, skipTitleStep, bypassMode }: QuizModalProps) => {
   const quiz = useQuizForm({ initialQuadrant: initialQuadrant ?? null, initialTitle, skipTitleStep });
 
   if (!isOpen) return null;
 
+  // 🆕 BYPASS MODE: Dla Q2 pomijamy quiz, idziemy od razu do subcategory
+  const isQ2Bypass = bypassMode === true && initialQuadrant === 2;
+
   const handleClose = () => {
+    if (isQ2Bypass) {
+      console.log('Bypass Q2: zamykanie bez zapisywania.');
+    }
     quiz.resetQuiz();
     onClose();
   };
 
   const shouldSkipTitle = skipTitleStep ?? (initialTitle ? true : false);
   const hasTitleStep = !shouldSkipTitle && initialQuadrant == null;
-  const needsSubcategory = quiz.predictedQuadrant === 2 || quiz.predictedQuadrant === 3 || quiz.predictedQuadrant === 4;
+  // Dla Q2 bypass predictedQuadrant = 2
+  const effectiveQuadrant = isQ2Bypass ? 2 : quiz.predictedQuadrant;
+  const needsSubcategory = effectiveQuadrant === 2 || effectiveQuadrant === 3 || effectiveQuadrant === 4;
 
   const getStepNumber = () => {
     const baseMap: Record<string, number> = hasTitleStep
@@ -99,6 +108,13 @@ export const QuizModal = ({ isOpen, onClose, initialQuadrant, initialTitle, clas
               <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">Krok {stepNumber} z {totalSteps}</p>
               <h2 className="text-2xl font-black text-white uppercase tracking-wide">Co chcesz zrobić?</h2>
               <p className="text-sm text-white/50 mt-2 max-w-[280px] mx-auto">Wpisz zadanie, które masz w głowie. Bez oceniania.</p>
+              {/* 🆕 BYPASS INDICATOR dla Q2 */}
+              {isQ2Bypass && (
+                <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 bg-[#D000FF]/20 border border-[#D000FF]/40 rounded-full">
+                  <span className="w-1.5 h-1.5 bg-[#D000FF] rounded-full animate-pulse" />
+                  <span className="text-xs text-[#D000FF] font-medium">Bypass Q2: Pomijam quiz</span>
+                </div>
+              )}
             </div>
             <input
               type="text"
