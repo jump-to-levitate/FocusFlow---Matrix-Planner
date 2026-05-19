@@ -1,0 +1,46 @@
+[1mdiff --git a/docs/architecture/adr_001.md b/docs/architecture/adr_001.md[m
+[1mindex 62d5469..905fdcb 100644[m
+[1m--- a/docs/architecture/adr_001.md[m
+[1m+++ b/docs/architecture/adr_001.md[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-# ADR 001: Wybór IndexedDB + Dexie.js jako głównego magazynu danych[m
+[32m+[m[32m﻿# ADR 001: Wybór IndexedDB + Dexie.js jako głównego magazynu danych[m
+ [m
+ > Architecture Decision Record dla FocusFlow 2.0[m
+ [m
+[36m@@ -130,7 +130,7 @@[m [mIndexedDB działa w:[m
+ - Android PWA (Chrome)[m
+ - Desktop (wszystkie przeglądarki)[m
+ [m
+[31m-Spełnia wymaganie **mobile-first 480px** z system_overview.md.[m
+[32m+[m[32mSpełnia wymaganie **mobile-first 430px Pro Max** z system_overview.md.[m
+ [m
+ ### Dlaczego Dexie.js (wrapper)?[m
+ [m
+[36m@@ -196,7 +196,7 @@[m [mconst tasks = await db.tasks.where('quadrant').equals(1).toArray();[m
+ | Minus | Mitigation |[m
+ |-------|------------|[m
+ | **No cloud sync** | Użytkownik traci dane przy utracie telefonu | Export/Import JSON (manual backup) |[m
+[31m-| **No multi-device** | Działa tylko na jednym urządzeniu | By design - mobile-first 480px constraint |[m
+[32m+[m[32m| **No multi-device** | Działa tylko na jednym urządzeniu | By design - mobile-first 430px Pro Max constraint |[m
+ | **Limited storage** | ~60MB limit na iOS Safari | Monitoring usage, alert przy 80% |[m
+ | **No sharing/collaboration** | Brak "share tasks with partner" | By design - single-player ADHD focus |[m
+ | **No server-side logic** | Brak "AI recommendations" w chmurze | On-device logic only (simpler, private) |[m
+[36m@@ -221,7 +221,7 @@[m [mconst tasks = await db.tasks.where('quadrant').equals(1).toArray();[m
+ [m
+ ## 6. Powiązane Decyzje (Related ADRs)[m
+ [m
+[31m-- ADR-002: Mobile-First 480px Constraint (wspiera offline-first approach)[m
+[32m+[m[32m- ADR-002: mobile-first 430px Pro Max Constraint (wspiera offline-first approach)[m
+ - ADR-003: No Cloud Sync Policy (konsekwencja tej decyzji)[m
+ - ADR-004: Data Export/Import Strategy (mitigacja braku sync)[m
+ [m
+[36m@@ -247,7 +247,7 @@[m [mconst tasks = await db.tasks.where('quadrant').equals(1).toArray();[m
+ [m
+ **Trade-off accepted:** [m
+ - No cloud sync → manual JSON backup[m
+[31m-- Single-device only → by design for mobile-first 480px constraint[m
+[32m+[m[32m- Single-device only → by design for mobile-first 430px Pro Max constraint[m
+ [m
+ **Next Step:** [m
+ - Implementacja w PLAN_001 (Core Data Layer)[m

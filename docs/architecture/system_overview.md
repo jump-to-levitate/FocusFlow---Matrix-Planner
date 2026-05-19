@@ -1,4 +1,4 @@
-# System Overview - FocusFlow 2.0
+﻿# System Overview - FocusFlow 2.0
 
 > High-Level Architecture Specification  
 > Status: STABLE  
@@ -246,7 +246,7 @@ App (BrowserRouter)
 1. **Single Device** - Data does not sync between devices (by design)
 2. **No Multi-user** - Single-user application architecture
 3. **Browser-dependent** - IndexedDB quotas vary by browser (typically 50MB-2GB)
-4. **Mobile-only** - Interface optimized for 480px width, not desktop
+4. **Mobile-only** - Interface optimized for 430px Pro Max width, not desktop
 
 ---
 

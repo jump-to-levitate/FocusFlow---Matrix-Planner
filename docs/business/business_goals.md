@@ -1,4 +1,4 @@
-# Wymagania Biznesowe FocusFlow 2.0
+﻿# Wymagania Biznesowe FocusFlow 2.0
 
 > Business Requirements Specification  
 > Document ID: BUS-GOALS-001  
@@ -156,12 +156,12 @@
 
 ### Constraint-003: Mobile-First Constraint (AppShell Safety Net)
 
-**Definicja:** Sztywne ograniczenie szerokości ramy interfejsu do 480px. Brak widoków dedykowanych dla ekranów desktopowych w fazie MVP.
+**Definicja:** Sztywne ograniczenie szerokości ramy interfejsu do 430px. Brak widoków dedykowanych dla ekranów desktopowych w fazie MVP.
 
 **Uzasadnienie:** Optymalizacja pod kciuk (touch), eliminacja "szukania myszką". Ograniczenie zakresu = szybsza iteracja = lepsze dopasowanie do głównego use case (telefon w ręku).
 
 **Konsekwencje Techniczne:**
-- Tailwind CSS z `max-w-[480px]`
+- Tailwind CSS z `max-w-[430px]`
 - PWA (Progressive Web App) zamiast native app
 - Brak responsive breakpoints dla tablet/desktop
 

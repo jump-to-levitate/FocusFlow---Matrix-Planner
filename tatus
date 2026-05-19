@@ -1,0 +1,16 @@
+warning: in the working copy of 'docs/business/business_goals.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/plans/01_strategy/01_mvp_roadmap.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/roles/tester/README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/tech/tech_stack.md', LF will be replaced by CRLF the next time Git touches it
+ docs/architecture/adr_001.md                  |  10 [32m+[m[31m-[m
+ docs/architecture/adr_002.md                  |  56 [32m+[m[31m--[m
+ docs/architecture/system_overview.md          |   4 [32m+[m[31m-[m
+ docs/business/business_goals.md               |   6 [32m+[m[31m-[m
+ docs/business/glossary.md                     |  10 [32m+[m[31m-[m
+ docs/plans/01_strategy/01_mvp_roadmap.md      |   4 [32m+[m[31m-[m
+ docs/plans/01_strategy/02_pre_mortem_audit.md |   6 [32m+[m[31m-[m
+ docs/roles/tester/README.md                   |   4 [32m+[m[31m-[m
+ docs/roles/tester/przypadki_edge_case.md      | 547 [31m--------------------------[m
+ docs/roles/tester/scenariusze_testow.md       | 444 [31m---------------------[m
+ docs/tech/tech_stack.md                       |   4 [32m+[m[31m-[m
+ 11 files changed, 52 insertions(+), 1043 deletions(-)

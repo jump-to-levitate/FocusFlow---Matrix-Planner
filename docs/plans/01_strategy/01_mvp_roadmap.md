@@ -1,4 +1,4 @@
-# 01 Strategia Rozwoju Produktu i Kamienie Milowe
+﻿# 01 Strategia Rozwoju Produktu i Kamienie Milowe
 
 > Wersja: 1.0  
 > Data: Maj 2026  
@@ -132,7 +132,7 @@ FocusFlow implementuje unikalny system **dwustopniowej klasyfikacji zadań** - o
 - **Frontend:** React 18 + Vite + Tailwind CSS
 - **Baza Danych:** Dexie.js (IndexedDB wrapper) - local-only
 - **PWA:** Service Worker, manifest.json, offline-first
-- **UX:** Mobile-first (480px constraint), cyberpunk neon design
+- **UX:** Mobile-first (430px constraint), cyberpunk neon design
 
 ### 3.4 Implementacja Techniczna Przepływu Pytań (Intra-Quadrant Branching)
 

@@ -1,4 +1,4 @@
-# FocusFlow 2.0 - Project Glossary
+﻿# FocusFlow 2.0 - Project Glossary
 
 > Single Source of Truth (SSOT) dla terminologii projektowej  
 > Język: Polski (UI) / Angielski (kod, komentarze)
@@ -217,14 +217,14 @@
 
 ---
 
-### 3.2 AppShell (480px Safety Net)
+### 3.2 AppShell (430px Safety Net)
 
 | Atrybut | Wartość |
 |---------|---------|
-| **Definicja** | Komponent root layoutu wymuszający sztywny limit szerokości 480px dla wszystkich widoków |
-| **Implementacja** | `max-width: 480px; margin: 0 auto;` na głównym kontenerze |
+| **Definicja** | Komponent root layoutu wymuszający sztywny limit szerokości 430px dla wszystkich widoków |
+| **Implementacja** | `max-width: 430px; margin: 0 auto;` na głównym kontenerze |
 | **Cel** | Mobile-First constraint - aplikacja jest ZAWSZE zoptymalizowana pod mobile |
-| **Behavior** | Mobile: 100% width + padding / Desktop: centered 480px box |
+| **Behavior** | Mobile: 100% width + padding / Desktop: centered 430px box |
 | **Safety Net** | Zapobiega "rozlania" się layoutu na desktopie, wymusza mobile UX |
 | **Code** | `app/src/App.tsx` - `<AppShell>` component |
 | **Ref** | `docs/design-system.md` (Constraints), `docs/tech/conventions.md` |

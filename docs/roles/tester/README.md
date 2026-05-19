@@ -22,8 +22,8 @@ Tester/QA Engineer w FocusFlow odpowiada za:
 | Dokument | Zawartość | Link |
 |----------|-----------|------|
 | **Strategia Testowania** | Spec-Driven Testing, Constraint-First, ADHD UX Heuristics, 430px Safety Net | [strategia_testow.md](./strategia_testow.md) |
-| **Scenariusze Testowe** | GIVEN-WHEN-THEN: Background Throttling, Quiz Bypass, UI Symmetry (h-14, whitespace-nowrap) | [scenariusze_testow.md](./scenariusze_testow.md) |
-| **Edge Cases** | Normalizacja null/undefined, Spam-testing, Q1 Anti-Burnout, Viewport edge cases | [przypadki_edge_case.md](./przypadki_edge_case.md) |
+| **Scenariusze Testowe** | GIVEN-WHEN-THEN: Background Throttling, Quiz Bypass, UI Symmetry (h-14, whitespace-nowrap) | [scenariusze_testow.md](./scenarios/scenariusze_testow.md) |
+| **Edge Cases** | Normalizacja null/undefined, Spam-testing, Q1 Anti-Burnout, Viewport edge cases | [przypadki_edge_case.md](./scenarios/przypadki_edge_case.md) |
 | **Raporty** | TECH_000 verification, feature test reports | [reports/](./reports/) |
 | **UX/UI Specs** | Design tokens, viewport constraints | [../ux_ui/](../ux_ui/) |
 | **Architecture Specs** | Dexie schema, TimerContext patterns | [../architect/](../architect/) |

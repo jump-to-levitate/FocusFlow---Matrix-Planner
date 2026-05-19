@@ -1,4 +1,4 @@
-# Stos Technologiczny FocusFlow 2.0
+﻿# Stos Technologiczny FocusFlow 2.0
 
 > Technical Stack Specification & Rationale  
 > Status: FROZEN (v1.0.0)  
@@ -149,7 +149,7 @@ Wersja 3.0.0+: P2P sync (WebRTC) - bez serwerów, bez logowania
 - Autentykacji (logowanie = friction dla ADHD)
 - Privacy policy / GDPR (złożoność prawna)
 
-### 3.3 Mobile-Only (480px)
+### 3.3 Mobile-Only (430px)
 
 **Ograniczenie celowe:**
 - Brak responsywności desktopowej (zbyt złożone)

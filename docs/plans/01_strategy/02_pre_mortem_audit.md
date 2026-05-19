@@ -1,4 +1,4 @@
-# STRAT_003: Pre-Mortem Audit - FocusFlow 2.0
+﻿# STRAT_003: Pre-Mortem Audit - FocusFlow 2.0
 
 > Wygenerowano przez workflow: WF_Kill_The_Idea.md
 > Data: 2026-05-10
@@ -46,7 +46,7 @@ Audyt ryzyka dla **FocusFlow 2.0** - inteligentnego planera z macierzą Eisenhow
 **Unikalne elementy (potencjalny moat):**
 - Limit 5 zadań w Q1 (overload protection) - **innowacja UX**
 - Smart Quiz do klasyfikacji - **automatyzacja decyzji**
-- Mobile-first 480px constraint - **niedostosowane do desktop**
+- mobile-first 430px Pro Max constraint - **niedostosowane do desktop**
 
 **Wniosek:** Produkt musi mocniej betować na **Smart Quiz** i **Q1 Limit** jako unikalne wartości, nie na samą macierz.
 
@@ -113,7 +113,7 @@ Audyt ryzyka dla **FocusFlow 2.0** - inteligentnego planera z macierzą Eisenhow
 | 1 | **Brak strategii dystrybucji** | Produkt nigdy nie osiągnie PMF | Zdefiniować ICP (Indie Hackers? ADHD community? Students?) i kanał (Reddit? Twitter? TikTok?) |
 | 2 | **Macierz jako core = copiable** | Big Tech lub indie dev klonuje w tydzień | Podwoić down na Smart Quiz + Q1 Limit jako defensible features |
 | 3 | **No network effects** | Zero organic growth, 100% płatna akwizycja | Dodać referral loop lub shareable templates |
-| 4 | **Mobile-only = desktop miss** | 50% potencjalnych użytkowników (office workers) wykluczonych | Rozważyć responsywny web app poza 480px |
+| 4 | **Mobile-only = desktop miss** | 50% potencjalnych użytkowników (office workers) wykluczonych | Rozważyć responsywny web app poza 430px |
 
 ---
 
