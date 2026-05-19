@@ -10,6 +10,8 @@ import { BottomNav } from './components/BottomNav';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { MatrixScreen } from './screens/MatrixScreen';
 import { Q2PlanningCenter } from './screens/Q2PlanningCenter';
+import { Q3LogisticsHub } from './screens/Q3LogisticsHub';
+import { Q4ArchiveScreen } from './screens/Q4ArchiveScreen';
 import { TimerScreen } from './screens/TimerScreen';
 import { BrainDumpScreen } from './screens/BrainDumpScreen';
 import { TimerProvider } from './context/TimerContext';
@@ -51,6 +53,8 @@ function App() {
               <Route path="/" element={<DashboardScreen />} />
               <Route path="/matrix" element={<MatrixScreen />} />
               <Route path="/q2" element={<Q2PlanningCenter />} />
+              <Route path="/q3" element={<Q3LogisticsHub />} />
+              <Route path="/q4" element={<Q4ArchiveScreen />} />
               <Route path="/timer" element={<TimerScreen />} />
               <Route path="/braindump" element={<BrainDumpScreen />} />
             </Routes>

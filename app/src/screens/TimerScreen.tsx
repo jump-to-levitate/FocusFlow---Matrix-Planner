@@ -61,7 +61,7 @@ export const TimerScreen = () => {
   const isPaused = state === 'paused';
 
   return (
-    <div className="w-full min-h-screen bg-[#0A0512] text-white flex flex-col justify-between font-sans">
+    <div className="w-full h-[calc(100vh-3.5rem)] flex flex-col justify-between bg-[#0A0512] text-white font-sans">
       <header className="h-14 w-full border-b border-[#1F192F] px-4 flex items-center justify-between bg-[#0E081B]/80 backdrop-blur-md sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="text-[#9CA3AF] hover:text-white transition-colors text-sm flex items-center gap-1">
           ← <span className="whitespace-nowrap">Matryca</span>
@@ -72,7 +72,7 @@ export const TimerScreen = () => {
         <div className="w-12" />
       </header>
 
-      <main className="flex-1 flex flex-col items-center justify-center px-6 py-4 space-y-8">
+      <main className="flex-1 flex flex-col items-center justify-between px-6 py-4 overflow-hidden mb-20">
         <div className="w-full relative z-40" ref={dropdownRef}>
           <label className="block text-xs font-semibold text-[#7C3AED] uppercase tracking-wider mb-2 px-1 whitespace-nowrap">Aktualny Cel:</label>
           <button
@@ -139,9 +139,9 @@ export const TimerScreen = () => {
         </div>
 
         {isIdle && (
-          <div className="w-full space-y-3 pt-4">
+          <div className="w-full space-y-3 pt-2 mt-auto">
             <span className="block text-xs font-semibold text-[#7C3AED] uppercase tracking-wider mb-2 px-1">Wybierz tryb dopaminowy:</span>
-            <div className="grid grid-cols-1 gap-2.5 max-h-[220px] overflow-y-auto pr-1">
+            <div className="grid grid-cols-1 gap-2.5 max-h-[180px] overflow-y-auto w-full pr-1">
               {TIMER_PRESETS.map(preset => (
                 <button
                   key={preset.id}

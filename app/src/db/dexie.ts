@@ -2,6 +2,8 @@ import Dexie, { type Table } from 'dexie';
 
 export type Q2Subcategory = 'rutyna' | 'projekt' | 'ogolny_cel' | 'inne';
 
+export type Q3ActionType = 'batch_call' | 'batch_email' | 'delegate' | 'quick_fix';
+
 export interface Task {
   id?: number;
   title: string;
@@ -9,6 +11,8 @@ export interface Task {
   completed: boolean;
   createdAt: Date;
   subcategory?: string | null; // Podkategoria: 'rutyna', 'projekt', 'zrob_teraz', 'rozrywka' itp.
+  q3Action?: Q3ActionType | null; // Hub Logistyki Q3 — typ akcji batchującej.
+  delegatedTo?: string | null;    // Adresat delegacji (ustawiany przy "Deleguj").
 }
 
 export class FocusFlowDB extends Dexie {

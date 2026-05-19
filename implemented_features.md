@@ -23,4 +23,12 @@
 - plan: PLAN_archiwum_q4.md
 - opis: Akceptacja nieproduktywności bez wyrzutów sumienia. Sub-matryca 2×2 z 4 kategoriami (Rozrywka, Hobby, Side-questy, Optymalizacja), Destructive Hatch, Matte Silver kolorystyka.
 
+---
+
+### Wdrożenie Kamienia Milowego: Finał MVP (Kwadraty Q3, Q4 oraz Pulpit)
+
+- **Hub Logistyki Q3:** Wdrożono grupowanie zadań w kapsuły czasowe przy użyciu selektorów memoizowanych.
+- **Strefa Redukcji Q4:** Zaimplementowano mechanizm brutalnego czyszczenia bazy danych Dexie za pomocą indeksowanego zapytania usuwającego rekordy bez generowania długu w postaci zbędnej historii operacji.
+- **Dashboard:** Uproszczono panel startowy do trójsekcyjnego układu derywacji stanów (stan timera, licznik krytyczny Q1, symetryczny grid nawigacyjny).
+- **Refaktoryzacja:** Usunięto ponad 400 linii martwego kodu z `MatrixScreen.tsx`, przeorganizowano strukturę katalogów pod kątem skalowalności.
 

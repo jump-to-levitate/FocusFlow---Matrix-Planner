@@ -122,14 +122,21 @@
 
 ---
 
-## Wdrożone Funkcjonalności (Stan na: Maj 2026)
+## Rejestr Wdrożenia Funkcjonalności MVP (Stan: Maj 2026)
 
-- [x] PLAN_focus_timer.md (Silnik Delta Timestamp, odporność na throttling, ekran zegara)
-- [x] PLAN_centrum_planowania_q2.md (Siatka 2x2, silne typowanie subkategorii, integracja Quiz Bypass Flow)
+- [x] PLAN_core_architecture.md (Dexie.js, IndexedDB, Reactive State)
+- [x] PLAN_focus_timer.md (Delta Timestamp, odporność na throttling tła)
+- [x] PLAN_centrum_planowania_q2.md (Siatka 2x2, silne typowanie subkategorii)
+- [x] PLAN_hub_logistyki_q3.md (Kapsuły czasowe, batching akcji)
+- [x] PLAN_archiwum_q4_destructive_hatch.md (Właz destrukcyjny, czyszczenie O(log n))
+- [x] PLAN_dashboard_mvp.md (Panel startowy, derywacje stanów bez efektów ubocznych)
 
-### Notatka Techniczna (2026-05-19)
+### Wdrożenie Kamienia Milowego: Finał MVP (Kwadraty Q3, Q4 oraz Pulpit)
 
-Wdrożono ekran Centrum Planowania Q2 z pełnym rygorem Type Safety (Q2Subcategory). Zsynchronizowano bazę danych IndexedDB pod kątem spójności literałów tekstowych ('rutyna'). Usunięto martwy kod sub-widoków w MatrixScreen.
+- **Hub Logistyki Q3:** Wdrożono grupowanie zadań w kapsuły czasowe przy użyciu selektorów memoizowanych.
+- **Strefa Redukcji Q4:** Zaimplementowano mechanizm brutalnego czyszczenia bazy danych Dexie za pomocą indeksowanego zapytania usuwającego rekordy bez generowania długu w postaci zbędnej historii operacji.
+- **Dashboard:** Uproszczono panel startowy do trójsekcyjnego układu derywacji stanów (stan timera, licznik krytyczny Q1, symetryczny grid nawigacyjny).
+- **Refaktoryzacja:** Usunięto ponad 400 linii martwego kodu z `MatrixScreen.tsx`, przeorganizowano strukturę katalogów pod kątem skalowalności.
 
 ---
 
